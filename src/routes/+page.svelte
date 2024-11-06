@@ -1,5 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
+	// import Items from '$lib/components/Items.svelte';
+	import Grid from '$lib/components/Grid.svelte';
+
 	let options = $state([{ text: 'next' }, { text: 'previous' }]);
 	let items = $state([]);
 	let session = $state({
@@ -11,10 +14,28 @@
 		order: getOrder()
 	});
 
-	let gridContainer = $state(null);
-
 	onMount(() => {
-		items = Array(39);
+		items = [
+			{ name: 'beef', color: '#8b0000' },
+			{ name: 'bologna', color: '#FF6347' },
+			{ name: 'loaf', color: '' },
+			{ name: 'cheese', color: '#b3a100' },
+			{ name: 'chicken', color: '#ffb433' },
+			{ name: 'ham', color: '#FFA07A' },
+			{ name: 'italian', color: '#A52A2A' },
+			{ name: 'turkey', color: '#edc478' },
+			{ name: 'franks', color: '#F00F00' }
+		];
+
+		items = items.sort((a, b) => {
+			if (a.text < b.text) return -1;
+			if (a.text > b.text) return 1;
+		});
+
+		// items = [...items, ...Array(800)];
+
+		// $inspect('hi', session);
+		itemHeight = ~~document.getElementById('Body').offsetHeight / itemRows - 10;
 	});
 
 	function getOrder() {
@@ -24,6 +45,21 @@
 	function getTicketNumber() {
 		return 'A' + ~~(Math.random() * 100);
 	}
+
+	function sorted(arr) {
+		arr.sort((a, b) => {
+			if (a.text < b.text) return -1;
+			if (a.text > b.text) return 1;
+		});
+		/*
+    let alphabetical = arr.sort((a, b) => {
+      if(a < b) return a;
+      return b;
+    });
+    return alphabetical;
+      */
+		// return ['test', 'hi']b;
+	}
 </script>
 
 <div id="Container" class="overflow-hidden">
@@ -32,38 +68,30 @@
 			aria-label="MenuButton"
 			class="flex items-center justify-center bg-slate-300 w-[80px] h-full rounded-md"
 		>
-			<img class="h-[75%] w-[70%]" src="mbstacked.png" />
+			<img alt="mbLogo" class="h-[75%] w-[70%]" src="mbstacked.png" />
 		</button>
-		<div class="flex-1 bg-slate-800 rounded-md"></div>
+		<div class="flex-1 bg-slate-200 rounded-md"></div>
 		<button aria-label="ShopButton" class="bg-slate-300 w-[50px] h-full rounded-md"></button>
 	</div>
-	<div id="Body" class="flex-1 w-full bg-red-700 relative">
-		<div class="absolute w-full h-full">
-			<div
-				bind:this={gridContainer}
-				onscrollend={(e) => {
-					console.log('sroll ended at...', gridContainer.scrollTop);
-					gridContainer.scrollTo(0, 1);
-				}}
-				onscroll={(e) => {
-					console.log(~~gridContainer.scrollTop);
-				}}
-				class="w-full h-full grid overflow-y-auto grid-cols-3 gap-2 p-2 border-box"
-			>
-				{#each items as item, idx}
-					<button
-						style={`height: ${document.getElementById('Body').offsetHeight / 3 - 10}px`}
-						onclick={() => {}}
-						class="rounded-md bg-slate-300 w-full flex items-center justify-center"
-						>{item?.name || 'item'}</button
-					>
-				{/each}
-			</div>
-		</div>
+	<div id="Body" class="flex-1 w-full bg-slate-100 flex relative">
+		<!-- <Items /> -->
+		<Grid {items} />
 		<!--
-    -->
+			<div class="h-full bg-slate-400 w-[30px] p-1 absolute right-[0px] top-[0px]">
+				<div
+					style={`
+          height: ${itemHeight}px;
+          `}
+					class="bg-slate-700 w-full rounded-md h-full"
+				></div>
+>
+			</div>
 	</div>
-	<!--
+-->
+	</div>
+</div>
+
+<!--
 	<div id="Footer" class="w-full h-[50px] bg-slate-300 flex flex-row">
 		{#each options as option}
 			<button
@@ -77,8 +105,8 @@
 			</button>
 		{/each}
 	</div>
-  -->
 </div>
+  -->
 
 <style>
 	#Container {
