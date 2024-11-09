@@ -11,8 +11,9 @@
 	let itemDivs = $state([]);
 	let gridContainer = $state(null);
 	let show = $state(false);
+	let touchPing = $state(null);
 
-	function setItem(idx) {
+	function setItem(idx, e) {
 		if (itemTick) {
 			clearInterval(itemTick);
 			itemTick = null;
@@ -22,11 +23,13 @@
 
 		setTimeout(() => {
 			curItem = -1;
+			touchPing.style.left = e.clientX - 8 + 'px';
+			touchPing.style.top = e.clientY - 55 + 'px';
 		}, 1);
 
 		setTimeout(() => {
 			ticker();
-		}, 550);
+		}, 650);
 	}
 
 	function outT(node, options) {
@@ -71,6 +74,16 @@
 <div class="overflow-hidden bg-slate-800">
 	{#if show}
 		<div in:fly={{ y: -100 }} class="absolute w-full h-full flex-1">
+			<div class="w-full h-full absolute top-0 left-0 z-[4] pointer-events-none">
+				{#if selectedItem !== null}
+					<div
+						bind:this={touchPing}
+						in:fade={{ duration: 100 }}
+						style={`background-color: ${items[selectedItem].color};`}
+						class="size-4 bg-red-400 rounded-full absolute animate-ping"
+					></div>
+				{/if}
+			</div>
 			<div
 				bind:this={gridContainer}
 				onscrollend={scrollEnd}
@@ -80,10 +93,12 @@
 					<div bind:this={itemDivs[idx]} class="p-1 relative">
 						<div class="w-full h-full flex items-center justify-center absolute">
 							{#if selectedItem == idx}
+								<!--
 								<div
 									style={`background-color: ${item.color};`}
 									class="animate-ping left-[20px] top-[0px] z-[0] absolute w-[60%] h-[60%] bg-red-400 rounded-md"
 								></div>
+              >-->
 							{/if}
 						</div>
 						<div class="overflow-hidden rounded-md" style={`height: ${~~itemHeight}px`}>
@@ -93,22 +108,24 @@
 									in:fly={{ y: 70 }}
 									out:outT={{ idx: idx }}
 									style={`height: ${~~itemHeight}px;`}
-									onclick={() => {
-										setItem(idx);
+									onclick={(e) => {
+										setItem(idx, e);
 									}}
 									class="relative select-none rounded-md bg-slate-300 w-full flex items-center justify-center"
 								>
 									<div
 										style={`background-color: ${item.color};`}
-										class={`z-[1] absolute ${selectedItem !== idx ? 'opacity-30' : ''} rounded-md w-full h-full`}
+										class={`z-[1] absolute ${selectedItem !== idx ? 'opacity-30' : 'opacity-30'} rounded-md w-full h-full`}
 									></div>
 									<div class="z-[2] w-[80%] flex justify-center items-center">
 										<div class="border-r pr-2 mr-2 border-slate-800/30">
-											<img
-												class="opacity-30 landscape:size-7 portrait:size-20 flex-1"
-												alt={`${item.name} icon`}
-												src={`icons/${item?.name}.svg`}
-											/>
+											{#if item?.name}
+												<img
+													class="opacity-30 landscape:size-7 portrait:size-20 flex-1"
+													alt={`${item?.name} icon`}
+													src={`icons/${item?.name}.svg`}
+												/>
+											{/if}
 										</div>
 										<div class="flex-1 text-left text-sm">
 											{item?.name || 'item ' + idx}
