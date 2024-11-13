@@ -25,17 +25,11 @@
 	});
 
 	onMount(() => {
-		// document.getElementById('Body')?.scrollTo(document.getElementsByClassName('')[0]);
 
 		setTimeout(() => {
 			curState = 1;
-		}, 1);
-		/*
-		document.addEventListener('resize', () => {
-			console.log('resizing.');
-			itemHeight = ~~document.getElementById('Body').offsetHeight / itemRows - 10;
-		});
-    */
+		}, 100);
+
 		items = [
 			{ name: 'beef', color: '#8b0000' },
 			{ name: 'bologna', color: '#FF6347' },
@@ -53,7 +47,7 @@
 			if (a.text < b.text) return -1;
 			if (a.text > b.text) return 1;
 		});
-    */
+    	*/
 
 		// items = [...items, ...Array(800)];
 
@@ -74,7 +68,7 @@
 			if (a.text < b.text) return -1;
 			if (a.text > b.text) return 1;
 		});
-		/*
+	/*
     let alphabetical = arr.sort((a, b) => {
       if(a < b) return a;
       return b;

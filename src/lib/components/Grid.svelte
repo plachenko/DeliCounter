@@ -66,8 +66,14 @@
 	}
 
 	onMount(() => {
+		window.addEventListener('resize', () => {
+			itemHeight = ~~document.getElementById('Body').offsetHeight / itemRows - 10;
+		});
+
 		itemHeight = ~~document.getElementById('Body').offsetHeight / itemRows - 10;
+		
 		ticker();
+		
 		setTimeout(() => {
 			show = true;
 		}, 40);
@@ -77,6 +83,7 @@
 <div class="h-full overflow-hidden bg-slate-800">
 	{#if show}
 		<div in:fly={{ y: -100 }} class="absolute w-full h-full flex-1">
+			<!--
 			<div class="w-full h-full absolute top-0 left-0 z-[4] pointer-events-none">
 				{#if selectedItem !== null}
 					<div
@@ -88,6 +95,7 @@
 					></div>
 				{/if}
 			</div>
+		-->
 			<div
 				bind:this={gridContainer}
 				onscrollend={scrollEnd}
@@ -108,7 +116,7 @@
 									class="relative select-none rounded-md bg-slate-300 w-full flex items-center justify-center"
 								>
 									<div
-										style={`background-color: ${item.color || '#CCC'};`}
+										style={`background-color: ${item?.color || '#CCC'};`}
 										class={`z-[1] absolute ${selectedItem !== idx ? 'opacity-30' : 'opacity-30'} rounded-md w-full h-full`}
 									></div>
 									<div class="z-[2] w-[80%] flex justify-center items-center">
