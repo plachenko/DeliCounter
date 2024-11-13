@@ -1,16 +1,18 @@
 <script>
 	import { onMount } from 'svelte';
-	// import Items from '$lib/components/Items.svelte';
+	import { fly } from 'svelte/transition';
+
+	import Header from '$lib/components/Header.svelte';
 	import Grid from '$lib/components/Grid.svelte';
 
 	let states = $state([
-		{ name: 'menu', showHeader: false },
-		{ name: 'grid' },
-		{ name: 'ticket', showHeader: false },
-		{ name: 'order', showHeader: false }
+		{ name: 'menu' },
+		{ name: 'grid', showHeader: true },
+		{ name: 'ticket' },
+		{ name: 'order' }
 	]);
 
-	let curState = $state(1);
+	let curState = $state(2);
 	let options = $state([{ text: 'next' }, { text: 'previous' }]);
 	let items = $state([]);
 	let session = $state({
@@ -23,6 +25,11 @@
 	});
 
 	onMount(() => {
+		// document.getElementById('Body')?.scrollTo(document.getElementsByClassName('')[0]);
+
+		setTimeout(() => {
+			curState = 1;
+		}, 1);
 		/*
 		document.addEventListener('resize', () => {
 			console.log('resizing.');
@@ -41,12 +48,14 @@
 			{ name: 'franks', color: '#F00F00' }
 		];
 
-		items = items.sort((a, b) => {
+		/*
+		items.sort((a, b) => {
 			if (a.text < b.text) return -1;
 			if (a.text > b.text) return 1;
 		});
+    */
 
-		items = [...items, ...Array(800)];
+		// items = [...items, ...Array(800)];
 
 		// $inspect('hi', session);
 		// itemHeight = ~~document.getElementById('Body').offsetHeight / itemRows - 10;
@@ -76,25 +85,19 @@
 	}
 </script>
 
-<div id="Container" class="overflow-hidden">
+<div id="Container" class="overflow-hidden bg-slate-100">
 	{#if states[curState]?.showHeader}
-		<div id="Header" class="flex w-full h-[50px] bg-slate-400 p-2 gap-1">
-			<button
-				aria-label="MenuButton"
-				class="flex items-center justify-center bg-slate-200 w-[80px] h-full rounded-md"
-			>
-				<img alt="mbLogo" class="h-[75%] w-[70%]" src="mbstacked.png" />
-			</button>
-			<div class="flex-1 bg-slate-200 rounded-md"></div>
-			<button aria-label="ShopButton" class="bg-slate-300 w-[50px] h-full rounded-md"></button>
+		<div in:fly={{ y: -100, delay: 100, duration: 600 }}>
+			<Header />
 		</div>
 	{/if}
-	<div id="Body" class="flex-1 w-full bg-slate-100 flex relative">
+	<div id="Body" class="flex-1 h-full w-full bg-slate-100 flex relative">
 		<!-- <Items /> -->
 
 		{#if states[curState].name == 'grid'}
 			<Grid {items} />
 		{/if}
+
 		<!--
 			<div class="h-full bg-slate-400 w-[30px] p-1 absolute right-[0px] top-[0px]">
 				<div
