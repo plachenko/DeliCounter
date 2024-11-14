@@ -65,7 +65,7 @@
 	}
 
 	onMount(() => {
-		window.addEventListener('resize', () => {
+		document.getElementById('gridContainer').addEventListener('resize', () => {
 			itemHeight = ~~document.getElementById('gridContainer').offsetHeight / itemRows - 10;
 		});
 
