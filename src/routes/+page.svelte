@@ -1,18 +1,20 @@
 <script>
 	import { onMount } from 'svelte';
-	import { fly } from 'svelte/transition';
+	import { fly, fade } from 'svelte/transition';
 
 	import Header from '$lib/components/Header.svelte';
 	import Grid from '$lib/components/Grid.svelte';
+	import VoiceRecognition from '$lib/components/VoiceRecognition.svelte';
 
 	let states = $state([
 		{ name: 'menu' },
 		{ name: 'grid', showHeader: true },
 		{ name: 'ticket' },
-		{ name: 'order' }
+		{ name: 'order' },
+		{ name: 'voiceRecognition', showHeader: true }
 	]);
 
-	let curState = $state(2);
+	let curState = $state(0);
 	let options = $state([{ text: 'next' }, { text: 'previous' }]);
 	let items = $state([]);
 	let session = $state({
@@ -24,8 +26,11 @@
 		order: getOrder()
 	});
 
-	onMount(() => {
+	function changeState(state) {
+		curState = state;
+	}
 
+	onMount(() => {
 		setTimeout(() => {
 			curState = 1;
 		}, 100);
@@ -68,13 +73,13 @@
 			if (a.text < b.text) return -1;
 			if (a.text > b.text) return 1;
 		});
-	/*
+		/*
     let alphabetical = arr.sort((a, b) => {
       if(a < b) return a;
       return b;
     });
-    return alphabetical;
       */
+		return alphabetical;
 		// return ['test', 'hi']b;
 	}
 </script>
@@ -82,14 +87,18 @@
 <div id="Container" class="overflow-hidden bg-slate-100">
 	{#if states[curState]?.showHeader}
 		<div in:fly={{ y: -100, delay: 100, duration: 600 }}>
-			<Header />
+			<Header {changeState} />
 		</div>
 	{/if}
 	<div id="Body" class="flex-1 h-full w-full bg-slate-100 flex relative">
-		<!-- <Items /> -->
-
 		{#if states[curState].name == 'grid'}
-			<Grid {items} />
+			<div out:fade>
+				<Grid {items} />
+			</div>
+		{:else if states[curState].name == 'voiceRecognition'}
+			<div in:fade class="bg-slate-300 flex flex-col justify-center items-center w-full h-full">
+				<VoiceRecognition />
+			</div>
 		{/if}
 
 		<!--

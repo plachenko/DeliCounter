@@ -38,7 +38,6 @@
 
 	function outT(node, options) {
 		if (options.idx == selectedItem) {
-			// selectedItem = null;
 			return fly(node, { y: -50, delay: 150 });
 		}
 
@@ -67,23 +66,22 @@
 
 	onMount(() => {
 		window.addEventListener('resize', () => {
-			itemHeight = ~~document.getElementById('Body').offsetHeight / itemRows - 10;
+			itemHeight = ~~document.getElementById('gridContainer').offsetHeight / itemRows - 10;
 		});
 
-		itemHeight = ~~document.getElementById('Body').offsetHeight / itemRows - 10;
-		
 		ticker();
-		
+
 		setTimeout(() => {
 			show = true;
+			itemHeight = ~~document.getElementById('gridContainer').offsetHeight / itemRows - 10;
 		}, 40);
 	});
 </script>
 
-<div class="h-full overflow-hidden bg-slate-800">
+<div id="gridContainer" class="h-full overflow-hidden bg-slate-800">
 	{#if show}
+		<!-- <div class="h-[20px] bg-red-400 w-full"></div> -->
 		<div in:fly={{ y: -100 }} class="absolute w-full h-full flex-1">
-			<!--
 			<div class="w-full h-full absolute top-0 left-0 z-[4] pointer-events-none">
 				{#if selectedItem !== null}
 					<div
@@ -95,7 +93,6 @@
 					></div>
 				{/if}
 			</div>
-		-->
 			<div
 				bind:this={gridContainer}
 				onscrollend={scrollEnd}
@@ -103,7 +100,7 @@
 			>
 				{#each items as item, idx}
 					<div bind:this={itemDivs[idx]} class="p-1 relative">
-						<div class="overflow-hidden rounded-md" style={`height: ${~~itemHeight}px`}>
+						<div class="overflow-hidden rounded-md relative" style={`height: ${~~itemHeight}px`}>
 							<div class={`offsetDiv absolute top-[-3px] size-2 cursor-pointer`}></div>
 							{#if curItem >= idx}
 								<button
@@ -119,8 +116,12 @@
 										style={`background-color: ${item?.color || '#CCC'};`}
 										class={`z-[1] absolute ${selectedItem !== idx ? 'opacity-30' : 'opacity-30'} rounded-md w-full h-full`}
 									></div>
-									<div class="z-[2] w-[80%] flex justify-center items-center">
-										<div class="border-r pr-2 mr-2 border-slate-800/30">
+									<div
+										class="z-[2] w-[80%] flex portrait:flex-col landscape:flex-row justify-center items-center"
+									>
+										<div
+											class="landscape:border-r portrait:border-b landscape:pr-2 landscape:mr-2 portrait:pb-2 portrait:size-[80%] portrait:mb-2 border-slate-800/30 flex items-center justify-center"
+										>
 											{#if item?.name}
 												<img
 													class="opacity-30 landscape:size-7 portrait:size-20 flex-1"

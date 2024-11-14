@@ -1,14 +1,13 @@
 <script>
-	import { fade } from 'svelte/transition';
+	import { fly, fade } from 'svelte/transition';
+
+	let { changeState } = $props();
 
 	let inputTxt = $state('');
 	let inputTxtContainer = $state(null);
 
 	let order = $state([]);
-
-	$effect(() => {
-		// console.log(inputTxt);
-	});
+	let inputFocused = $state(false);
 </script>
 
 <div id="Header" class="flex w-full h-[50px] bg-slate-400 p-2 gap-1">
@@ -19,13 +18,27 @@
 		<img alt="mbLogo" class="h-[75%] w-[70%]" src="mbstacked.png" />
 	</button>
 	<div
-		class={`${inputTxt !== '' ? 'border-3' : ''} flex-1 overflow-hidden bg-slate-200 relative max-w-full rounded-md flex items-center pl-2 pr-9`}
+		class={`border-box flex-1 overflow-hidden bg-slate-200 relative max-w-full rounded-md flex items-center pl-2 pr-9`}
 		`
 	>
+		{#if inputFocused}
+			<div
+				in:fade
+				out:fade
+				class="border-slate-800 border-2 w-full h-full rounded-md absolute left-0"
+			></div>
+		{/if}
+
 		<div
 			id="inputTxtField"
 			out:fly={{ x: 100 }}
-			placeholder="Enter a product..."
+			onfocus={() => {
+				inputFocused = true;
+			}}
+			onblur={() => {
+				inputFocused = false;
+			}}
+			placeholder="Enter a product or tag..."
 			contenteditable="true"
 			bind:this={inputTxtContainer}
 			bind:textContent={inputTxt}
@@ -38,19 +51,44 @@
 				onclick={() => {
 					inputTxt = '';
 					inputTxtContainer.focus();
+					setTimeout(() => {
+						inputFocused = true;
+					}, 1);
 				}}
 				class="select-none bg-slate-500/30 text-slate-500/40 hover:text-slate-500/80 font-bold size-7 flex items-center justify-center absolute right-[5px] rounded-md"
 			>
 				X
+			</button>
+		{:else}
+			<button
+				aria-label="start voice recognition"
+				in:fade={{ duration: 300 }}
+				out:fade={{ duration: 300 }}
+				onclick={() => {
+					changeState(4);
+				}}
+				class="select-none bg-slate-500/30 p-1 text-slate-500/40 hover:text-slate-500/80 font-bold size-7 flex items-center justify-center absolute right-[5px] rounded-md"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="size-6"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z"
+					/>
+				</svg>
 			</button>
 		{/if}
 	</div>
 	<button
 		disabled={order.length == 0}
 		aria-label="ShopButton"
-		onclick={() => {
-			console.log('test');
-		}}
 		class="bg-slate-300 w-[50px] h-full rounded-md relative"
 	>
 		{#if order.length}
