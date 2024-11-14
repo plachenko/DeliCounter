@@ -87,7 +87,7 @@
 <div id="Container" class="overflow-hidden bg-slate-100">
 	{#if states[curState]?.showHeader}
 		<div in:fly={{ y: -100, delay: 100, duration: 600 }}>
-			<Header {changeState} />
+			<Header {curState} {changeState} />
 		</div>
 	{/if}
 	<div id="Body" class="flex-1 h-full w-full bg-slate-100 flex relative">
