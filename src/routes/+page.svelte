@@ -14,6 +14,8 @@
 		{ name: 'voiceRecognition', showHeader: true }
 	]);
 
+	let voiceStarted = $state(true);
+
 	let curState = $state(0);
 	let options = $state([{ text: 'next' }, { text: 'previous' }]);
 	let items = $state([]);
@@ -25,6 +27,10 @@
 		user: null,
 		order: getOrder()
 	});
+
+	function startVoice() {
+		voiceStarted = !voiceStarted;
+	}
 
 	function changeState(state) {
 		curState = state;
@@ -87,17 +93,33 @@
 <div id="Container" class="overflow-hidden bg-slate-100">
 	{#if states[curState]?.showHeader}
 		<div in:fly={{ y: -100, delay: 100, duration: 600 }}>
-			<Header {curState} {changeState} />
+			<Header {curState} {startVoice} />
 		</div>
 	{/if}
-	<div id="Body" class="flex-1 h-full w-full bg-slate-100 flex relative">
+
+	<div id="Body" class="flex-1 h-full w-full flex relative overflow-hidden">
+		{#if voiceStarted}
+			<div
+				in:fly={{ y: -100 }}
+				out:fly={{ y: -100 }}
+				class="absolute w-full h-full bg-slate-200 z-[99]"
+			>
+				<VoiceRecognition />
+			</div>
+			<!--
+			<div
+				in:fly={{ y: 100 }}
+				out:fly={{ y: 100 }}
+				class="bg-slate-300 flex flex-col justify-center items-center w-full h-full"
+			>
+				<VoiceRecognition />
+			</div>
+-->
+		{/if}
+
 		{#if states[curState].name == 'grid'}
 			<div out:fade>
 				<Grid {items} />
-			</div>
-		{:else if states[curState].name == 'voiceRecognition'}
-			<div in:fade class="bg-slate-300 flex flex-col justify-center items-center w-full h-full">
-				<VoiceRecognition />
 			</div>
 		{/if}
 

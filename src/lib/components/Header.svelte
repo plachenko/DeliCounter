@@ -1,7 +1,7 @@
 <script>
 	import { fly, fade } from 'svelte/transition';
 
-	let { curState, changeState } = $props();
+	let { curState, changeState, startVoice } = $props();
 
 	let inputTxt = $state('');
 	let inputTxtContainer = $state(null);
@@ -65,11 +65,14 @@
 				in:fade={{ duration: 300 }}
 				out:fade={{ duration: 300 }}
 				onclick={() => {
+					/*
 					if (curState == 4) {
 						changeState(1);
 						return;
 					}
 					changeState(4);
+          */
+					startVoice();
 				}}
 				class={`${curState == 4 ? 'border-2 border-slate-500/60 text-slate-500/80' : ''} border-box select-none bg-slate-500/30 p-1 text-slate-500/40 hover:text-slate-500/80 font-bold size-7 flex items-center justify-center absolute right-[5px] rounded-md`}
 			>

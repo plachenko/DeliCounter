@@ -1,39 +1,64 @@
 <script>
 	import { onMount } from 'svelte';
 
-	let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+	let SpeechRecognition;
 	let recognition;
-	let speechResult = $state('');
+	let speechResult = $state('testing');
+	let voiceStarted = $state(false);
+	let loadProducts = $state(false);
 
 	onMount(() => {
+		SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 		if (SpeechRecognition) {
 			recognition = new SpeechRecognition();
+
 			recognition.lang = 'en-US';
 			// recognition.continuous = true;
 			recognition.interimResults = true;
 			recognition.maxAlternatives = 1;
-			
+
 			recognition.onstart = () => {
-				console.log('Voice recognition started');
-			}
+				voiceStarted = true;
+			};
+
+			recognition.onend = () => {
+				voiceStarted = false;
+			};
 
 			recognition.onresult = (event) => {
 				speechResult = event.results[0][0].transcript;
-			}
+				voiceStarted = false;
+			};
 		}
 	});
 
 	function startVoice() {
+		if (voiceStarted) {
+			recognition.stop();
+			voiceStarted = false;
+			return;
+		}
+
 		recognition.start();
 	}
+
+	function stopVoice() {}
 </script>
 
 <div class="flex justify-center items-center flex-col">
-	<span>Please say your order</span>
-	<span class="text-2xl font-bold italic">{speechResult}</span>
+	<div class="w-full border-b-2 border-dashed border-slate-400 py-3 text-center">
+		Please press the microphone and say your order
+	</div>
+	<span class="text-2xl font-bold italic text-slate-400/80">&ldquo;{speechResult}&rdquo;</span>
 	<div class="absolute bottom-[50px] flex items-center justify-center bg-blue-400">
+		{#if loadProducts}
+			<div
+				class="animate-spin-slow absolute z-[99] border-[4px] border-dashed border-slate-800/50 size-[89px] rounded-full"
+			></div>
+		{/if}
 		<button
-		onclick={startVoice}
+			onclick={startVoice}
+			aria-label="start recognition"
 			class="absolute rounded-full bg-red-400 size-[79px] z-[10] flex justify-center items-center"
 		>
 			<svg
@@ -52,7 +77,9 @@
 			</svg>
 		</button>
 
-		<div class="absolute rounded-full bg-blue-400 z-[5] size-[54px] animate-ping"></div>
+		{#if voiceStarted}
+			<div class="absolute rounded-full bg-blue-400 z-[5] size-[54px] animate-ping"></div>
+		{/if}
 	</div>
-	<button class="bg-red-400 rounded-md">Cancel</button>
+	<!-- <button class="bg-red-400 rounded-md">Cancel</button> -->
 </div>

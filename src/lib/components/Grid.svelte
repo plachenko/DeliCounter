@@ -100,8 +100,8 @@
 			>
 				{#each items as item, idx}
 					<div bind:this={itemDivs[idx]} class="p-1 relative">
-						<div class="overflow-hidden rounded-md relative" style={`height: ${~~itemHeight}px`}>
-							<div class={`offsetDiv absolute top-[-3px] size-2 cursor-pointer`}></div>
+						<div class="rounded-md relative" style={`height: ${~~itemHeight}px`}>
+							<div class={`offsetDiv absolute top-[-7px] size-2`}></div>
 							{#if curItem >= idx}
 								<button
 									in:fly={{ y: 70 }}
