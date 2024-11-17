@@ -100,8 +100,8 @@
 	<div id="Body" class="flex-1 h-full w-full flex relative overflow-hidden">
 		{#if voiceStarted}
 			<div
-				in:fly={{ y: -100 }}
-				out:fly={{ y: -100 }}
+				in:fly={{ y: 100 }}
+				out:fly={{ y: 10 }}
 				class="absolute w-full h-full bg-slate-200 z-[99]"
 			>
 				<VoiceRecognition />
