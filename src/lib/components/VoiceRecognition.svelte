@@ -39,6 +39,7 @@
 	});
 
 	function startVoice() {
+		speechResult = '';
 		if (voiceStarted) {
 			recognition.stop();
 			voiceStarted = false;
@@ -52,17 +53,23 @@
 </script>
 
 <div class="flex justify-center items-center flex-col h-full w-full">
-	<div class="flex flex-1 w-full h-full"></div>
 	<div
-		class="pt-[30px] relative pb-[10px] flex border-t-2 w-full shrink justify-center items-center"
+		class="normal-case flex justify-center items-center flex-1 w-full h-full text-2xl italic text-slate-500/60 font-bold"
 	>
+		{#if speechResult !== ''}
+			<span class="font-serif">&ldquo;</span><span>{speechResult}</span><span class="font-serif"
+				>&rdquo;</span
+			>
+		{/if}
+	</div>
+	<div class="relative h-[120px] flex border-t-2 w-full shrink justify-center items-center">
 		{#if showing}
 			<button
 				in:fly={{ y: -10, delay: 300 }}
 				out:fly={{ y: 10 }}
 				onclick={startVoice}
 				aria-label="start recognition"
-				class="absolute drop-shadow rounded-full border-2 bg-red-400 top-[-50px] size-[79px] z-[10] flex justify-center items-center"
+				class="absolute drop-shadow rounded-full border-2 bg-red-400 bottom-[10px] size-[79px] z-[10] flex justify-center items-center"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -79,13 +86,19 @@
 					/>
 				</svg>
 			</button>
+
 			{#if voiceStarted}
-				<div class="absolute rounded-full bg-blue-400 z-[5] size-[54px] animate-ping"></div>
+				<div
+					class="absolute rounded-full bg-blue-400 z-[5] size-[54px] animate-ping bottom-[24px]"
+				></div>
 			{/if}
 		{/if}
 
 		{#if showing}
-			<div class="relative flex justify-center w-full text-sm text-slate-400">
+			<div
+				in:fly={{ y: 10, delay: 300 }}
+				class="absolute top-0 flex justify-center w-full text-sm text-slate-400"
+			>
 				{#if voiceStarted}
 					<div class="absolute" in:fly={{ y: 10 }} out:fly={{ y: 10 }}>Listening...</div>
 				{:else}

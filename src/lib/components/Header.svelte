@@ -1,7 +1,7 @@
 <script>
 	import { fly, fade } from 'svelte/transition';
 
-	let { curState, changeState, startVoice } = $props();
+	let { curState, changeState, startVoice, voiceStarted } = $props();
 
 	let inputTxt = $state('');
 	let inputTxtContainer = $state(null);
@@ -18,32 +18,40 @@
 		<img alt="mbLogo" class="h-[75%] w-[70%]" src="mbstacked.png" />
 	</button>
 	<div
-		class={`border-box flex-1 overflow-hidden bg-slate-200 relative max-w-full rounded-md flex items-center pl-2 pr-9`}
+		class={`p-1 border-box flex-1 overflow-hidden bg-slate-200 relative max-w-full rounded-md flex items-center  pr-9`}
 		`
 	>
 		{#if inputFocused}
 			<div
 				in:fade
 				out:fade
-				class="border-slate-800 border-2 w-full h-full rounded-md absolute left-0"
+				class="border-blue-400 border-[2px] w-full h-full rounded-md absolute left-0"
 			></div>
 		{/if}
 
-		<div
-			id="inputTxtField"
-			out:fly={{ x: 100 }}
-			onfocus={() => {
-				inputFocused = true;
-			}}
-			onblur={() => {
-				inputFocused = false;
-			}}
-			placeholder="Enter a product or tag..."
-			contenteditable="true"
-			bind:this={inputTxtContainer}
-			bind:textContent={inputTxt}
-			class="overflow-x-auto whitespace-nowrap w-full flex items-center outline-none linebreak-none"
-		></div>
+		{#if !voiceStarted}
+			<div
+				id="inputTxtField"
+				out:fly={{ y: 10 }}
+				in:fly={{ y: 10 }}
+				onfocus={() => {
+					inputFocused = true;
+				}}
+				onblur={() => {
+					inputFocused = false;
+				}}
+				placeholder="Enter a product or tag..."
+				contenteditable="true"
+				bind:this={inputTxtContainer}
+				bind:textContent={inputTxt}
+				class="pl-2 overflow-x-auto whitespace-nowrap w-full flex items-center outline-none linebreak-none"
+			></div>
+		{:else}
+			<div in:fly={{ y: -10 }} out:fly={{ y: -10 }} class="left-0 pr-9 absolute p-1 w-full h-full">
+				<div class="w-full h-full bg-slate-400 rounded-md"></div>
+			</div>
+		{/if}
+
 		{#if inputTxt}
 			<button
 				in:fade={{ duration: 300 }}
@@ -74,7 +82,7 @@
           */
 					startVoice();
 				}}
-				class={`${curState == 4 ? 'border-2 border-slate-500/60 text-slate-500/80' : ''} border-box select-none bg-slate-500/30 p-1 text-slate-500/40 hover:text-slate-500/80 font-bold size-7 flex items-center justify-center absolute right-[5px] rounded-md`}
+				class={`${voiceStarted ? 'border-2 border-slate-500/60 text-slate-500/80' : ''} border-box select-none bg-slate-500/30 p-1 text-slate-500/40 hover:text-slate-500/80 font-bold size-7 flex items-center justify-center absolute right-[5px] rounded-md`}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
