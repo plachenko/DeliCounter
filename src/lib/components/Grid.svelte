@@ -96,7 +96,7 @@
 			<div
 				bind:this={gridContainer}
 				onscrollend={scrollEnd}
-				class="w-full h-full grid overflow-y-auto grid-cols-3 p-1 border-box"
+				class="w-full h-full grid overflow-y-auto grid-cols-3"
 			>
 				{#each items as item, idx}
 					<div bind:this={itemDivs[idx]} class="p-1 relative">
@@ -117,10 +117,10 @@
 										class={`z-[1] absolute ${selectedItem !== idx ? 'opacity-30' : 'opacity-30'} rounded-md w-full h-full`}
 									></div>
 									<div
-										class="z-[2] w-[80%] flex portrait:flex-col landscape:flex-row justify-center items-center"
+										class="h-full z-[2] w-[80%] flex portrait:flex-col landscape:flex-row justify-center items-center"
 									>
 										<div
-											class="landscape:border-r portrait:border-b landscape:pr-2 landscape:mr-2 portrait:pb-2 portrait:size-[80%] portrait:mb-2 border-slate-800/30 flex items-center justify-center"
+											class=" landscape:border-r portrait:border-b landscape:pr-2 landscape:mr-2 portrait:pb-2 portrait:size-[80%] portrait:mb-2 border-slate-800/30 flex items-center justify-center"
 										>
 											{#if item?.name}
 												<img
@@ -130,7 +130,8 @@
 												/>
 											{/if}
 										</div>
-										<div class="flex-1 text-left text-sm">
+										
+										<div class="capitalize flex-1 landscape:text-left landscap:text-sm portrait:text-lg">
 											{item?.name || 'item ' + idx}
 										</div>
 

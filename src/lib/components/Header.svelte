@@ -48,7 +48,9 @@
 			></div>
 		{:else}
 			<div in:fly={{ y: -10 }} out:fly={{ y: -10 }} class="left-0 pr-9 absolute p-1 w-full h-full">
-				<div class="w-full h-full bg-slate-400 rounded-md"></div>
+				<div class="w-full h-full bg-slate-400 rounded-md">
+
+				</div>
 			</div>
 		{/if}
 
