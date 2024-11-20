@@ -13,6 +13,7 @@
 	let show = $state(false);
 	let touchPing = $state(null);
 	let tickDone = $state(false);
+	let taken = $state(false);
 
 	function setItem(idx, e) {
 		if (itemTick) {
@@ -29,6 +30,7 @@
 		}, 1);
 
 		setTimeout(() => {
+			taken = true;
 			selectedItem = null;
 		}, 300);
 
@@ -81,6 +83,7 @@
 </script>
 
 <div id="gridContainer" class="h-full overflow-hidden bg-slate-800">
+	<!-- <img class="bg-slate-200 absolute size-[190px] z-[3] " src="ticket.svg" /> -->
 	{#if show}
 		<!-- <div class="h-[20px] bg-red-400 w-full"></div> -->
 		<div in:fly={{ y: -100 }} class="absolute w-full h-full flex-1">

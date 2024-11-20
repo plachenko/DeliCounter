@@ -1,0 +1,179 @@
+{
+    "Afrikaans": [
+      ["South Africa", "af-ZA"]
+    ],
+    "العربية (Arabic)" : [
+      ["Saudi Arabia","ar-SA"],
+      ["Algeria","ar-DZ"],
+      ["Bahrain","ar-BH"],
+      ["Egypt","ar-EG"],
+      ["Israel","ar-IL"],
+      ["Iraq","ar-IQ"],
+      ["Jordan","ar-JO"],
+      ["Kuwait","ar-KW"],
+      ["Lebanon","ar-LB"],
+      ["Morocco","ar-MA"],
+      ["Oman","ar-OM"],
+      ["Palestinian Territory","ar-PS"],
+      ["Qatar","ar-QA"],
+      ["Tunisia","ar-TN"],
+      ["UAE","ar-AE"]
+    ],
+    "Euskara (Basque)": [
+      ["Spain", "eu-ES"]
+    ],
+    "Български (Bulgarian)": [
+      ["Bulgaria", "bg-BG"]
+    ],
+    "Català (Catalan)": [
+      ["Spain", "ca-ES"]
+    ],
+    "普通话 (Chinese Mandarin)": [
+      ["China (Simp.)", "cmn-Hans-CN"],
+      ["Hong Kong SAR (Trad.)", "cmn-Hans-HK"],
+      ["Taiwan (Trad.)", "cmn-Hant-TW"]
+    ],
+    "廣東話 (Chinese Cantonese)": [
+      ["Hong Kong", "yue-Hant-HK"]
+    ],
+    "Hrvatski (Croatian)": [
+      ["Croatia", "hr_HR"]
+    ],
+    "Čeština (Czech)": [
+      ["Czech Republic", "cs-CZ"]
+    ],
+    "Dansk (Danish)": [
+      ["Denmark", "da-DK"]
+    ],
+    "English": [
+      ["United States", "en-US"],
+      ["Australia", "en-AU"],
+      ["Canada", "en-CA"],
+      ["India", "en-IN"],
+      ["Ireland", "en-IE"],
+      ["New Zealand", "en-NZ"],
+      ["Philippines", "en-PH"],
+      ["South Africa", "en-ZA"],
+      ["United Kingdom", "en-GB"]
+    ],
+    "فارسی (Farsi)": [
+      ["Iran", "fa-IR"]
+    ],
+    "Français (French)": [
+      ["France", "fr-FR"]
+    ],
+    "Filipino": [
+      ["Philippines", "fil-PH"]
+    ],
+    "Galego (Galician)": [
+      ["Spain", "gl-ES"]
+    ],
+    "Deutsch (German)": [
+      ["Germany", "de-DE"]
+    ],
+    "Ελληνικά (Greek)": [
+      ["Greece", "el-GR"]
+    ],
+    "Suomi (Finnish)": [
+      ["Finland", "fi-FI"]
+    ],
+    "עברית (Hebrew)" :[
+      ["Israel", "he-IL"]
+    ],
+    "हिन्दी (Hindi)": [
+      ["India", "hi-IN"]
+    ],
+    "Magyar (Hungarian)": [
+      ["Hungary", "hu-HU"]
+    ],
+    "Bahasa Indonesia (Indonesian)": [
+      ["Indonesia", "id-ID"]
+    ],
+    "Íslenska (Icelandic)": [
+      ["Iceland", "is-IS"]
+    ],
+    "Italiano (Italian)": [
+      ["Italy", "it-IT"],
+      ["Switzerland", "it-CH"]
+    ],
+    "日本語 (Japanese)": [
+      ["Japan", "ja-JP"]
+    ],
+    "한국어 (Korean)": [
+      ["Korea", "ko-KR"]
+    ],
+    "Lietuvių (Lithuanian)": [
+      ["Lithuania", "lt-LT"]
+    ],
+    "Bahasa Malaysia (Malaysian)": [
+      ["Malaysia", "ms-MY"]
+    ],
+    "Nederlands (Dutch)": [
+      ["Netherlands", "nl-NL"]
+    ],
+    "Norsk (Norwegian)": [
+      ["Norway", "nb-NO"]
+    ],
+    "Polski (Polish)": [
+      ["Poland", "pl-PL"]
+    ],
+    "Português (Portuguese)": [
+      ["Portugal", "pt-PT"],
+      ["Brazil", "pt-BR"]
+    ],
+    "Română (Romanian)": [
+      ["Romania", "ro-RO"]
+    ],
+    "Русский (Russian)": [
+      ["Russia", "ru-RU"]
+    ],
+    "Српски (Serbian)": [
+      ["Serbia", "sr-RS"]
+    ],
+    "Slovenčina (Slovak)": [
+      ["Slovakia", "sk-SK"]
+    ],
+    "Slovenščina (Slovenian)": [
+      ["Slovenia", "sl-SI"]
+    ],
+    "Español (Spanish)": [
+      ["Spain", "es-ES"],
+      ["Argentina", "es-AR"],
+      ["Bolivia", "es-BO"],
+      ["Chile", "es-CL"],
+      ["Colombia", "es-CO"],
+      ["Costa Rica", "es-CR"],
+      ["Dominican Republic", "es-DO"],
+      ["Ecuador", "es-EC"],
+      ["El Salvador", "es-SV"],
+      ["Guatemala", "es-GT"],
+      ["Honduras", "es-HN"],
+      ["México", "es-MX"],
+      ["Nicaragua", "es-NI"],
+      ["Panamá", "es-PA"],
+      ["Paraguay", "es-PY"],
+      ["Perú", "es-PE"],
+      ["Puerto Rico", "es-PR"],
+      ["Uruguay", "es-UY"],
+      ["United States", "es-US"],
+      ["Venezuela", "es-VE"]
+    ],
+    "Svenska (Swedish)": [
+      ["Sweden", "sv-SE"]
+    ],
+    "ไทย (Thai)": [
+      ["Thailand", "th-TH"]
+    ],
+    "Türkçe (Turkish)": [
+      ["Turkey", "tr-TR"]
+    ],
+    "Українська (Ukrainian)": [
+      ["Ukraine", "uk-UA"]
+    ],
+    "Tiếng Việt (Vietnamese)": [
+      ["Viet Nam", "vi-VN"]
+    ],
+    "isiZulu (Zulu)": [
+      ["South Africa", "zu-ZA"]
+    ]
+  }

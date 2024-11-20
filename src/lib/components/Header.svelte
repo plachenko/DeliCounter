@@ -1,17 +1,19 @@
 <script>
 	import { fly, fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
+	import LanguageList from '$lib/LanguageList.json';
 
 	let { curState, changeState, startVoice, voiceStarted } = $props();
 
 	let selectingLanguage = $state(false);
+	let currentLanguage = $state(10);
 
 	let inputTxt = $state('');
 	let inputTxtContainer = $state(null);
 
 	let order = $state([]);
 	let inputFocused = $state(false);
-	let languages = $state(Array(100));
+	// let languages = $state(LanguageList);
 
 	$effect(() => {
 		if (!voiceStarted) {
@@ -21,6 +23,8 @@
 
 	onMount(() => {
 		selectingLanguage = false;
+		
+	console.log(Object.keys(LanguageList));
 	});
 </script>
 
@@ -32,9 +36,13 @@
 			class="bg-slate-400 rounded-md left-[10%] top-[55px] z-[399] w-[80%] absolute"
 		>
 			<div class="rounded-md h-[66vh] overflow-y-auto w-full bg-slate-400 absolute top-0">
-				{#each languages as lang, idx}
-					<button class="w-full border-b-2 border-dashed p-2 border-slate-500"
-						>Language {idx}</button
+				{#each Object.keys(LanguageList) as lang, idx}
+					<button onclick={() => {
+						currentLanguage = idx;
+						selectingLanguage = false;
+						}} 
+						class={`${idx == currentLanguage ? 'font-bold' : ''} hover:bg-slate-300 w-full border-b-2 border-dashed p-2 border-slate-500`}
+						>{lang}</button
 					>
 				{/each}
 			</div>
@@ -47,7 +55,7 @@
 		<img alt="mbLogo" class="h-[75%] w-[70%]" src="mbstacked.png" />
 	</button>
 	<div
-		class={`p-1 border-box flex-1 overflow-hidden bg-slate-200 relative max-w-full rounded-md flex items-center  pr-9`}
+		class={`p-1 border-box flex-1 overflow-hidden bg-slate-200 relative max-w-full rounded-md flex items-center pr-9`}
 		`
 	>
 		{#if inputFocused}
@@ -81,7 +89,7 @@
 					onclick={() => {
 						selectingLanguage = !selectingLanguage;
 					}}
-					class={`${selectingLanguage ? 'border-box border-2 border-slate-500/40' : ''} select-none cursor-pointer w-full h-full bg-slate-400 rounded-md text-center`}
+					class={`${selectingLanguage ? 'border-box border-2 border-slate-500/40' : ''} select-none cursor-pointer w-full h-full bg-slate-400/50 rounded-md text-center`}
 				>
 					<div class="flex h-full">
 						<div
@@ -94,8 +102,8 @@
 							{/if}
 						</div>
 
-						<span class="flex-1 flex items-center justify-center text-slate-600">
-							Language &mdash; <strong>English</strong>
+						<span class="flex-1 flex items-center justify-center text-slate-500">
+							Language &mdash; <strong>{Object.keys(LanguageList)[currentLanguage]}</strong>
 						</span>
 					</div>
 				</button>
