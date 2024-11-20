@@ -1,16 +1,45 @@
 <script>
 	import { fly, fade } from 'svelte/transition';
+	import { onMount } from 'svelte';
 
 	let { curState, changeState, startVoice, voiceStarted } = $props();
+
+	let selectingLanguage = $state(false);
 
 	let inputTxt = $state('');
 	let inputTxtContainer = $state(null);
 
 	let order = $state([]);
 	let inputFocused = $state(false);
+	let languages = $state(Array(100));
+
+	$effect(() => {
+		if (!voiceStarted) {
+			selectingLanguage = false;
+		}
+	});
+
+	onMount(() => {
+		selectingLanguage = false;
+	});
 </script>
 
-<div id="Header" class="flex w-full h-[50px] bg-slate-400 p-2 gap-1">
+<div id="Header" class="flex w-full relative h-[50px] bg-slate-400 p-2 gap-1">
+	{#if selectingLanguage && voiceStarted}
+		<div
+			in:fly={{ y: -10 }}
+			out:fly={{ y: -10 }}
+			class="bg-slate-400 rounded-md left-[10%] top-[55px] z-[399] w-[80%] absolute"
+		>
+			<div class="rounded-md h-[66vh] overflow-y-auto w-full bg-slate-400 absolute top-0">
+				{#each languages as lang, idx}
+					<button class="w-full border-b-2 border-dashed p-2 border-slate-500"
+						>Language {idx}</button
+					>
+				{/each}
+			</div>
+		</div>
+	{/if}
 	<button
 		aria-label="MenuButton"
 		class="flex items-center justify-center bg-slate-200 w-[80px] h-full rounded-md"
@@ -48,9 +77,28 @@
 			></div>
 		{:else}
 			<div in:fly={{ y: -10 }} out:fly={{ y: -10 }} class="left-0 pr-9 absolute p-1 w-full h-full">
-				<div class="w-full h-full bg-slate-400 rounded-md">
+				<button
+					onclick={() => {
+						selectingLanguage = !selectingLanguage;
+					}}
+					class={`${selectingLanguage ? 'border-box border-2 border-slate-500/40' : ''} select-none cursor-pointer w-full h-full bg-slate-400 rounded-md text-center`}
+				>
+					<div class="flex h-full">
+						<div
+							class="w-[30px] h-full text-slate-500 flex border-r border-slate-500 justify-center items-center"
+						>
+							{#if selectingLanguage}
+								<span class="absolute" in:fly={{ y: 10 }} out:fly={{ y: 10 }}>&#9650;</span>
+							{:else}
+								<span class="absolute" in:fly={{ y: -10 }} out:fly={{ y: -10 }}>&#9660;</span>
+							{/if}
+						</div>
 
-				</div>
+						<span class="flex-1 flex items-center justify-center text-slate-600">
+							Language &mdash; <strong>English</strong>
+						</span>
+					</div>
+				</button>
 			</div>
 		{/if}
 
@@ -103,6 +151,7 @@
 			</button>
 		{/if}
 	</div>
+	<!-- <div class="absolute top-[30px] z-[999] w-full h-[400px] bg-slate-500"></div> -->
 	<button
 		disabled={order.length == 0}
 		aria-label="ShopButton"

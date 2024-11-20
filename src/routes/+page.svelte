@@ -60,7 +60,7 @@
 		});
     	*/
 
-		// items = [...items, ...Array(800)];
+		items = [...items, ...Array(1)];
 
 		// $inspect('hi', session);
 		// itemHeight = ~~document.getElementById('Body').offsetHeight / itemRows - 10;

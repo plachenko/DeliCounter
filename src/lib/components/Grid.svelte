@@ -12,6 +12,7 @@
 	let gridContainer = $state(null);
 	let show = $state(false);
 	let touchPing = $state(null);
+	let tickDone = $state(false);
 
 	function setItem(idx, e) {
 		if (itemTick) {
@@ -53,6 +54,7 @@
 	}
 
 	function ticker() {
+		tickDone = false;
 		itemTick = setInterval(() => {
 			if (curItem < items.length - 1) {
 				curItem++;
@@ -96,7 +98,7 @@
 			<div
 				bind:this={gridContainer}
 				onscrollend={scrollEnd}
-				class="w-full h-full grid overflow-y-auto grid-cols-3"
+				class={`w-full h-full grid pt-1 ${curItem <= 8 ? 'overflow-hidden' : 'overflow-y-auto'} grid-cols-3`}
 			>
 				{#each items as item, idx}
 					<div bind:this={itemDivs[idx]} class="p-1 relative">
@@ -108,6 +110,9 @@
 									out:outT={{ idx: idx }}
 									style={`height: ${~~itemHeight}px;`}
 									onclick={(e) => {
+										setTimeout(() => {
+											gridContainer.scrollTo(0, 0);
+										}, 300);
 										setItem(idx, e);
 									}}
 									class="relative select-none rounded-md bg-slate-300 w-full flex items-center justify-center"
@@ -130,8 +135,10 @@
 												/>
 											{/if}
 										</div>
-										
-										<div class="capitalize flex-1 landscape:text-left landscap:text-sm portrait:text-lg">
+
+										<div
+											class="capitalize flex-1 landscape:text-left landscap:text-sm portrait:text-lg"
+										>
 											{item?.name || 'item ' + idx}
 										</div>
 

@@ -13,12 +13,12 @@
 		setTimeout(() => {
 			showing = true;
 		}, 100);
-
 		SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
 		if (SpeechRecognition) {
 			recognition = new SpeechRecognition();
 
-			recognition.lang = 'en-US';
+			recognition.lang = 'en-EN';
 			// recognition.continuous = true;
 			recognition.interimResults = true;
 			recognition.maxAlternatives = 1;
@@ -71,6 +71,13 @@
 				aria-label="start recognition"
 				class="absolute drop-shadow rounded-full border-2 bg-red-400 bottom-[10px] size-[79px] z-[10] flex justify-center items-center"
 			>
+				{#if voiceStarted}
+					<span
+						in:fly={{ y: -10 }}
+						out:fly={{ y: -10 }}
+						class="absolute bottom-[2px] font-bold text-xs text-white">X</span
+					>
+				{/if}
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -103,7 +110,7 @@
 					<div class="absolute" in:fly={{ y: 10 }} out:fly={{ y: 10 }}>Listening...</div>
 				{:else}
 					<div class="absolute" in:fly={{ y: 10 }} out:fly={{ y: 10 }}>
-						Please press the microphone and say your order
+						Please press the microphone to start your order
 					</div>
 				{/if}
 			</div>
