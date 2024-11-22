@@ -3,10 +3,10 @@
 	import { onMount } from 'svelte';
 	import LanguageList from '$lib/LanguageList.json';
 
-	let { curState, changeState, startVoice, voiceStarted } = $props();
+	let { currentLanguage, setCurrentLanguage, curState, changeState, startVoice, voiceStarted } =
+		$props();
 
 	let selectingLanguage = $state(false);
-	let currentLanguage = $state(10);
 
 	let inputTxt = $state('');
 	let inputTxtContainer = $state(null);
@@ -23,8 +23,6 @@
 
 	onMount(() => {
 		selectingLanguage = false;
-		
-	console.log(Object.keys(LanguageList));
 	});
 </script>
 
@@ -37,10 +35,11 @@
 		>
 			<div class="rounded-md h-[66vh] overflow-y-auto w-full bg-slate-400 absolute top-0">
 				{#each Object.keys(LanguageList) as lang, idx}
-					<button onclick={() => {
-						currentLanguage = idx;
-						selectingLanguage = false;
-						}} 
+					<button
+						onclick={() => {
+							setCurrentLanguage(idx);
+							selectingLanguage = false;
+						}}
 						class={`${idx == currentLanguage ? 'font-bold' : ''} hover:bg-slate-300 w-full border-b-2 border-dashed p-2 border-slate-500`}
 						>{lang}</button
 					>
@@ -89,21 +88,43 @@
 					onclick={() => {
 						selectingLanguage = !selectingLanguage;
 					}}
-					class={`${selectingLanguage ? 'border-box border-2 border-slate-500/40' : ''} select-none cursor-pointer w-full h-full bg-slate-400/50 rounded-md text-center`}
+					class={`relative select-none cursor-pointer w-full h-full bg-slate-400/50 rounded-md text-center`}
 				>
+					{#if selectingLanguage}
+						<div
+							in:fade
+							class="absolute w-full h-full border-2 border-slate-500/60 rounded-md"
+						></div>
+					{/if}
 					<div class="flex h-full">
 						<div
-							class="w-[30px] h-full text-slate-500 flex border-r border-slate-500 justify-center items-center"
+							class="w-[50px] gap-1 h-full text-slate-500 flex border-r border-slate-500 justify-center items-center"
 						>
+							<div class="flex flex-col flex-1 w-full h-full">
+								{#if selectingLanguage}
+									<span class="absolute" in:fly={{ y: 10 }} out:fly={{ y: 10 }}>&#9650;</span>
+								{:else}
+									<span class="absolute" in:fly={{ y: -10 }} out:fly={{ y: -10 }}>&#9660;</span>
+								{/if}
+							</div>
+							<span> &#x1F310; </span>
+						</div>
+						<!--
 							{#if selectingLanguage}
 								<span class="absolute" in:fly={{ y: 10 }} out:fly={{ y: 10 }}>&#9650;</span>
 							{:else}
 								<span class="absolute" in:fly={{ y: -10 }} out:fly={{ y: -10 }}>&#9660;</span>
 							{/if}
+							<span class="ml-[40px]"> &#x1F310; </span>
 						</div>
+-->
 
-						<span class="flex-1 flex items-center justify-center text-slate-500">
-							Language &mdash; <strong>{Object.keys(LanguageList)[currentLanguage]}</strong>
+						<span class="flex-1 flex relative items-center justify-center text-slate-500">
+							<!--
+							<span class="absolute left-[5px] text-slate-500 bg-white/30 rounded-md p-1 text-xs"
+								>&#x1F310;</span
+							>-->
+							<strong>{Object.keys(LanguageList)[currentLanguage]}</strong>
 						</span>
 					</div>
 				</button>

@@ -1,6 +1,7 @@
 <script>
 	import { fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
+	import LanguageList from '$lib/LanguageList.json';
 
 	let SpeechRecognition;
 	let recognition;
@@ -8,6 +9,8 @@
 	let voiceStarted = $state(false);
 	let loadProducts = $state(false);
 	let showing = $state(false);
+
+	let { currentLanguage } = $props();
 
 	onMount(() => {
 		setTimeout(() => {
@@ -35,6 +38,12 @@
 				speechResult = event.results[0][0].transcript;
 				voiceStarted = false;
 			};
+		}
+	});
+
+	$effect(() => {
+		if (currentLanguage) {
+			recognition.lang = Object.entries(LanguageList)[currentLanguage][1][0][1];
 		}
 	});
 

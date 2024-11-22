@@ -6,6 +6,8 @@
 	import Grid from '$lib/components/Grid.svelte';
 	import VoiceRecognition from '$lib/components/VoiceRecognition.svelte';
 
+	let currentLanguage = $state(10);
+
 	let states = $state([
 		{ name: 'menu' },
 		{ name: 'grid', showHeader: true },
@@ -14,7 +16,7 @@
 		{ name: 'voiceRecognition', showHeader: true }
 	]);
 
-	let voiceStarted = $state(true);
+	let voiceStarted = $state(false);
 
 	let curState = $state(0);
 	let options = $state([{ text: 'next' }, { text: 'previous' }]);
@@ -28,6 +30,8 @@
 		order: getOrder()
 	});
 
+	let showBody = $state(false);
+
 	function startVoice() {
 		voiceStarted = !voiceStarted;
 	}
@@ -36,10 +40,19 @@
 		curState = state;
 	}
 
+	function setCurrentLanguage(idx) {
+		console.log('setting.');
+		currentLanguage = idx;
+	}
+
 	onMount(() => {
 		setTimeout(() => {
 			curState = 1;
 		}, 100);
+
+		setTimeout(() => {
+			showBody = true;
+		}, 800);
 
 		items = [
 			{ name: 'beef', color: '#8b0000' },
@@ -60,7 +73,7 @@
 		});
     	*/
 
-		items = [...items, ...Array(1)];
+		// items = [...items, ...Array(100)];
 
 		// $inspect('hi', session);
 		// itemHeight = ~~document.getElementById('Body').offsetHeight / itemRows - 10;
@@ -93,28 +106,29 @@
 <div id="Container" class="overflow-hidden bg-slate-100">
 	{#if states[curState]?.showHeader}
 		<div in:fly={{ y: -100, delay: 100, duration: 600 }}>
-			<Header {curState} {startVoice} {voiceStarted} />
+			<Header {setCurrentLanguage} {currentLanguage} {curState} {startVoice} {voiceStarted} />
 		</div>
 	{/if}
 
-	<div id="Body" class="flex-1 h-full w-full flex relative overflow-hidden">
-		{#if voiceStarted}
-			<div
-				in:fly={{ y: 10 }}
-				out:fly={{ y: 10 }}
-				class="absolute w-full h-full bg-slate-200 z-[99]"
-			>
-				<VoiceRecognition />
-			</div>
-		{/if}
+	{#if showBody}
+		<div in:fade id="Body" class="flex-1 h-full w-full flex relative overflow-hidden">
+			{#if voiceStarted}
+				<div
+					in:fly={{ y: 10 }}
+					out:fly={{ y: 10 }}
+					class="absolute w-full h-full bg-slate-200 z-[99]"
+				>
+					<VoiceRecognition {currentLanguage} />
+				</div>
+			{/if}
 
-		{#if states[curState].name == 'grid'}
-			<div out:fade>
-				<Grid {items} />
-			</div>
-		{/if}
+			{#if states[curState].name == 'grid'}
+				<div out:fade>
+					<Grid {items} />
+				</div>
+			{/if}
 
-		<!--
+			<!--
 			<div class="h-full bg-slate-400 w-[30px] p-1 absolute right-[0px] top-[0px]">
 				<div
 					style={`
@@ -126,7 +140,8 @@
 			</div>
 	</div>
 -->
-	</div>
+		</div>
+	{/if}
 </div>
 
 <!--
