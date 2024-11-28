@@ -5,8 +5,11 @@
 	import Header from '$lib/components/Header.svelte';
 	import Grid from '$lib/components/Grid.svelte';
 	import VoiceRecognition from '$lib/components/VoiceRecognition.svelte';
+	import Logo from '$lib/components/Logo.svelte';
 
 	let currentLanguage = $state(10);
+	let sliderShown = $state(false);
+	let order = $state([]);
 
 	let states = $state([
 		{ name: 'menu' },
@@ -18,7 +21,7 @@
 
 	let voiceStarted = $state(false);
 
-	let curState = $state(0);
+	let curState = $state(2);
 	let options = $state([{ text: 'next' }, { text: 'previous' }]);
 	let items = $state([]);
 	let session = $state({
@@ -36,6 +39,10 @@
 		voiceStarted = !voiceStarted;
 	}
 
+	function takeTicket() {
+		curState = 1;
+	}
+
 	function changeState(state) {
 		curState = state;
 	}
@@ -47,12 +54,16 @@
 
 	onMount(() => {
 		setTimeout(() => {
-			curState = 1;
+			curState = 2;
 		}, 100);
 
 		setTimeout(() => {
 			showBody = true;
 		}, 800);
+
+		setTimeout(() => {
+			sliderShown = true;
+		}, 1000);
 
 		items = [
 			{ name: 'beef', color: '#8b0000' },
@@ -106,7 +117,14 @@
 <div id="Container" class="overflow-hidden bg-slate-100">
 	{#if states[curState]?.showHeader}
 		<div in:fly={{ y: -100, delay: 100, duration: 600 }}>
-			<Header {setCurrentLanguage} {currentLanguage} {curState} {startVoice} {voiceStarted} />
+			<Header
+				{order}
+				{setCurrentLanguage}
+				{currentLanguage}
+				{curState}
+				{startVoice}
+				{voiceStarted}
+			/>
 		</div>
 	{/if}
 
@@ -119,6 +137,22 @@
 					class="absolute w-full h-full bg-slate-200 z-[99]"
 				>
 					<VoiceRecognition {currentLanguage} />
+				</div>
+			{/if}
+
+			{#if states[curState].name == 'ticket'}
+				<div class="p-2 w-full h-full flex justify-center items-center">
+					<Logo />
+					{#if sliderShown}
+						<div
+							in:fly={{ x: 40, duration: 400, delay: 100 }}
+							class="w-[80px] bg-slate-400/50 rounded-md h-full absolute right-0 border-box m-2 mt-2"
+						>
+							<div class="w-full h-[60px] absolute left-0 bottom-0 p-2">
+								<button onclick={takeTicket} class="bg-slate-500 w-full h-full rounded-md"></button>
+							</div>
+						</div>
+					{/if}
 				</div>
 			{/if}
 

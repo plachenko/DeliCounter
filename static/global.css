@@ -1,0 +1,22 @@
+[contentEditable='true']:empty:before {
+	content: attr(placeholder);
+	color: #ccc;
+}
+body,
+html {
+	height: 100%;
+	overscroll-behavior: contain;
+}
+
+@font-face {
+	font-family: 'Eponymous-BoldItalic';
+	src: url('https://db.onlinewebfonts.com/t/31e9678cd832600c6aa9caa3bd5a166b.eot');
+	src:
+		url('https://db.onlinewebfonts.com/t/31e9678cd832600c6aa9caa3bd5a166b.eot?#iefix')
+			format('embedded-opentype'),
+		url('https://db.onlinewebfonts.com/t/31e9678cd832600c6aa9caa3bd5a166b.woff2') format('woff2'),
+		url('https://db.onlinewebfonts.com/t/31e9678cd832600c6aa9caa3bd5a166b.woff') format('woff'),
+		url('https://db.onlinewebfonts.com/t/31e9678cd832600c6aa9caa3bd5a166b.ttf') format('truetype'),
+		url('https://db.onlinewebfonts.com/t/31e9678cd832600c6aa9caa3bd5a166b.svg#Eponymous-BoldItalic')
+			format('svg');
+}

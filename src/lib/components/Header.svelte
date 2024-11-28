@@ -14,6 +14,11 @@
 	let order = $state([]);
 	let inputFocused = $state(false);
 	// let languages = $state(LanguageList);
+	//
+	let languages = $state({
+		English: [['United States', 'en-US']],
+		'Español (Spanish)': [['Spain', 'es-ES']]
+	});
 
 	$effect(() => {
 		if (!voiceStarted) {
@@ -33,17 +38,20 @@
 			out:fly={{ y: -10 }}
 			class="bg-slate-400 rounded-md left-[10%] top-[55px] z-[399] w-[80%] absolute"
 		>
-			<div class="rounded-md h-[66vh] overflow-y-auto w-full bg-slate-400 absolute top-0">
+			<div class="rounded-md max-h-[66vh] overflow-y-auto w-full bg-slate-400 absolute top-0">
 				{#each Object.keys(LanguageList) as lang, idx}
 					<button
 						onclick={() => {
 							setCurrentLanguage(idx);
 							selectingLanguage = false;
 						}}
-						class={`${idx == currentLanguage ? 'font-bold' : ''} hover:bg-slate-300 w-full border-b-2 border-dashed p-2 border-slate-500`}
+						class={`${idx == currentLanguage ? 'font-bold' : ''} hover:bg-slate-300 w-full [&:last-child]:border-none border-b-2 border-dashed p-2 border-slate-500`}
 						>{lang}</button
 					>
 				{/each}
+				<button class="flex items-center justify-center p-2 w-full hover:bg-slate-300"
+					>More ...</button
+				>
 			</div>
 		</div>
 	{/if}
@@ -61,7 +69,7 @@
 			<div
 				in:fade
 				out:fade
-				class="border-blue-400 border-[2px] w-full h-full rounded-md absolute left-0"
+				class="border-slate-600/80 border-[2px] w-full h-full rounded-md absolute left-0"
 			></div>
 		{/if}
 
@@ -98,16 +106,20 @@
 					{/if}
 					<div class="flex h-full">
 						<div
-							class="w-[50px] gap-1 h-full text-slate-500 flex border-r border-slate-500 justify-center items-center"
+							class="w-[50px] gap-1 h-full relative text-slate-500 flex border-r border-slate-500 justify-center items-center"
 						>
-							<div class="flex flex-col flex-1 w-full h-full">
+							<div class="flex flex-col relative flex-1 w-full h-full">
 								{#if selectingLanguage}
-									<span class="absolute" in:fly={{ y: 10 }} out:fly={{ y: 10 }}>&#9650;</span>
+									<span class="absolute left-[4px]" in:fly={{ y: 10 }} out:fly={{ y: 10 }}
+										>&#9650;</span
+									>
 								{:else}
-									<span class="absolute" in:fly={{ y: -10 }} out:fly={{ y: -10 }}>&#9660;</span>
+									<span class="absolute left-[4px]" in:fly={{ y: -10 }} out:fly={{ y: -10 }}
+										>&#9660;</span
+									>
 								{/if}
 							</div>
-							<span> &#x1F310; </span>
+							<span class="opacity-30 absolute right-[8px]"> &#x1F310; </span>
 						</div>
 						<!--
 							{#if selectingLanguage}
@@ -120,10 +132,6 @@
 -->
 
 						<span class="flex-1 flex relative items-center justify-center text-slate-500">
-							<!--
-							<span class="absolute left-[5px] text-slate-500 bg-white/30 rounded-md p-1 text-xs"
-								>&#x1F310;</span
-							>-->
 							<strong>{Object.keys(LanguageList)[currentLanguage]}</strong>
 						</span>
 					</div>
