@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
 
+	import Time from '$lib/components/Time.svelte';
+
 	import Header from '$lib/components/Header.svelte';
 	import Grid from '$lib/components/Grid.svelte';
 	import VoiceRecognition from '$lib/components/VoiceRecognition.svelte';
@@ -10,6 +12,9 @@
 	let currentLanguage = $state(10);
 	let sliderShown = $state(false);
 	let order = $state([]);
+
+	let infoHeaderShown = $state(false);
+	let showLogo = $state(false);
 
 	let states = $state([
 		{ name: 'menu' },
@@ -59,10 +64,12 @@
 
 		setTimeout(() => {
 			showBody = true;
+			showLogo = true;
 		}, 800);
 
 		setTimeout(() => {
 			sliderShown = true;
+			infoHeaderShown = true;
 		}, 1000);
 
 		items = [
@@ -74,7 +81,8 @@
 			{ name: 'ham', color: '#FFA07A' },
 			{ name: 'italian', color: '#A52A2A' },
 			{ name: 'turkey', color: '#edc478' },
-			{ name: 'franks', color: '#F00F00' }
+			{ name: 'franks', color: '#F00F00' },
+			{ name: 'platters', color: '#F00F00' }
 		];
 
 		/*
@@ -141,19 +149,85 @@
 			{/if}
 
 			{#if states[curState].name == 'ticket'}
-				<div class="p-2 w-full h-full flex justify-center items-center">
+				<div class="w-full h-full flex flex-col">
+					<div class="h-[30px] w-full relative">
+						{#if infoHeaderShown}
+							<div
+								in:fly={{ y: -30 }}
+								class="flex bg-slate-400/30 pb-2 p-1 text-slate-800/30 text-sm items-center w-full absolute top-0 h-full"
+							>
+								<div class="flex flex-1">store# 88</div>
+								<div class="w-[152hx]"><Time /></div>
+								<div class="flex-1 flex items-end justify-end">John Doe</div>
+								<div class="w-full bg-red-400 h-[2px] absolute bottom-0 left-0">
+									<div class="absolute left-0 bg-green-400 h-full w-[30px]"></div>
+								</div>
+							</div>
+						{/if}
+					</div>
+					<div class="w-full h-full flex">
+						<div class="flex-1 h-full flex justiy-center relative items-center">
+							{#if showLogo}
+								<Logo />
+								<!--
+								<div
+									in:fly={{ x: 130, duration: 3800 }}
+									class="bg-yellow-300 w-[300px] h-full absolute"
+								>
+								</div>
+-->
+							{/if}
+						</div>
+						<div class="p-2 relative w-[80px] h-full">
+							{#if sliderShown}
+								<div in:fly={{ x: 40, duration: 400, delay: 100 }} class="w-full h-full">
+									<div class="h-full w-full rounded-md bg-slate-400/50 flex items-end">
+										<div class="w-full h-[70px] p-2">
+											<button onclick={takeTicket} class="bg-slate-500 w-full h-full rounded-md"
+											></button>
+										</div>
+										<!--
+										<div class="w-full h-[60px] h-max-[30px] absolute left-0 bottom-0">
+										</div>
+-->
+									</div>
+								</div>
+							{/if}
+						</div>
+					</div>
+				</div>
+				<!--
+				<div class="w-full h-full flex justify-center items-center relative">
+					{#if infoHeaderShown}
+						<div
+							in:fly={{ y: -30 }}
+							class="flex bg-slate-400/30 p-1 text-slate-800/30 text-sm items-center w-full absolute top-0"
+						>
+							<div class="flex flex-1">store# 88</div>
+							<div class="w-[152hx]"><Time /></div>
+							<div class="flex-1 flex items-end justify-end">John Doe</div>
+							<div class="w-full bg-red-400 h-[2px] absolute bottom-0 left-0">
+								<div class="absolute left-0 bg-green-400 h-full w-[30px]"></div>
+							</div>
+						</div>
+					{/if}
+
 					<Logo />
 					{#if sliderShown}
 						<div
 							in:fly={{ x: 40, duration: 400, delay: 100 }}
-							class="w-[80px] bg-slate-400/50 rounded-md h-full absolute right-0 border-box m-2 mt-2"
+							class="w-[80px] p-2 h-full absolute right-0 border-box"
 						>
-							<div class="w-full h-[60px] absolute left-0 bottom-0 p-2">
-								<button onclick={takeTicket} class="bg-slate-500 w-full h-full rounded-md"></button>
+							<div class="h-full w-full rounded-md bg-slate-400/50 p-2">
+								<div class="w-full h-[60px] h-max-[30px] absolute left-0 bottom-0 p-3">
+									<button onclick={takeTicket} class="bg-slate-500 w-full h-full rounded-md"
+									></button>
+								</div>
 							</div>
 						</div>
 					{/if}
 				</div>
+-->
 			{/if}
 
 			{#if states[curState].name == 'grid'}
