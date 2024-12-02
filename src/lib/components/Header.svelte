@@ -108,7 +108,7 @@
 						<div
 							class="w-[50px] gap-1 h-full relative text-slate-500 flex border-r border-slate-500 justify-center items-center"
 						>
-							<div class="flex flex-col relative flex-1 w-full h-full">
+							<div class="bg-slate-200/30 rounded-l-md flex flex-col relative flex-1 w-full h-full">
 								{#if selectingLanguage}
 									<span class="absolute left-[4px]" in:fly={{ y: 10 }} out:fly={{ y: 10 }}
 										>&#9650;</span

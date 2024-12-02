@@ -15,6 +15,8 @@
 	let tickDone = $state(false);
 	let taken = $state(false);
 
+	let curOver = $state(null);
+
 	function setItem(idx, e) {
 		if (itemTick) {
 			clearInterval(itemTick);
@@ -105,6 +107,15 @@
 			>
 				{#each items as item, idx}
 					<div bind:this={itemDivs[idx]} class="p-1 relative">
+						<!--
+						{#if curOver == idx}
+							<div
+								in:fade={{ duration: 200 }}
+								out:fade
+								class="bg-green-400/40 w-full h-full absolute left-[-1px] top-[-1px] rounded-md"
+							></div>
+						{/if}
+-->
 						<div class="rounded-md relative" style={`height: ${~~itemHeight}px`}>
 							<div class={`offsetDiv absolute top-[-7px] size-2`}></div>
 							{#if curItem >= idx}
@@ -112,6 +123,9 @@
 									in:fly={{ y: 70 }}
 									out:outT={{ idx: idx }}
 									style={`height: ${~~itemHeight}px;`}
+									onpointerover={() => {
+										curOver = idx;
+									}}
 									onclick={(e) => {
 										setTimeout(() => {
 											gridContainer.scrollTo(0, 0);

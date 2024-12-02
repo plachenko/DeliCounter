@@ -13,6 +13,10 @@
 	let sliderShown = $state(false);
 	let order = $state([]);
 
+	let timeCol = $state('#0F0');
+
+	let showTimer = $state(false);
+
 	let infoHeaderShown = $state(false);
 	let showLogo = $state(false);
 
@@ -40,12 +44,21 @@
 
 	let showBody = $state(false);
 
+	const curDate = new Date();
+
+	const curTime = `${curDate.getHours()}:${curDate.getMinutes()}`;
+
 	function startVoice() {
 		voiceStarted = !voiceStarted;
 	}
 
 	function takeTicket() {
-		curState = 1;
+		showLogo = false;
+		infoHeaderShown = false;
+		sliderShown = false;
+		setTimeout(() => {
+			curState = 1;
+		}, 200);
 	}
 
 	function changeState(state) {
@@ -57,6 +70,38 @@
 		currentLanguage = idx;
 	}
 
+	function timeScale(currentTimeStr) {
+		// Define opening and closing times in 24-hour format (e.g., "HH:MM")
+		const openingTimeStr = '09:00'; // Opening time at 9:00 AM
+		const closingTimeStr = '21:00'; // Closing time at 5:00 PM
+
+		// Convert time strings into minutes from midnight
+		function timeToMinutes(timeStr) {
+			const [hours, minutes] = timeStr.split(':').map(Number);
+			return hours * 60 + minutes;
+		}
+
+		// Compute minutes from midnight for each time
+		const openingTime = timeToMinutes(openingTimeStr);
+		const closingTime = timeToMinutes(closingTimeStr);
+		const currentTime = timeToMinutes(currentTimeStr);
+
+		// Calculate the duration in minutes the store is open
+		const totalOpenMinutes = closingTime - openingTime;
+
+		// Make sure current time is within the bounds of open and close times
+		if (currentTime < openingTime) {
+			timeCol = '#F00';
+			return 0; // Before opening time
+		} else if (currentTime > closingTime) {
+			timeCol = '#F00';
+			return 1; // After closing time
+		} else {
+			// Calculate the position of current time within open hours
+			return (currentTime - openingTime) / totalOpenMinutes;
+		}
+	}
+
 	onMount(() => {
 		setTimeout(() => {
 			curState = 2;
@@ -64,13 +109,17 @@
 
 		setTimeout(() => {
 			showBody = true;
-			showLogo = true;
 		}, 800);
 
 		setTimeout(() => {
 			sliderShown = true;
+			showLogo = true;
 			infoHeaderShown = true;
 		}, 1000);
+
+		setTimeout(() => {
+			showTimer = true;
+		}, 1100);
 
 		items = [
 			{ name: 'beef', color: '#8b0000' },
@@ -84,18 +133,6 @@
 			{ name: 'franks', color: '#F00F00' },
 			{ name: 'platters', color: '#F00F00' }
 		];
-
-		/*
-		items.sort((a, b) => {
-			if (a.text < b.text) return -1;
-			if (a.text > b.text) return 1;
-		});
-    	*/
-
-		// items = [...items, ...Array(100)];
-
-		// $inspect('hi', session);
-		// itemHeight = ~~document.getElementById('Body').offsetHeight / itemRows - 10;
 	});
 
 	function getOrder() {
@@ -111,14 +148,7 @@
 			if (a.text < b.text) return -1;
 			if (a.text > b.text) return 1;
 		});
-		/*
-    let alphabetical = arr.sort((a, b) => {
-      if(a < b) return a;
-      return b;
-    });
-      */
 		return alphabetical;
-		// return ['test', 'hi']b;
 	}
 </script>
 
@@ -153,6 +183,7 @@
 					<div class="h-[30px] w-full relative">
 						{#if infoHeaderShown}
 							<div
+								out:fly={{ y: -30 }}
 								in:fly={{ y: -30 }}
 								class="flex bg-slate-400/30 pb-2 p-1 text-slate-800/30 text-sm items-center w-full absolute top-0 h-full"
 							>
@@ -160,74 +191,52 @@
 								<div class="w-[152hx]"><Time /></div>
 								<div class="flex-1 flex items-end justify-end">John Doe</div>
 								<div class="w-full bg-red-400 h-[2px] absolute bottom-0 left-0">
-									<div class="absolute left-0 bg-green-400 h-full w-[30px]"></div>
+									{#if showTimer}
+										<div
+											in:fly={{ x: -100, delay: 300, duration: 1000 }}
+											style={`background-color: ${timeCol}; width: ${~~(timeScale('21:59') * window.innerWidth)}px`}
+											class="absolute left-0 h-full"
+										></div>
+									{/if}
 								</div>
 							</div>
 						{/if}
 					</div>
 					<div class="w-full h-full flex">
-						<div class="flex-1 h-full flex justiy-center relative items-center">
+						<div class="relative flex-1 h-full flex justify-center relative items-center">
 							{#if showLogo}
-								<Logo />
-								<!--
 								<div
-									in:fly={{ x: 130, duration: 3800 }}
-									class="bg-yellow-300 w-[300px] h-full absolute"
+									in:fly={{ y: 30 }}
+									out:fly={{ y: -10 }}
+									class="absolute flex justify-center items-center w-[100px] h-[100px]"
 								>
+									<div class="absolute top-[30px]">
+										<Logo />
+									</div>
 								</div>
--->
 							{/if}
 						</div>
 						<div class="p-2 relative w-[80px] h-full">
 							{#if sliderShown}
-								<div in:fly={{ x: 40, duration: 400, delay: 100 }} class="w-full h-full">
+								<div
+									out:fly={{ x: 40 }}
+									in:fly={{ x: 40, duration: 400, delay: 100 }}
+									class="w-full h-full"
+								>
 									<div class="h-full w-full rounded-md bg-slate-400/50 flex items-end">
 										<div class="w-full h-[70px] p-2">
-											<button onclick={takeTicket} class="bg-slate-500 w-full h-full rounded-md"
+											<button
+												aria-label="take a ticket"
+												onclick={takeTicket}
+												class="bg-slate-500 w-full h-full rounded-md"
 											></button>
 										</div>
-										<!--
-										<div class="w-full h-[60px] h-max-[30px] absolute left-0 bottom-0">
-										</div>
--->
 									</div>
 								</div>
 							{/if}
 						</div>
 					</div>
 				</div>
-				<!--
-				<div class="w-full h-full flex justify-center items-center relative">
-					{#if infoHeaderShown}
-						<div
-							in:fly={{ y: -30 }}
-							class="flex bg-slate-400/30 p-1 text-slate-800/30 text-sm items-center w-full absolute top-0"
-						>
-							<div class="flex flex-1">store# 88</div>
-							<div class="w-[152hx]"><Time /></div>
-							<div class="flex-1 flex items-end justify-end">John Doe</div>
-							<div class="w-full bg-red-400 h-[2px] absolute bottom-0 left-0">
-								<div class="absolute left-0 bg-green-400 h-full w-[30px]"></div>
-							</div>
-						</div>
-					{/if}
-
-					<Logo />
-					{#if sliderShown}
-						<div
-							in:fly={{ x: 40, duration: 400, delay: 100 }}
-							class="w-[80px] p-2 h-full absolute right-0 border-box"
-						>
-							<div class="h-full w-full rounded-md bg-slate-400/50 p-2">
-								<div class="w-full h-[60px] h-max-[30px] absolute left-0 bottom-0 p-3">
-									<button onclick={takeTicket} class="bg-slate-500 w-full h-full rounded-md"
-									></button>
-								</div>
-							</div>
-						</div>
-					{/if}
-				</div>
--->
 			{/if}
 
 			{#if states[curState].name == 'grid'}
@@ -235,19 +244,6 @@
 					<Grid {items} />
 				</div>
 			{/if}
-
-			<!--
-			<div class="h-full bg-slate-400 w-[30px] p-1 absolute right-[0px] top-[0px]">
-				<div
-					style={`
-          height: ${itemHeight}px;
-          `}
-					class="bg-slate-700 w-full rounded-md h-full"
-				></div>
->
-			</div>
-	</div>
--->
 		</div>
 	{/if}
 </div>

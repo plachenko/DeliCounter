@@ -5,7 +5,7 @@
 
 	let SpeechRecognition;
 	let recognition;
-	let speechResult = $state('testing');
+	let speechResult = $state('');
 	let voiceStarted = $state(false);
 	let loadProducts = $state(false);
 	let showing = $state(false);

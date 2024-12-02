@@ -9,12 +9,16 @@
 			class="w-full text-4xl text-red-600 text-center uppercase leading-7 tracking-[-1px] drop-shadow-[-2px_2px_0px_rgb(0,0,0)] text-center font-['Eponymous-BoldItalic'] z-[2] flex flex-col"
 		>
 			<div class="flex-1 flex items-end relative">
+				<div class="absolute rotate-[125deg] -scale-x-100 left-[-17px] top-[4px]">&lsquo;</div>
+				<div class="absolute bg-white w-[2px] h-[7px] left-[5px] rotate-[12deg] bottom-[1px]"></div>
+				<!-- <div class="absolute bg-white w-[7px] h-[7px] left-[0px] bottom-[0px]"></div> -->
 				<div class="">M</div>
 				<div class="bg-blue-300 flex-1 w-full h-full flex justify-start items-end">
 					<span class="scale-[.7] absolute left-[14px] bottom-[-3px]">arket</span>
 				</div>
 			</div>
 			<div class="flex-1 flex items-end justify-end relative">
+				<div class="absolute rotate-45 left-[-12px] top-[-6px]">&lsquo;</div>
 				<div class="">B</div>
 				<div class="bg-blue-300 flex-1 w-full h-full flex justify-start items-end">
 					<span class="scale-[.7] absolute left-[5px] bottom-[-3px]">asket</span>
