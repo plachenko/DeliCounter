@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
 
-	let { items } = $props();
+	let { items, showGrid } = $props();
 	let itemHeight = $state(null);
 	let itemRows = $state(3);
 	let curItem = $state(-1);
@@ -16,6 +16,13 @@
 	let taken = $state(false);
 
 	let curOver = $state(null);
+
+	$effect(() => {
+		console.log(showGrid);
+		if (!showGrid) {
+			show = false;
+		}
+	});
 
 	function setItem(idx, e) {
 		if (itemTick) {

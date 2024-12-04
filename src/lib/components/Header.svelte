@@ -56,6 +56,9 @@
 		</div>
 	{/if}
 	<button
+		onclick={() => {
+			changeState(2);
+		}}
 		aria-label="MenuButton"
 		class="flex items-center justify-center bg-slate-200 w-[80px] h-full rounded-md"
 	>
