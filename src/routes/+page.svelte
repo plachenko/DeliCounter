@@ -9,9 +9,13 @@
 	import VoiceRecognition from '$lib/components/VoiceRecognition.svelte';
 	import Logo from '$lib/components/Logo.svelte';
 
+	import DeliItems from '$lib/DeliItems.json';
+
 	let currentLanguage = $state(10);
 	let sliderShown = $state(false);
 	let order = $state([]);
+
+	let ticketShown = $state(true);
 
 	let infoBubble = $state(false);
 	let ticking = $state(false);
@@ -61,13 +65,16 @@
 	}
 
 	function takeTicket() {
-		showLogo = false;
-		infoHeaderShown = false;
-		sliderShown = false;
-		// infoBubble = false;
 		setTimeout(() => {
-			curState = 1;
-		}, 200);
+			showLogo = false;
+			infoHeaderShown = false;
+			sliderShown = false;
+			setTimeout(() => {
+				curState = 1;
+			}, 200);
+		}, 400);
+		ticketShown = false;
+		infoBubble = false;
 	}
 
 	function changeState(state) {
@@ -128,6 +135,7 @@
 		setTimeout(() => {
 			infoBubble = true;
 			ticking = true;
+			ticketShown = true;
 			setTimeout(() => {
 				ticking = false;
 			}, 100);
@@ -149,6 +157,23 @@
 		setTimeout(() => {
 			curState = 2;
 		}, 100);
+
+		for (let e in DeliItems) {
+			console.log(DeliItems[e].description);
+		}
+		/*
+		DeliItems.each((e) => {
+			console.log(e);
+		});
+    */
+		/*
+    DeliItems.forEach((e){
+      // console.log(e);
+
+    })
+    */
+
+		// console.log(DeliItems);
 
 		/*
 		timeWidthTicker = setInterval(() => {
@@ -220,47 +245,6 @@
 				<div class="w-full h-full flex flex-col">
 					<div class="h-[30px] w-full relative">
 						{#if infoHeaderShown}
-							{#if infoBubble}
-								<div
-									in:fly={{ y: -10 }}
-									out:fly={{ y: -10 }}
-									class="absolute top-[38px] w-full flex h-[30px] justify-center items-center"
-								>
-									<div class="absolute bg-red-200/90 overflow-hidden rounded-md w-[230px] h-full">
-										{#if ticking}
-											<div
-												out:fly={{ x: -260, duration: 8000 }}
-												class="z-[8] w-full h-full bg-slate-800/80 absolute"
-											></div>
-										{/if}
-										<div class="absolute z-[19] w-full h-full p-1">
-											<div
-												class="bg-red-300 w-full h-full z-[19] rounded-md text-red-800 border-red-400 flex justify-center items-center text-sm p-1"
-											>
-												Store will be closing in 15 minutes
-											</div>
-										</div>
-									</div>
-									<!--
-									<div class=" p-1">
-										<div
-											class="bg-red-400 bg-red-300 border-2 zIndex-[10] text-red-800 border-red-400 rounded-md absolute"
-										></div>
-										<div
-											class="bg-slate-500 overflow-hidden zIndex-[4] rounded-md w-full h-full absolute left-[-4px] top-[-4px] border-box pr-[14px]"
-										>
-											{#if ticking}
-												<div
-													out:fly={{ x: -250, duration: 7000, delay: 100 }}
-													class="h-full bg-slate-200 w-full"
-												></div>
-											{/if}
-										</div>
-										Store closed will reopen in 3 hours
-									</div>
--->
-								</div>
-							{/if}
 							<div
 								out:fly={{ y: -30 }}
 								in:fly={{ y: -30 }}
@@ -283,6 +267,29 @@
 					</div>
 					<div class="w-full h-full flex">
 						<div class="relative flex-1 h-full flex justify-center relative items-center">
+							{#if infoBubble}
+								<div
+									in:fly={{ y: -10, duration: 1000 }}
+									out:fly={{ y: -20 }}
+									class="absolute top-[10px] w-full flex h-[30px] justify-center items-center"
+								>
+									<div class="absolute bg-slate-800/20 overflow-hidden rounded-md w-[230px] h-full">
+										{#if ticking}
+											<div
+												out:fly={{ x: -260, duration: 8000 }}
+												class="z-[8] w-full h-full bg-slate-800/80 absolute"
+											></div>
+										{/if}
+										<div class="absolute z-[19] w-full h-full p-1">
+											<div
+												class="bg-red-300 w-full h-full z-[19] rounded-md text-red-800 border-red-400 flex justify-center items-center text-sm p-1"
+											>
+												Store will be closing in 15 minutes
+											</div>
+										</div>
+									</div>
+								</div>
+							{/if}
 							{#if showLogo}
 								<div
 									in:fly={{ y: 30 }}
@@ -294,6 +301,15 @@
 									</div>
 								</div>
 							{/if}
+							{#if !infoBubble && sliderShown}
+								<div
+									out:fly={{ y: 10 }}
+									in:fly={{ y: 10 }}
+									class="bg-red-400/30 border-2 border-red-400 p-2 rounded-md absolute bottom-[15px]"
+								>
+									Slide down to start order
+								</div>
+							{/if}
 						</div>
 						<div class="p-2 relative w-[80px] h-full">
 							{#if sliderShown}
@@ -302,8 +318,17 @@
 									in:fly={{ x: 40, duration: 400, delay: 100 }}
 									class="w-full h-full"
 								>
-									<div class="h-full w-full rounded-md border-box bg-slate-400/50 flex items-end">
-										<div class="bg-red-400 flex-1 w-full h-[10px] absolute top-[0px]"></div>
+									<div
+										class="h-full w-full relative rounded-md border-box bg-slate-400/50 flex items-end"
+									>
+										<!-- <div class="bg-red-400 flex-1 w-full h-[10px] absolute top-[0px]"></div> -->
+										<div class="w-full h-[100px] absolute top-0 p-1">
+											{#if ticketShown}
+												<div out:fly={{ y: 80 }} class="p-2 bg-slate-400 rounded-md w-full h-full">
+													<img src="ticket.svg" />
+												</div>
+											{/if}
+										</div>
 										<div class="w-full h-[70px] p-2">
 											<button
 												aria-label="take a ticket"
