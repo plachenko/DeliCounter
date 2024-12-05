@@ -161,6 +161,7 @@
 		for (let e in DeliItems) {
 			console.log(DeliItems[e].description);
 		}
+
 		/*
 		DeliItems.each((e) => {
 			console.log(e);
@@ -307,7 +308,7 @@
 									in:fly={{ y: 10 }}
 									class="bg-red-400/30 border-2 border-red-400 p-2 rounded-md absolute bottom-[15px]"
 								>
-									Slide down to start order
+									<span class="text-red-400"> Slide down to start order </span>
 								</div>
 							{/if}
 						</div>
@@ -319,12 +320,15 @@
 									class="w-full h-full"
 								>
 									<div
-										class="h-full w-full relative rounded-md border-box bg-slate-400/50 flex items-end"
+										class="h-full w-full relative rounded-md border-box border-[2px] bg-slate-400/50 flex items-end"
 									>
 										<!-- <div class="bg-red-400 flex-1 w-full h-[10px] absolute top-[0px]"></div> -->
 										<div class="w-full h-[100px] absolute top-0 p-1">
 											{#if ticketShown}
-												<div out:fly={{ y: 80 }} class="p-2 bg-slate-400 rounded-md w-full h-full">
+												<div
+													out:fly={{ y: 80 }}
+													class="p-2 bg-slate-400 border-[2px] border-slate-800/20 rounded-md w-full h-full"
+												>
 													<img src="ticket.svg" />
 												</div>
 											{/if}
