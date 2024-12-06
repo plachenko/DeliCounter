@@ -133,7 +133,7 @@
 
 	function showTicketEls() {
 		setTimeout(() => {
-			infoBubble = true;
+			// infoBubble = true;
 			ticking = true;
 			ticketShown = true;
 			setTimeout(() => {
@@ -291,6 +291,7 @@
 									</div>
 								</div>
 							{/if}
+
 							{#if showLogo}
 								<div
 									in:fly={{ y: 30 }}
@@ -329,7 +330,7 @@
 													out:fly={{ y: 80 }}
 													class="p-2 bg-slate-400 border-[2px] border-slate-800/20 rounded-md w-full h-full"
 												>
-													<img src="ticket.svg" />
+													<img alt="Ticket Stub" src="ticket.svg" />
 												</div>
 											{/if}
 										</div>

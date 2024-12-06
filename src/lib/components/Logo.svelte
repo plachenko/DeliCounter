@@ -9,8 +9,8 @@
 			class="w-full text-4xl text-red-600 text-center uppercase leading-7 tracking-[-1px] drop-shadow-[-2px_2px_0px_rgb(0,0,0)] text-center font-['Eponymous-BoldItalic'] z-[2] flex flex-col"
 		>
 			<div class="flex-1 flex items-end relative">
-				<div class="absolute rotate-[125deg] -scale-x-100 left-[-17px] top-[4px]">&lsquo;</div>
-				<div class="absolute bg-white w-[2px] h-[7px] left-[5px] rotate-[12deg] bottom-[1px]"></div>
+				<div class="absolute rotate-[120deg] -scale-x-100 left-[-18px] top-[5px]">&lsquo;</div>
+				<div class="absolute bg-white w-[2px] h-[9px] left-[5px] rotate-[12deg] bottom-[3px]"></div>
 				<!-- <div class="absolute bg-white w-[7px] h-[7px] left-[0px] bottom-[0px]"></div> -->
 				<div class="">M</div>
 				<div class="bg-blue-300 flex-1 w-full h-full flex justify-start items-end">

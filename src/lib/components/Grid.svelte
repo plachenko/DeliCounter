@@ -15,6 +15,8 @@
 	let tickDone = $state(false);
 	let taken = $state(false);
 
+	let currentCategory = $state(null);
+
 	let curOver = $state(null);
 
 	$effect(() => {
@@ -35,13 +37,18 @@
 		setTimeout(() => {
 			curItem = -1;
 			touchPing.style.left = e.clientX - 8 + 'px';
-			touchPing.style.top = e.clientY - 55 + 'px';
+			touchPing.style.top = e.clientY - 55 - (currentCategory ? 30 : 0) + 'px';
 		}, 1);
 
 		setTimeout(() => {
 			taken = true;
 			selectedItem = null;
 		}, 300);
+
+		setTimeout(() => {
+			currentCategory = items[idx];
+			setItemHeight();
+		}, 500);
 
 		setTimeout(() => {
 			ticker();
@@ -77,21 +84,46 @@
 		}, 60);
 	}
 
+	function setItemHeight() {
+		itemHeight =
+			~~document.getElementById('gridContainer').offsetHeight / itemRows -
+			10 -
+			(currentCategory ? 15 : 0);
+	}
+
 	onMount(() => {
 		document.getElementById('gridContainer').addEventListener('resize', () => {
-			itemHeight = ~~document.getElementById('gridContainer').offsetHeight / itemRows - 10;
+			setItemHeight();
 		});
 
 		ticker();
 
 		setTimeout(() => {
 			show = true;
-			itemHeight = ~~document.getElementById('gridContainer').offsetHeight / itemRows - 10;
+			setItemHeight();
 		}, 40);
 	});
 </script>
 
-<div id="gridContainer" class="h-full overflow-hidden bg-slate-800">
+<div id="gridContainer" class="h-full overflow-hidden w-full">
+	{#if currentCategory}
+		<div
+			in:fly={{ y: -100 }}
+			style={`background-color: ${currentCategory?.color || '#CCC'}`}
+			class="px-3 opacity-40 flex gap-3 flex-row items-center bg-slate-800 flex-1 w-[100vw] h-[30px]"
+		></div>
+		<div class="absolute w-full h-full left-0 top-0 flex">
+			<!--
+			<div class="size-6">
+				<img alt={`${currentCategory?.name} icon`} src={`icons/${currentCategory?.name}.svg`} />
+			</div>
+
+			<span class="border-l-2 border-slate-400 pl-3">
+				{currentCategory.name}
+			</span>
+-->
+		</div>
+	{/if}
 	<!-- <img class="bg-slate-200 absolute size-[190px] z-[3] " src="ticket.svg" /> -->
 	{#if show}
 		<!-- <div class="h-[20px] bg-red-400 w-full"></div> -->
@@ -110,68 +142,70 @@
 			<div
 				bind:this={gridContainer}
 				onscrollend={scrollEnd}
-				class={`w-full h-full grid pt-1 ${curItem <= 8 ? 'overflow-hidden' : 'overflow-y-auto'} grid-cols-3`}
+				class={`w-full h-full grid ${curItem <= 8 ? 'overflow-hidden' : 'overflow-y-auto'} grid-cols-3`}
 			>
 				{#each items as item, idx}
-					<div bind:this={itemDivs[idx]} class="p-1 relative">
-						<!--
-						{#if curOver == idx}
-							<div
-								in:fade={{ duration: 200 }}
-								out:fade
-								class="bg-green-400/40 w-full h-full absolute left-[-1px] top-[-1px] rounded-md"
-							></div>
-						{/if}
--->
-						<div class="rounded-md relative" style={`height: ${~~itemHeight}px`}>
-							<div class={`offsetDiv absolute top-[-7px] size-2`}></div>
-							{#if curItem >= idx}
-								<button
-									in:fly={{ y: 70 }}
-									out:outT={{ idx: idx }}
-									style={`height: ${~~itemHeight}px;`}
-									onpointerover={() => {
-										curOver = idx;
-									}}
-									onclick={(e) => {
-										setTimeout(() => {
-											gridContainer.scrollTo(0, 0);
-										}, 300);
-										setItem(idx, e);
-									}}
-									class="relative select-none rounded-md bg-slate-300 w-full flex items-center justify-center"
+					<div
+						style={`height: ${itemHeight}px`}
+						class="border-2 border-box flex justify-center items-center p-1"
+					>
+						{#if curItem >= idx}
+							<button
+								in:fly={{ y: 70 }}
+								out:outT={{ idx: idx }}
+								style={`height: ${~~itemHeight}px;`}
+								onpointerover={() => {
+									curOver = idx;
+								}}
+								onclick={(e) => {
+									setTimeout(() => {
+										gridContainer.scrollTo(0, 0);
+									}, 300);
+									setItem(idx, e);
+								}}
+								class="flex-1 relative select-none border-b-2 rounded-md bg-slate-300 w-full flex items-center justify-center"
+							>
+								<div
+									style={`background-color: ${item?.color || '#CCC'};`}
+									class={`z-[1] absolute ${selectedItem !== idx ? 'opacity-30' : 'opacity-30'} rounded-md w-full h-full`}
+								></div>
+								<div
+									class="h-full z-[2] w-[80%] flex portrait:flex-col landscape:flex-row justify-center items-center"
 								>
 									<div
-										style={`background-color: ${item?.color || '#CCC'};`}
-										class={`z-[1] absolute ${selectedItem !== idx ? 'opacity-30' : 'opacity-30'} rounded-md w-full h-full`}
-									></div>
-									<div
-										class="h-full z-[2] w-[80%] flex portrait:flex-col landscape:flex-row justify-center items-center"
+										class=" landscape:border-r portrait:border-b landscape:pr-2 landscape:mr-2 portrait:pb-2 portrait:size-[80%] portrait:mb-2 border-slate-800/30 flex items-center justify-center"
 									>
-										<div
-											class=" landscape:border-r portrait:border-b landscape:pr-2 landscape:mr-2 portrait:pb-2 portrait:size-[80%] portrait:mb-2 border-slate-800/30 flex items-center justify-center"
-										>
-											{#if item?.name}
-												<img
-													class="opacity-30 landscape:size-7 portrait:size-20 flex-1"
-													alt={`${item?.name} icon`}
-													src={`icons/${item?.name}.svg`}
-												/>
-											{/if}
-										</div>
-
-										<div
-											class="capitalize flex-1 landscape:text-left landscap:text-sm portrait:text-lg"
-										>
-											{item?.name || 'item ' + idx}
-										</div>
-
-										<!-- <span class="absolute top-1 text-xs text-slate-800/30">0 Products</span> -->
+										{#if item?.name}
+											<img
+												class="opacity-30 landscape:size-7 portrait:size-20 flex-1"
+												alt={`${item?.name} icon`}
+												src={`icons/${item?.name}.svg`}
+											/>
+										{/if}
 									</div>
-								</button>
-							{/if}
+
+									<div
+										class="capitalize flex-1 landscape:text-left landscap:text-sm portrait:text-lg"
+									>
+										{item?.name || 'item ' + idx}
+									</div>
+								</div>
+							</button>
+						{/if}
+						<!-- <div class="bg-red-400 rounded-md w-full h-full"></div> -->
+					</div>
+					<!--
+					<div
+						bind:this={itemDivs[idx]}
+						style={`height: ${~~itemHeight}px;`}
+						class="p-1 relative border-b-2 border-dashed border-red-400"
+					>
+						<div class="rounded-md relative" style={`height: ${~~itemHeight}px`}>
+							<div class={`offsetDiv absolute top-[-7px] size-2`}></div>
+
 						</div>
 					</div>
+        -->
 				{/each}
 			</div>
 		</div>
