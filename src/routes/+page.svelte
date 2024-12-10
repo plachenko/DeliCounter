@@ -4,6 +4,8 @@
 
 	import Time from '$lib/components/Time.svelte';
 
+	import StoreLocations from '$lib/storeLocations.json';
+
 	import Header from '$lib/components/Header.svelte';
 	import Grid from '$lib/components/Grid.svelte';
 	import VoiceRecognition from '$lib/components/VoiceRecognition.svelte';
@@ -14,6 +16,8 @@
 	let currentLanguage = $state(10);
 	let sliderShown = $state(false);
 	let order = $state([]);
+
+	let showStoreInfo = $state(false);
 
 	let ticketShown = $state(true);
 
@@ -30,6 +34,8 @@
 	let infoHeaderShown = $state(false);
 	let showLogo = $state(false);
 	let showGrid = $state(false);
+
+	let curLocation = $state(null);
 
 	let states = $state([
 		{ name: 'menu' },
@@ -95,7 +101,7 @@
 	}
 
 	function setCurrentLanguage(idx) {
-		console.log('setting.');
+		// console.log('setting.');
 		currentLanguage = idx;
 	}
 
@@ -152,35 +158,43 @@
 		}, 700);
 	}
 
+	function between(val, min = 1, max = 1) {
+		let v = val * 1000000;
+
+		return v >= v - min && v <= v + max;
+	}
+
+	function distance(p1, p2) {
+		let x = p2[0] - p1[0];
+		let y = p2[1] - p1[1];
+
+		let d = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+
+		return d;
+	}
+
 	onMount(() => {
 		showTicketEls();
 		setTimeout(() => {
 			curState = 2;
+			// document.getElementById('TicketNumber').textContent = 'new';
+			console.log(document.getElementById('TicketNumber'));
 		}, 100);
 
 		for (let e in DeliItems) {
-			console.log(DeliItems[e].description);
+			// console.log(DeliItems[e].description);
 		}
+		navigator.geolocation.getCurrentPosition((e) => {
+			let curLoc = [e.coords.latitude, e.coords.longitude];
 
-		/*
-		DeliItems.each((e) => {
-			console.log(e);
+			StoreLocations.forEach((eSt) => {
+				let storeLoc = eSt.field_geolocation.split(',');
+
+				const dist = distance(curLoc, storeLoc);
+
+				// if (dist < 0.02) console.log(eSt);
+			});
 		});
-    */
-		/*
-    DeliItems.forEach((e){
-      // console.log(e);
-
-    })
-    */
-
-		// console.log(DeliItems);
-
-		/*
-		timeWidthTicker = setInterval(() => {
-			scaleWidth = ~~(timeScale(curTime) * window.innerWidth);
-		}, 1000);
-    */
 
 		setTimeout(() => {
 			showBody = true;
@@ -243,13 +257,19 @@
 			{/if}
 
 			{#if states[curState].name == 'ticket'}
+				{#if showStoreInfo}
+					<div
+						transition:fly={{ y: -100 }}
+						class="bg-slate-300 w-full h-full absolute top-[27px] left-0 z-[20]"
+					></div>
+				{/if}
 				<div class="w-full h-full flex flex-col">
 					<div class="h-[30px] w-full relative">
 						{#if infoHeaderShown}
 							<div
 								out:fly={{ y: -30 }}
 								in:fly={{ y: -30 }}
-								class="flex bg-slate-400/30 pb-2 p-1 text-slate-800/30 text-sm items-center w-full absolute top-0 h-full"
+								class="z-[21] flex bg-slate-400/30 px-3 p-2 text-slate-800/30 text-sm items-center w-full absolute top-0 h-full"
 							>
 								<div class="flex flex-1">store# 88</div>
 								<div class="w-[152hx]"><Time /></div>
@@ -263,6 +283,13 @@
 										></div>
 									{/if}
 								</div>
+								<button
+									aria-label="show store information"
+									onclick={() => {
+										showStoreInfo = !showStoreInfo;
+									}}
+									class="absolute left-0 w-full h-full"
+								></button>
 							</div>
 						{/if}
 					</div>

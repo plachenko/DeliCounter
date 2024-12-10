@@ -20,9 +20,9 @@
 	let curOver = $state(null);
 
 	$effect(() => {
-		console.log(showGrid);
 		if (!showGrid) {
 			show = false;
+			currentCategory = null;
 		}
 	});
 
@@ -88,7 +88,7 @@
 		itemHeight =
 			~~document.getElementById('gridContainer').offsetHeight / itemRows -
 			10 -
-			(currentCategory ? 15 : 0);
+			(currentCategory ? 10 : 0);
 	}
 
 	onMount(() => {
@@ -110,18 +110,20 @@
 		<div
 			in:fly={{ y: -100 }}
 			style={`background-color: ${currentCategory?.color || '#CCC'}`}
-			class="px-3 opacity-40 flex gap-3 flex-row items-center bg-slate-800 flex-1 w-[100vw] h-[30px]"
-		></div>
-		<div class="absolute w-full h-full left-0 top-0 flex">
-			<!--
-			<div class="size-6">
-				<img alt={`${currentCategory?.name} icon`} src={`icons/${currentCategory?.name}.svg`} />
+			class="border-b-2 border-slate-600 select-none px-3 opacity-40 flex gap-3 flex-row items-center bg-slate-800 flex-1 w-[100vw] h-[30px]"
+		>
+			<div class="px-2 absolute w-full flex h-[30px] flex py-2 items-center left-0 top-0">
+				<div class="size-6 flex items-center">
+					<img
+						class="flex-1"
+						alt={`${currentCategory?.name} icon`}
+						src={`icons/${currentCategory?.name}.svg`}
+					/>
+				</div>
+				<div class="text-white border-l-2 pl-2 ml-2 border-slate-800 h-full flex items-center">
+					{currentCategory.name}
+				</div>
 			</div>
-
-			<span class="border-l-2 border-slate-400 pl-3">
-				{currentCategory.name}
-			</span>
--->
 		</div>
 	{/if}
 	<!-- <img class="bg-slate-200 absolute size-[190px] z-[3] " src="ticket.svg" /> -->
@@ -142,18 +144,17 @@
 			<div
 				bind:this={gridContainer}
 				onscrollend={scrollEnd}
-				class={`w-full h-full grid ${curItem <= 8 ? 'overflow-hidden' : 'overflow-y-auto'} grid-cols-3`}
+				class={`pt-2 w-full grid ${curItem <= 8 ? 'overflow-hidden' : 'overflow-y-auto'} grid-cols-3 gap-2 px-1`}
 			>
 				{#each items as item, idx}
 					<div
-						style={`height: ${itemHeight}px`}
-						class="border-2 border-box flex justify-center items-center p-1"
+						style={`height: ${~~itemHeight}px;`}
+						class="border-box relative flex justify-center items-center p-2"
 					>
 						{#if curItem >= idx}
 							<button
 								in:fly={{ y: 70 }}
 								out:outT={{ idx: idx }}
-								style={`height: ${~~itemHeight}px;`}
 								onpointerover={() => {
 									curOver = idx;
 								}}
@@ -163,7 +164,7 @@
 									}, 300);
 									setItem(idx, e);
 								}}
-								class="flex-1 relative select-none border-b-2 rounded-md bg-slate-300 w-full flex items-center justify-center"
+								class="flex-1 absolute h-full select-none rounded-md bg-slate-300 w-full flex items-center justify-center"
 							>
 								<div
 									style={`background-color: ${item?.color || '#CCC'};`}
@@ -191,8 +192,8 @@
 									</div>
 								</div>
 							</button>
+							<!-- <div class="bg-red-400 rounded-md w-full h-full"></div> -->
 						{/if}
-						<!-- <div class="bg-red-400 rounded-md w-full h-full"></div> -->
 					</div>
 					<!--
 					<div
