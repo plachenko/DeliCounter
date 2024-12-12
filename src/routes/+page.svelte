@@ -4,7 +4,7 @@
 
 	import Time from '$lib/components/Time.svelte';
 
-	import StoreLocations from '$lib/storeLocations.json';
+	import StoreLocations from '$lib/stores.json';
 
 	import Header from '$lib/components/Header.svelte';
 	import Grid from '$lib/components/Grid.svelte';
@@ -16,6 +16,8 @@
 	let currentLanguage = $state(10);
 	let sliderShown = $state(false);
 	let order = $state([]);
+
+	let stores = $state([]);
 
 	let showStoreInfo = $state(false);
 
@@ -178,23 +180,31 @@
 		setTimeout(() => {
 			curState = 2;
 			// document.getElementById('TicketNumber').textContent = 'new';
-			console.log(document.getElementById('TicketNumber'));
 		}, 100);
 
 		for (let e in DeliItems) {
 			// console.log(DeliItems[e].description);
 		}
-		navigator.geolocation.getCurrentPosition((e) => {
-			let curLoc = [e.coords.latitude, e.coords.longitude];
 
-			StoreLocations.forEach((eSt) => {
-				let storeLoc = eSt.field_geolocation.split(',');
+		function getNearestMB() {
+			navigator.geolocation.getCurrentPosition((e) => {
+				let curLoc = [e.coords.latitude, e.coords.longitude];
+				StoreLocations.forEach((eSt) => {
+					let storeLoc = eSt.field_geolocation.split(',');
 
-				const dist = distance(curLoc, storeLoc);
+					const dist = distance(curLoc, storeLoc);
+					eSt.distance = dist;
 
-				// if (dist < 0.02) console.log(eSt);
+					if (dist < 0.03) {
+						stores = [...stores, eSt];
+						// console.log(stores);
+						// console.log(eSt.path.split('-').pop());
+					}
+				});
 			});
-		});
+		}
+
+		getNearestMB();
 
 		setTimeout(() => {
 			showBody = true;
@@ -261,7 +271,19 @@
 					<div
 						transition:fly={{ y: -100 }}
 						class="bg-slate-300 w-full h-full absolute top-[27px] left-0 z-[20]"
-					></div>
+					>
+						{#each stores as store}
+							<!--
+							{#each Object.keys(store) as prop}
+								<div class="flex text-xs p-1">
+									<span class="block flex-1">{prop}</span>
+									<span class="block">{store[prop]}</span>
+								</div>
+							{/each}
+-->
+							<div class="border-b flex justify-center">{store.title} {store.distance}</div>
+						{/each}
+					</div>
 				{/if}
 				<div class="w-full h-full flex flex-col">
 					<div class="h-[30px] w-full relative">
