@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
+	import Cities from '$lib/Cities.json';
 
 	import Time from '$lib/components/Time.svelte';
 
@@ -18,10 +19,14 @@
 	let order = $state([]);
 
 	let stores = $state([]);
+	let curStore = $state(0);
 
 	let showStoreInfo = $state(false);
 
 	let ticketShown = $state(true);
+
+	let currentCity = $state('Tewksbury');
+	let currentUSState = $state(20);
 
 	let infoBubble = $state(false);
 	let ticking = $state(false);
@@ -62,6 +67,8 @@
 	});
 
 	let showBody = $state(false);
+
+	let distThreshold = $state(0.02);
 
 	const curDate = new Date();
 
@@ -174,6 +181,25 @@
 
 		return d;
 	}
+	function getNearestMB() {
+		stores = [];
+		navigator.geolocation.getCurrentPosition((e) => {
+			let curLoc = [e.coords.latitude, e.coords.longitude];
+			StoreLocations.forEach((eSt) => {
+				let storeLoc = eSt.field_geolocation.split(',');
+
+				const dist = distance(curLoc, storeLoc);
+				eSt.distance = dist;
+
+				if (dist < distThreshold) {
+					stores = [...stores, eSt];
+					stores = stores.sort((a, b) => {
+						return a.distance - b.distance;
+					});
+				}
+			});
+		});
+	}
 
 	onMount(() => {
 		showTicketEls();
@@ -182,29 +208,19 @@
 			// document.getElementById('TicketNumber').textContent = 'new';
 		}, 100);
 
+		let areas = [];
+		StoreLocations.forEach((e) => {
+			if (areas.includes(e.field_address_administrative_area)) return;
+
+			areas.push(e.field_address_administrative_area);
+		});
+		console.log(areas);
+
 		for (let e in DeliItems) {
 			// console.log(DeliItems[e].description);
 		}
 
-		function getNearestMB() {
-			navigator.geolocation.getCurrentPosition((e) => {
-				let curLoc = [e.coords.latitude, e.coords.longitude];
-				StoreLocations.forEach((eSt) => {
-					let storeLoc = eSt.field_geolocation.split(',');
-
-					const dist = distance(curLoc, storeLoc);
-					eSt.distance = dist;
-
-					if (dist < 0.03) {
-						stores = [...stores, eSt];
-						// console.log(stores);
-						// console.log(eSt.path.split('-').pop());
-					}
-				});
-			});
-		}
-
-		getNearestMB();
+		// getNearestMB();
 
 		setTimeout(() => {
 			showBody = true;
@@ -221,6 +237,59 @@
 			{ name: 'franks', color: '#F00F00' }
 		];
 	});
+
+	const USStates = [
+		'AL',
+		'AK',
+		'AZ',
+		'AR',
+		'CA',
+		'CO',
+		'CT',
+		'DE',
+		'FL',
+		'GA',
+		'HI',
+		'ID',
+		'IL',
+		'IN',
+		'IA',
+		'KS',
+		'KY',
+		'LA',
+		'ME',
+		'MD',
+		'MA',
+		'MI',
+		'MN',
+		'MS',
+		'MO',
+		'MT',
+		'NE',
+		'NV',
+		'NH',
+		'NJ',
+		'NM',
+		'NY',
+		'NC',
+		'ND',
+		'OH',
+		'OK',
+		'OR',
+		'PA',
+		'RI',
+		'SC',
+		'SD',
+		'TN',
+		'TX',
+		'UT',
+		'VT',
+		'VA',
+		'WA',
+		'WV',
+		'WI',
+		'WY'
+	];
 
 	function getOrder() {
 		return null;
@@ -270,9 +339,73 @@
 				{#if showStoreInfo}
 					<div
 						transition:fly={{ y: -100 }}
-						class="bg-slate-300 w-full h-full absolute top-[27px] left-0 z-[20]"
+						class="overflow-y-scroll bg-slate-300 w-full h-full absolute top-[27px] left-0 z-[960]"
 					>
-						{#each stores as store}
+						{#if !stores.length}
+							<div class="flex flex-col justify-center items-center h-full w-full">
+								<div class="flex flex-col gap-7">
+									<div class="font-bold text-slate-400">No Current Store has been set</div>
+									<button
+										class="bg-slate-400 p-2 rounded-md"
+										onclick={() => {
+											getNearestMB();
+										}}>Use device location</button
+									>
+								</div>
+								<div class="w-full flex items-center justify-center h-[30px]">
+									<div class="w-full border-b"></div>
+									<span class="absolute bg-slate-300 px-2">or</span>
+								</div>
+								<div class="flex flex-col">
+									<span>enter a city / state</span>
+									<div class="flex gap-2">
+										<div class="flex w-full h-full relative">
+											<input
+												type="text"
+												placeholder="please enter a city"
+												class="rounded-md p-1"
+												bind:value={currentCity}
+											/>
+											{#if currentCity !== ''}
+												<button
+													class="absolute right-[6px] top-[8px] text-slate-300"
+													onclick={() => {
+														currentCity = '';
+													}}>x</button
+												>
+											{/if}
+										</div>
+										<select class="rounded-md" bind:value={currentUSState}>
+											{#each USStates as state, stateIdx}
+												<option value={stateIdx}>{state}</option>
+											{/each}
+										</select>
+										<button
+											disabled={currentCity == ''}
+											class={`bg-slate-400 p-2 rounded-md ${currentCity == '' ? 'opacity-30' : ''}`}
+											>search</button
+										>
+									</div>
+								</div>
+							</div>
+						{:else}
+							<div>
+								stores within distance<input
+									bind:value={distThreshold}
+									min=".01"
+									max="2"
+									step=".01"
+									oninput={() => {
+										getNearestMB();
+									}}
+									type="range"
+								/>{distThreshold}
+
+								{stores.length} /
+								{StoreLocations.length}
+							</div>
+						{/if}
+						{#each stores as store, idx}
 							<!--
 							{#each Object.keys(store) as prop}
 								<div class="flex text-xs p-1">
@@ -280,8 +413,43 @@
 									<span class="block">{store[prop]}</span>
 								</div>
 							{/each}
--->
-							<div class="border-b flex justify-center">{store.title} {store.distance}</div>
+              -->
+							<div class="border-b flex justify-center relative">
+								{#if curStore !== idx}
+									<button
+										aria-label="set current store"
+										onclick={() => {
+											curStore = idx;
+										}}
+										class="w-full h-full absolute"
+									></button>
+								{/if}
+								{store.title}
+							</div>
+							{#if idx == curStore}
+								<div class=" bg-slate-400">
+									<h3 class="header text-xl text-center">Manager</h3>
+									<div class="flex border-b border-slate-800">
+										<span class="flex-1">
+											{store.storeInfo.Manager.name}
+										</span>
+										<span>
+											{stores[curStore].storeInfo.Manager.years} years
+										</span>
+									</div>
+									<h3 class="h3 text-xl text-center">Assistant Manager</h3>
+									{#each store.storeInfo.Assistant as assistant}
+										<div class="border-b border-slate-800 flex">
+											<span class="flex-1">
+												{assistant.name}
+											</span>
+											<span>
+												{assistant.years} years
+											</span>
+										</div>
+									{/each}
+								</div>
+							{/if}
 						{/each}
 					</div>
 				{/if}
@@ -293,9 +461,24 @@
 								in:fly={{ y: -30 }}
 								class="z-[21] flex bg-slate-400/30 px-3 p-2 text-slate-800/30 text-sm items-center w-full absolute top-0 h-full"
 							>
-								<div class="flex flex-1">store# 88</div>
-								<div class="w-[152hx]"><Time /></div>
-								<div class="flex-1 flex items-end justify-end">John Doe</div>
+								{#if stores.length}
+									<div class="flex flex-1">MB {stores[curStore].title.split(' ').pop()}</div>
+								{:else}
+									<span>No store found</span>
+								{/if}
+
+								<div class="justify-end items-end flex flex-1">
+									<div class={`${!stores.length ? 'flex-1 w-full flex justify-end' : 'w-[156px]'}`}>
+										<Time />
+									</div>
+								</div>
+								{#if stores.length}
+									<div class="flex-1 flex items-end justify-end">
+										<span>
+											{stores[curStore].storeInfo.Manager.name}
+										</span>
+									</div>
+								{/if}
 								<div class="w-full bg-red-400 h-[2px] absolute bottom-0 left-0">
 									{#if showTimer}
 										<div

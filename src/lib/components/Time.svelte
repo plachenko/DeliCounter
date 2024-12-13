@@ -33,7 +33,7 @@
 	}
 </script>
 
-<div id="timeCont" class="flex py-2 flex-col text-slate-400 align-center relative w-full">
+<div id="timeCont" class="flex flex-col text-slate-400 relative">
 	<!--
   <div class="bg-red-400 w-full h-[5px] absolute bottom-[-5px]">
     <div class="h-full w-[39%] bg-green-300"></div>
