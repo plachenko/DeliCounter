@@ -185,17 +185,21 @@
 		stores = [];
 		navigator.geolocation.getCurrentPosition((e) => {
 			let curLoc = [e.coords.latitude, e.coords.longitude];
+
 			StoreLocations.forEach((eSt) => {
 				let storeLoc = eSt.field_geolocation.split(',');
 
 				const dist = distance(curLoc, storeLoc);
 				eSt.distance = dist;
 
+
+				console.log(dist < distThreshold);
 				if (dist < distThreshold) {
 					stores = [...stores, eSt];
 					stores = stores.sort((a, b) => {
 						return a.distance - b.distance;
 					});
+					console.log(stores)
 				}
 			});
 		});
@@ -498,7 +502,8 @@
 							</div>
 						{/if}
 					</div>
-					<div class="w-full h-full flex">
+
+					<div class="w-full h-full flex portrait:flex-col landscape:flex-row">
 						<div class="relative flex-1 h-full flex justify-center relative items-center">
 							{#if infoBubble}
 								<div
@@ -539,12 +544,58 @@
 								<div
 									out:fly={{ y: 10 }}
 									in:fly={{ y: 10 }}
-									class="bg-red-400/30 border-2 border-red-400 p-2 rounded-md absolute bottom-[15px]"
+									class="bg-red-400/30 border-2 border-red-400 p-2 rounded-md absolute bottom-[15px] portrait:hidden"
 								>
 									<span class="text-red-400"> Slide down to start order </span>
 								</div>
 							{/if}
 						</div>
+
+						
+						<div class="h-full flex portrait:flex-1 justify-center items-center portrait:pb-[80px]">
+							<div class="p-2 relative w-[80px] h-full">
+								{#if sliderShown}
+									<div
+										out:fly={{ x: 40 }}
+										in:fly={{ x: 40, duration: 400, delay: 100 }}
+										class="w-full h-full"
+									>
+										<div
+											class="h-full w-full relative rounded-md border-box border-[2px] bg-slate-400/50 flex items-end"
+										>
+											<div class="w-full h-[100px] absolute top-0 p-1">
+												{#if ticketShown}
+													<div
+														out:fly={{ y: 80 }}
+														class="p-2 bg-slate-400 border-[2px] border-slate-800/20 rounded-md w-full h-full"
+													>
+														<img alt="Ticket Stub" src="ticket.svg" />
+													</div>
+												{/if}
+											</div>
+											<div class="w-full h-[70px] p-2">
+												<button
+													aria-label="take a ticket"
+													onclick={takeTicket}
+													class="bg-slate-500 w-full h-full rounded-md"
+												></button>
+											</div>
+										</div>
+									</div>
+								{/if}
+							</div>
+							{#if !infoBubble && sliderShown}
+							<div
+								out:fly={{ y: 10 }}
+								in:fly={{ y: 10 }}
+								class="bg-red-400/30 border-2 border-red-400 p-2 rounded-md absolute bottom-[15px] landscape:hidden"
+							>
+								<span class="text-red-400"> Slide down to start order </span>
+							</div>
+						{/if}
+						</div>
+						<!--
+						
 						<div class="p-2 relative w-[80px] h-full">
 							{#if sliderShown}
 								<div
@@ -555,7 +606,6 @@
 									<div
 										class="h-full w-full relative rounded-md border-box border-[2px] bg-slate-400/50 flex items-end"
 									>
-										<!-- <div class="bg-red-400 flex-1 w-full h-[10px] absolute top-[0px]"></div> -->
 										<div class="w-full h-[100px] absolute top-0 p-1">
 											{#if ticketShown}
 												<div
@@ -577,6 +627,7 @@
 								</div>
 							{/if}
 						</div>
+					-->
 					</div>
 				</div>
 			{/if}
