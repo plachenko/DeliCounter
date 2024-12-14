@@ -92,10 +92,10 @@
 	}
 
 	onMount(() => {
-		document.getElementById('gridContainer').addEventListener('resize', () => {
+		window.addEventListener('resize', (e) => {
 			setItemHeight();
 		});
-
+		
 		ticker();
 
 		setTimeout(() => {

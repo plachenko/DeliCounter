@@ -68,7 +68,7 @@
 
 	let showBody = $state(false);
 
-	let distThreshold = $state(0.02);
+	let distThreshold = $state(0.03);
 
 	const curDate = new Date();
 
@@ -192,14 +192,11 @@
 				const dist = distance(curLoc, storeLoc);
 				eSt.distance = dist;
 
-
-				console.log(dist < distThreshold);
 				if (dist < distThreshold) {
 					stores = [...stores, eSt];
 					stores = stores.sort((a, b) => {
 						return a.distance - b.distance;
 					});
-					console.log(stores)
 				}
 			});
 		});
@@ -218,7 +215,6 @@
 
 			areas.push(e.field_address_administrative_area);
 		});
-		console.log(areas);
 
 		for (let e in DeliItems) {
 			// console.log(DeliItems[e].description);
