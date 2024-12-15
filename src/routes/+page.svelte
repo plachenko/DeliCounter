@@ -14,9 +14,16 @@
 
 	import DeliItems from '$lib/DeliItems.json';
 
+	import GrillItems from '$lib/Grill.json';
+	import PizzaItems from '$lib/Pizza.json';
+	import SubItems from '$lib/Subs.json';
+
 	let currentLanguage = $state(10);
 	let sliderShown = $state(false);
 	let order = $state([]);
+
+	let orderTypes = $state(['deli', 'kitchen']);
+	let curOrderType = $state(0);
 
 	let stores = $state([]);
 	let curStore = $state(0);
@@ -68,12 +75,35 @@
 
 	let showBody = $state(false);
 
+	let deliItems = $state([
+		{ name: 'beef', color: '#8b0000' },
+		{ name: 'bologna', color: '#FF6347' },
+		{ name: 'loaf', color: '' },
+		{ name: 'cheese', color: '#b3a100' },
+		{ name: 'chicken', color: '#ffb433' },
+		{ name: 'ham', color: '#FFA07A' },
+		{ name: 'italian', color: '#A52A2A' },
+		{ name: 'turkey', color: '#edc478' },
+		{ name: 'franks', color: '#F00F00' }
+	]);
+
 	let distThreshold = $state(0.03);
 
 	const curDate = new Date();
 
 	const curTime = `${curDate.getHours()}:${curDate.getMinutes()}`;
 	let scaleWidth = $state(0);
+
+	$effect(() => {
+		switch (curOrderType) {
+			case 0:
+				items = deliItems;
+				break;
+			case 1:
+				items = [{ name: 'pizza' }, { name: 'grill' }, { name: 'subs' }];
+				break;
+		}
+	});
 
 	function startVoice() {
 		voiceStarted = !voiceStarted;
@@ -203,6 +233,10 @@
 	}
 
 	onMount(() => {
+		GrillItems.menu.items.forEach((e) => {
+			console.log(e.name, e.price, e.calories);
+		});
+
 		showTicketEls();
 		setTimeout(() => {
 			curState = 2;
@@ -225,17 +259,9 @@
 		setTimeout(() => {
 			showBody = true;
 		}, 800);
-		items = [
-			{ name: 'beef', color: '#8b0000' },
-			{ name: 'bologna', color: '#FF6347' },
-			{ name: 'loaf', color: '' },
-			{ name: 'cheese', color: '#b3a100' },
-			{ name: 'chicken', color: '#ffb433' },
-			{ name: 'ham', color: '#FFA07A' },
-			{ name: 'italian', color: '#A52A2A' },
-			{ name: 'turkey', color: '#edc478' },
-			{ name: 'franks', color: '#F00F00' }
-		];
+
+		// items = deliItems;
+		// items = ['test', 'pizza', 'grill'];
 	});
 
 	const USStates = [
@@ -525,6 +551,19 @@
 								</div>
 							{/if}
 
+							<div class="absolute top-[7px] w-full h-[40px] items-center flex-1 flex">
+								{#each orderTypes as type, idx}
+									<div class="flex-1 flex w-full h-full justify-center items-center">
+										<button
+											class={`bg-red-300 absolute rounded-md p-2 ${curOrderType == idx ? 'border-red-400 border-2 border-box' : ''}`}
+											onclick={() => {
+												curOrderType = idx;
+											}}>{type}</button
+										>
+									</div>
+								{/each}
+							</div>
+
 							{#if showLogo}
 								<div
 									in:fly={{ y: 30 }}
@@ -547,7 +586,6 @@
 							{/if}
 						</div>
 
-						
 						<div class="h-full flex portrait:flex-1 justify-center items-center portrait:pb-[80px]">
 							<div class="p-2 relative w-[80px] h-full">
 								{#if sliderShown}
@@ -581,14 +619,14 @@
 								{/if}
 							</div>
 							{#if !infoBubble && sliderShown}
-							<div
-								out:fly={{ y: 10 }}
-								in:fly={{ y: 10 }}
-								class="bg-red-400/30 border-2 border-red-400 p-2 rounded-md absolute bottom-[15px] landscape:hidden"
-							>
-								<span class="text-red-400"> Slide down to start order </span>
-							</div>
-						{/if}
+								<div
+									out:fly={{ y: 10 }}
+									in:fly={{ y: 10 }}
+									class="bg-red-400/30 border-2 border-red-400 p-2 rounded-md absolute bottom-[15px] landscape:hidden"
+								>
+									<span class="text-red-400"> Slide down to start order </span>
+								</div>
+							{/if}
 						</div>
 						<!--
 						

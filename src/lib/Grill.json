@@ -1,0 +1,53 @@
+{
+	"menu": {
+		"items": [
+			{
+				"name": "Hamburger",
+				"calories": 310,
+				"price": 2.89
+			},
+			{
+				"name": "Cheeseburger",
+				"calories": 360,
+				"price": 2.99
+			},
+			{
+				"name": "Double Cheeseburger",
+				"calories": 600,
+				"price": 4.99
+			},
+			{
+				"name": "Jumbo Hot Dog",
+				"calories": 750,
+				"price": 1.99
+			},
+			{
+				"name": "Grilled Chicken Sandwich",
+				"calories": 740,
+				"price": 4.99
+			},
+			{
+				"name": "Steak & Cheese Sub",
+				"calories": 940,
+				"price": 5.99
+			},
+			{
+				"name": "Steak Bomb Sub",
+				"description": "Steak, cheese, peppers, onions, mushrooms, salami and pepperoni",
+				"calories": 1360,
+				"price": 6.99
+			},
+			{
+				"name": "Shaved Chicken Bomb",
+				"description": "Chicken, cheese, peppers, onions, mushrooms, salami and pepperoni",
+				"calories": 1370,
+				"price": 6.99
+			},
+			{
+				"name": "Shaved Chicken & Cheese",
+				"calories": 950,
+				"price": 5.99
+			}
+		]
+	}
+}

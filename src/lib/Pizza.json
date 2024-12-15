@@ -1,0 +1,59 @@
+{
+	"menu": {
+		"pizzas": {
+			"cheese": "9.99",
+			"1_topping": "12.99",
+			"2_toppings": "14.99",
+			"3_toppings": "15.99",
+			"4_toppings": "17.99"
+		},
+		"giant_pizza": {
+			"slice_of_cheese": {
+				"calories": "840",
+				"price": "2.99"
+			},
+			"1_topping": "3.99",
+			"2_toppings": "3.59",
+			"3_toppings": "4.59",
+			"4_toppings": "4.99"
+		},
+		"toppings": {
+			"extra_cheese": {
+				"calories": "12"
+			},
+			"pepperoni": {
+				"calories": "90"
+			},
+			"mushroom": {
+				"calories": "9"
+			},
+			"green_pepper": {
+				"calories": "6"
+			},
+			"onion": {
+				"calories": "9"
+			},
+			"black_olive": {
+				"calories": "45"
+			},
+			"sausage": {
+				"calories": "92"
+			},
+			"pineapple": {
+				"calories": "41"
+			},
+			"ham": {
+				"calories": "42"
+			},
+			"broccoli": {
+				"calories": "40"
+			},
+			"garlic": {
+				"calories": "4"
+			},
+			"jalapeño": {
+				"calories": "4"
+			}
+		}
+	}
+}

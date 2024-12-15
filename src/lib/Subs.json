@@ -1,0 +1,39 @@
+{
+	"menu": {
+		"subs": {
+			"whole": "$5.29",
+			"half": "$3.99",
+			"options": [
+				{ "name": "Roast Beef", "calories": [380, 790] },
+				{ "name": "Baked Ham", "calories": [380, 760] },
+				{ "name": "Italian", "calories": [760, 780] },
+				{ "name": "Turkey", "calories": [360, 760] },
+				{ "name": "Chicken Salad", "calories": [350, 720] },
+				{ "name": "Egg Salad", "calories": [380, 750] },
+				{ "name": "Seafood Salad", "calories": [330, 530] },
+				{ "name": "Tuna Salad", "calories": [530, 990] }
+			]
+		},
+		"veggie_sub": {
+			"whole": { "price": "$4.99", "calories": [210, 420] },
+			"half": { "price": "$2.99" }
+		},
+		"wraps": [
+			{ "name": "Vegetarian Greek Salad", "calories": 520, "price": "$4.99" },
+			{ "name": "Caesar Salad with Chicken", "calories": 530, "price": "$5.29" }
+		],
+		"paninis": [
+			{ "name": "Ham & Cheese", "calories": 800, "price": "$4.99" },
+			{ "name": "Smoked Turkey", "calories": 840, "price": "$4.99" },
+			{ "name": "Italian", "calories": 690, "price": "$4.99" },
+			{ "name": "Roast Beef", "calories": 680, "price": "$4.99" },
+			{ "name": "Cubano Classic", "calories": 670, "price": "$4.99" },
+			{ "name": "Reuben", "calories": 680, "price": "$4.99" }
+		],
+		"melts": [
+			{ "name": "Grilled Cheese & Tomato", "calories": 450, "price": "$2.99" },
+			{ "name": "Tuna Melt", "calories": 640, "price": "$4.99" },
+			{ "name": "BLT Melt", "calories": 570, "price": "$3.99" }
+		]
+	}
+}

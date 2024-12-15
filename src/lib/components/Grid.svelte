@@ -85,6 +85,7 @@
 	}
 
 	function setItemHeight() {
+		itemRows = Math.ceil(items.length / 3);
 		itemHeight =
 			~~document.getElementById('gridContainer').offsetHeight / itemRows -
 			10 -
@@ -95,7 +96,7 @@
 		window.addEventListener('resize', (e) => {
 			setItemHeight();
 		});
-		
+
 		ticker();
 
 		setTimeout(() => {
