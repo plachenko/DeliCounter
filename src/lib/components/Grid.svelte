@@ -90,6 +90,7 @@
 			~~document.getElementById('gridContainer').offsetHeight / itemRows -
 			10 -
 			(currentCategory ? 10 : 0);
+		itemHeight = items.length <= 6 ? itemHeight - 6 : itemHeight;
 	}
 
 	onMount(() => {
@@ -145,7 +146,7 @@
 			<div
 				bind:this={gridContainer}
 				onscrollend={scrollEnd}
-				class={`pt-2 w-full grid ${curItem <= 8 ? 'overflow-hidden' : 'overflow-y-auto'} grid-cols-3 gap-2 px-1`}
+				class={`pt-2 w-full grid ${curItem <= 8 ? 'overflow-hidden' : 'overflow-y-auto'} grid-cols-${items.length >= 3 ? '3' : items.length} gap-2 px-1`}
 			>
 				{#each items as item, idx}
 					<div

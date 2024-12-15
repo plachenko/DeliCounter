@@ -100,7 +100,7 @@
 				items = deliItems;
 				break;
 			case 1:
-				items = [{ name: 'pizza' }, { name: 'grill' }, { name: 'subs' }];
+				items = [{ name: 'pizza' }, { name: 'grill' }];
 				break;
 		}
 	});
@@ -260,8 +260,6 @@
 			showBody = true;
 		}, 800);
 
-		// items = deliItems;
-		// items = ['test', 'pizza', 'grill'];
 	});
 
 	const USStates = [
