@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
 
-	let { items, showGrid } = $props();
+	let { items, showGrid, setNewItems, setOrderItem } = $props();
 	let itemHeight = $state(null);
 	let itemRows = $state(3);
 	let curItem = $state(-1);
@@ -14,6 +14,7 @@
 	let touchPing = $state(null);
 	let tickDone = $state(false);
 	let taken = $state(false);
+	let colNumber = $state(3);
 
 	let currentCategory = $state(null);
 
@@ -47,6 +48,11 @@
 
 		setTimeout(() => {
 			currentCategory = items[idx];
+			if (items[idx]?.objects) {
+				setNewItems(items[idx]?.objects);
+			} else {
+				setOrderItem(items[idx]);
+			}
 			setItemHeight();
 		}, 500);
 
@@ -89,7 +95,7 @@
 		itemHeight =
 			~~document.getElementById('gridContainer').offsetHeight / itemRows -
 			10 -
-			(currentCategory ? 10 : 0);
+			(currentCategory ? (itemRows >= 1 ? 10 : 40) : 0);
 		itemHeight = items.length <= 6 ? itemHeight - 6 : itemHeight;
 	}
 
@@ -116,11 +122,13 @@
 		>
 			<div class="px-2 absolute w-full flex h-[30px] flex py-2 items-center left-0 top-0">
 				<div class="size-6 flex items-center">
+					<!--
 					<img
 						class="flex-1"
 						alt={`${currentCategory?.name} icon`}
 						src={`icons/${currentCategory?.name}.svg`}
 					/>
+-->
 				</div>
 				<div class="text-white border-l-2 pl-2 ml-2 border-slate-800 h-full flex items-center">
 					{currentCategory.name}
@@ -146,7 +154,7 @@
 			<div
 				bind:this={gridContainer}
 				onscrollend={scrollEnd}
-				class={`pt-2 w-full grid ${curItem <= 8 ? 'overflow-hidden' : 'overflow-y-auto'} grid-cols-${items.length >= 3 ? '3' : items.length} gap-2 px-1`}
+				class={`pt-2 w-full grid ${curItem <= 8 ? 'overflow-hidden' : 'overflow-y-auto'} grid-cols-3 gap-2 px-1`}
 			>
 				{#each items as item, idx}
 					<div
@@ -168,6 +176,11 @@
 								}}
 								class="flex-1 absolute h-full select-none rounded-md bg-slate-300 w-full flex items-center justify-center"
 							>
+								<!--
+								{#if curItem?.price}
+									<span>{curItem.price}</span>
+								{/if}
+-->
 								<div
 									style={`background-color: ${item?.color || '#CCC'};`}
 									class={`z-[1] absolute ${selectedItem !== idx ? 'opacity-30' : 'opacity-30'} rounded-md w-full h-full`}
@@ -179,18 +192,25 @@
 										class=" landscape:border-r portrait:border-b landscape:pr-2 landscape:mr-2 portrait:pb-2 portrait:size-[80%] portrait:mb-2 border-slate-800/30 flex items-center justify-center"
 									>
 										{#if item?.name}
+											<!--
 											<img
 												class="opacity-30 landscape:size-7 portrait:size-20 flex-1"
 												alt={`${item?.name} icon`}
 												src={`icons/${item?.name}.svg`}
 											/>
+-->
 										{/if}
 									</div>
 
 									<div
-										class="capitalize flex-1 landscape:text-left landscap:text-sm portrait:text-lg"
+										class="capitalize relativeflex-1 text-sm landscape:text-left landscap:text-sm portrait:text-lg"
 									>
 										{item?.name || 'item ' + idx}
+										{#if item.price}
+											<span class="absolute font-bold bottom-1 right-1 bg-slate-400 rounded-md p-1"
+												>{item.price}</span
+											>
+										{/if}
 									</div>
 								</div>
 							</button>

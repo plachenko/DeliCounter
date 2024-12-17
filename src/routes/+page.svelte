@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
 	import Cities from '$lib/Cities.json';
+	import TakeoutMenu from '$lib/TakeOutMenu.json';
 
 	import Time from '$lib/components/Time.svelte';
 
@@ -18,6 +19,7 @@
 	import PizzaItems from '$lib/Pizza.json';
 	import SubItems from '$lib/Subs.json';
 
+	let curOrderItem = $state(null);
 	let currentLanguage = $state(10);
 	let sliderShown = $state(false);
 	let order = $state([]);
@@ -55,6 +57,7 @@
 		{ name: 'menu' },
 		{ name: 'grid', showHeader: true },
 		{ name: 'ticket' },
+		{ name: 'orderItem', showHeader: true },
 		{ name: 'order' },
 		{ name: 'voiceRecognition', showHeader: true }
 	]);
@@ -100,10 +103,47 @@
 				items = deliItems;
 				break;
 			case 1:
-				items = [{ name: 'pizza' }, { name: 'grill' }];
+				items = Object.keys(TakeoutMenu).map((e) => {
+					return { name: e, objects: TakeoutMenu[e] };
+				});
+				/*
+				items = [
+					{ name: 'pizza', objects: PizzaItems },
+					{ name: 'grill', objects: GrillItems },
+					{ name: 'Subs', objects: SubItems }
+				];
+        */
 				break;
 		}
 	});
+
+	function setOrderItem(orderItem) {
+		if (curOrderItem?.obj) {
+			curOrderItem.name = orderItem.name;
+			curOrderItem.price = orderItem.obj.price;
+			curOrderItem.calories = orderItem.obj.calories;
+		} else {
+			curOrderItem = orderItem;
+		}
+		curState = 3;
+	}
+
+	function setNewItems(newItems) {
+		console.log('setting...');
+		if (newItems[0]?.name) {
+			items = newItems;
+
+			return;
+		}
+
+		// console.log(Object.keys(newItems));
+		items = Object.keys(newItems).map((e) => {
+			return {
+				name: e,
+				obj: newItems[e]
+			};
+		});
+	}
 
 	function startVoice() {
 		voiceStarted = !voiceStarted;
@@ -234,7 +274,7 @@
 
 	onMount(() => {
 		GrillItems.menu.items.forEach((e) => {
-			console.log(e.name, e.price, e.calories);
+			// console.log(e.name, e.price, e.calories);
 		});
 
 		showTicketEls();
@@ -259,7 +299,6 @@
 		setTimeout(() => {
 			showBody = true;
 		}, 800);
-
 	});
 
 	const USStates = [
@@ -356,6 +395,17 @@
 					class="absolute w-full h-full bg-slate-200 z-[99]"
 				>
 					<VoiceRecognition {currentLanguage} />
+				</div>
+			{/if}
+
+			{#if states[curState].name == 'orderItem'}
+				<div class="flex flex-col bg-blue-400">
+					<div class="flex flex-1 w-full">
+						<div class="w-full flex-1 bg-red-400">{curOrderItem.name}</div>
+						<div class="flex-1">{curOrderItem.price}</div>
+					</div>
+					<div>{curOrderItem.description}</div>
+					<div>{curOrderItem.calories}</div>
 				</div>
 			{/if}
 
@@ -666,7 +716,7 @@
 
 			{#if states[curState].name == 'grid'}
 				<div out:fade>
-					<Grid {items} {showGrid} />
+					<Grid {items} {showGrid} {setNewItems} {setOrderItem} />
 				</div>
 			{/if}
 		</div>

@@ -1,0 +1,372 @@
+{
+	"Fresh Custom Made Subs": {
+		"Roast Beef": {
+			"Half": {
+				"Price": "$3.99",
+				"Calories": 450
+			},
+			"Whole": {
+				"Price": "$5.29",
+				"Calories": 900
+			}
+		},
+		"Italian": {
+			"Half": {
+				"Price": "$3.99",
+				"Calories": 530
+			},
+			"Whole": {
+				"Price": "$5.29",
+				"Calories": 1060
+			}
+		},
+		"Ham": {
+			"Half": {
+				"Price": "$3.99",
+				"Calories": 500
+			},
+			"Whole": {
+				"Price": "$5.29",
+				"Calories": 990
+			}
+		},
+		"American": {
+			"Half": {
+				"Price": "$3.99",
+				"Calories": 500
+			},
+			"Whole": {
+				"Price": "$5.29",
+				"Calories": 990
+			}
+		},
+		"Turkey": {
+			"Half": {
+				"Price": "$3.99",
+				"Calories": 340
+			},
+			"Whole": {
+				"Price": "$5.29",
+				"Calories": 680
+			}
+		},
+		"Ultimate": {
+			"Half": {
+				"Price": "$3.99",
+				"Calories": 340
+			},
+			"Whole": {
+				"Price": "$5.29",
+				"Calories": 680
+			}
+		},
+		"Hot Subs": {
+			"Chicken Parmesan": {
+				"Half": {
+					"Price": "$4.49",
+					"Calories": 570
+				},
+				"Whole": {
+					"Price": "$6.99",
+					"Calories": 1160
+				}
+			},
+			"Eggplant Parmesan": {
+				"Half": {
+					"Price": "$4.49",
+					"Calories": 510
+				},
+				"Whole": {
+					"Price": "$6.99",
+					"Calories": 1010
+				}
+			},
+			"Meatball": {
+				"Half": {
+					"Price": "$4.49",
+					"Calories": 340
+				},
+				"Whole": {
+					"Price": "$6.99",
+					"Calories": 680
+				}
+			},
+			"Meatloaf": {
+				"Half": {
+					"Price": "$4.49",
+					"Calories": 340
+				},
+				"Whole": {
+					"Price": "$6.99",
+					"Calories": 680
+				}
+			}
+		}
+	},
+	"Freshly Made Salads": {
+		"Garden Salad": {
+			"Medium": {
+				"Price": "$3.79",
+				"Calories": 20
+			},
+			"Large": {
+				"Price": "$5.49",
+				"Calories": 20
+			}
+		},
+		"Chef Salad": {
+			"Price": "$4.29",
+			"Calories": 60
+		},
+		"Chef Salad with Egg": {
+			"Price": "$4.99",
+			"Calories": 60
+		},
+		"Greek Salad": {
+			"Price": "$4.29",
+			"Calories": 70
+		},
+		"Caesar Salad": {
+			"Price": "$4.49",
+			"Calories": 40
+		},
+		"Grilled Chicken Caesar Salad": {
+			"Price": "$5.99",
+			"Calories": 90
+		}
+	},
+	"Fresh Made Wraps": {
+		"Vegetarian Greek Salad": {
+			"Price": "$4.49",
+			"Calories": 520
+		},
+		"Vegetarian Italian Salad": {
+			"Price": "$4.49",
+			"Calories": 520
+		},
+		"Caesar Salad with Chicken": {
+			"Price": "$5.29",
+			"Calories": 520
+		}
+	},
+	"Fresh Made Finger Rolls": [
+		{
+			"name": "Lobster Salad",
+			"description": "Real Lobster Twin Pack",
+			"calories": 420,
+			"price": "$8.99"
+		},
+		{
+			"name": "Tuna Salad",
+			"description": "Twin Pack",
+			"calories": 310,
+			"price": "$2.99"
+		},
+		{
+			"name": "Buffalo Chicken Salad",
+			"description": "Twin Pack",
+			"calories": 340,
+			"price": "$2.99"
+		},
+		{
+			"name": "Cranberry Chicken Salad",
+			"description": "Twin Pack",
+			"calories": 390,
+			"price": "$2.99"
+		},
+		{
+			"name": "Chicken Salad",
+			"description": "Twin Pack",
+			"calories": 380,
+			"price": "$2.49"
+		},
+		{
+			"name": "Ham Salad",
+			"description": "Twin Pack",
+			"calories": 470,
+			"price": "$2.49"
+		},
+		{
+			"name": "Egg Salad",
+			"description": "Twin Pack",
+			"calories": 380,
+			"price": "$2.49"
+		}
+	],
+	"Fresh Made Panini Melts": [
+		{
+			"name": "Ham and Cheese",
+			"description": "Baked ham and Swiss cheese",
+			"calories": 500,
+			"price": "$4.99"
+		},
+		{
+			"name": "Roast Beef",
+			"description": "Rare roast beef, horseradish cheddar cheese",
+			"calories": 620,
+			"price": "$4.99"
+		},
+		{
+			"name": "Smoked Turkey",
+			"description": "Smoked turkey, cheddar cheese, tomato, and bacon",
+			"calories": 620,
+			"price": "$4.99"
+		},
+		{
+			"name": "Cubano Classico",
+			"description": "Roast pork, ham, Swiss cheese, red onion, spicy mayo",
+			"calories": 670,
+			"price": "$4.99"
+		},
+		{
+			"name": "Italian",
+			"description": "Ham, salami, capicola, mortadella, provolone cheese",
+			"calories": 690,
+			"price": "$4.99"
+		},
+		{
+			"name": "Reuben",
+			"description": "Corned beef and Swiss cheese, sauerkraut, and Thousand Island dressing",
+			"calories": 680,
+			"price": "$4.99"
+		},
+		{
+			"name": "Grilled Cheese and Tomato",
+			"calories": 450,
+			"price": "$2.99"
+		},
+		{
+			"name": "Tuna Melt",
+			"calories": 630,
+			"price": "$4.99"
+		},
+		{
+			"name": "BLT Melt",
+			"calories": 520,
+			"price": "$3.99"
+		}
+	],
+	"Fresh Made 19 Pizza": [
+		{
+			"name": "19\" Traditional Cheese Pizza",
+			"calories": 840,
+			"price": "$8.99"
+		},
+		{
+			"name": "19\" Traditional 1 Topping Pizza",
+			"calories": 840,
+			"price": "$10.99"
+		},
+		{
+			"name": "19\" Traditional 2 Topping Pizza",
+			"calories": 840,
+			"price": "$12.99"
+		},
+		{
+			"name": "19\" Traditional 3 Topping Pizza",
+			"calories": 840,
+			"price": "$14.99"
+		},
+		{
+			"name": "19\" Traditional 4 Topping Pizza",
+			"calories": 840,
+			"price": "$16.99"
+		},
+		{
+			"name": "Sicilian Style Cheese Pizza",
+			"calories": 840,
+			"price": "$10.99"
+		},
+		{
+			"name": "Sicilian Style Vegetable Pizza",
+			"calories": 840,
+			"price": "$14.99"
+		},
+		{
+			"pizzaToppings": {
+				"extraCheese": { "calories": 127 },
+				"pepperoni": { "calories": 90 },
+				"mushroom": { "calories": 9 },
+				"greenPeppers": { "calories": 6 },
+				"onion": { "calories": 18 },
+				"blackOlive": { "calories": 45 },
+				"sausage": { "calories": 170 },
+				"pineapple": { "calories": 21 },
+				"ham": { "calories": 42 },
+				"broccoli": { "calories": 7 },
+				"garlic": { "calories": 3 },
+				"chicken": { "calories": 60 }
+			}
+		}
+	],
+	"Chicken Wings": [
+		{
+			"name": "Teriyaki",
+			"calories": 240,
+			"price": "$7.99/LB"
+		},
+		{
+			"name": "Buffalo",
+			"calories": 430,
+			"price": "$7.99/LB"
+		},
+		{
+			"name": "Barbecue",
+			"calories": 300,
+			"price": "$7.99/LB"
+		},
+		{
+			"name": "Magnum",
+			"calories": 300,
+			"price": "$7.99/LB"
+		},
+		{
+			"name": "Salt and Vinegar",
+			"calories": 260,
+			"price": "$7.99/LB"
+		}
+	],
+	"Country Fried Chicken": [
+		{
+			"name": "4 Piece Chicken",
+			"description": "Breast, thigh, wing, and drumstick",
+			"calories": 600,
+			"price": "$4.99"
+		},
+		{
+			"name": "8 Piece Chicken",
+			"description": "2 breasts, 2 thighs, 2 wings, and 2 drumsticks",
+			"calories": 600,
+			"price": "$7.99"
+		}
+	],
+	"From The Grill": [
+		{
+			"name": "Steak Bomb Sub",
+			"calories": 1360,
+			"price": "$6.99"
+		},
+		{
+			"name": "Grilled Chicken Sandwich",
+			"calories": 360,
+			"price": "$4.99"
+		},
+		{
+			"name": "Cheeseburger",
+			"description": "with French Fries",
+			"calories": 740,
+			"price": "$2.99"
+		},
+		{
+			"name": "Hamburger",
+			"description": "with French Fries",
+			"calories": 640,
+			"price": "$2.89"
+		},
+		{
+			"name": "Jumbo Hot Dog",
+			"calories": 230,
+			"price": "$1.99"
+		}
+	]
+}
