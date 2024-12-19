@@ -48,6 +48,34 @@
 
 		setTimeout(() => {
 			currentCategory = items[idx];
+			// console.log(Object.keys(items[idx].objects));
+
+			let arr = items[idx].objects;
+			let firstArr = arr[Object.keys(arr)[0]];
+
+			if (currentCategory.name == 'Subs') {
+				// console.log(arr);
+				/*
+        items = items[idx].map((e)=>{
+          return {name: }
+        })
+        */
+			}
+
+			/*
+			if (Object.keys(firstArr)[0] == 'Half') {
+				console.log('setting half');
+			}
+      */
+
+			/*
+			if (firstArr[0] == 'Half') {
+				console.log('subs');
+			}
+      */
+
+			console.log(items[idx]?.objects);
+
 			if (items[idx]?.objects) {
 				setNewItems(items[idx]?.objects);
 			} else {
@@ -95,7 +123,7 @@
 		itemHeight =
 			~~document.getElementById('gridContainer').offsetHeight / itemRows -
 			10 -
-			(currentCategory ? (itemRows >= 1 ? 10 : 40) : 0);
+			(currentCategory ? (itemRows == 1 ? 30 : 10) : 0);
 		itemHeight = items.length <= 6 ? itemHeight - 6 : itemHeight;
 	}
 
@@ -154,7 +182,7 @@
 			<div
 				bind:this={gridContainer}
 				onscrollend={scrollEnd}
-				class={`pt-2 w-full grid ${curItem <= 8 ? 'overflow-hidden' : 'overflow-y-auto'} grid-cols-3 gap-2 px-1`}
+				class={`pt-2 w-full grid ${curItem <= 8 ? 'overflow-hidden' : 'overflow-y-auto'} grid-cols-${items.length < 3 ? items.length : '3'} gap-2 px-1`}
 			>
 				{#each items as item, idx}
 					<div

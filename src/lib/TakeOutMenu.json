@@ -1,67 +1,78 @@
 {
-	"Fresh Custom Made Subs": {
-		"Roast Beef": {
-			"Half": {
-				"Price": "$3.99",
-				"Calories": 450
-			},
-			"Whole": {
-				"Price": "$5.29",
-				"Calories": 900
-			}
-		},
-		"Italian": {
-			"Half": {
-				"Price": "$3.99",
-				"Calories": 530
-			},
-			"Whole": {
-				"Price": "$5.29",
-				"Calories": 1060
-			}
-		},
-		"Ham": {
-			"Half": {
-				"Price": "$3.99",
-				"Calories": 500
-			},
-			"Whole": {
-				"Price": "$5.29",
-				"Calories": 990
-			}
-		},
-		"American": {
-			"Half": {
-				"Price": "$3.99",
-				"Calories": 500
-			},
-			"Whole": {
-				"Price": "$5.29",
-				"Calories": 990
-			}
-		},
-		"Turkey": {
-			"Half": {
-				"Price": "$3.99",
-				"Calories": 340
-			},
-			"Whole": {
-				"Price": "$5.29",
-				"Calories": 680
-			}
-		},
-		"Ultimate": {
-			"Half": {
-				"Price": "$3.99",
-				"Calories": 340
-			},
-			"Whole": {
-				"Price": "$5.29",
-				"Calories": 680
+	"Subs": {
+		"Cold Sub": {
+			"objects": {
+				"Roast Beef": {
+					"Description": "Cooked to perfection roast beef",
+					"Half": {
+						"Price": "$3.99",
+						"Calories": 450
+					},
+					"Whole": {
+						"Price": "$5.29",
+						"Calories": 900
+					}
+				},
+				"Italian": {
+					"Description": "Genoa salami, capricola, mortadella cooked ham, provolone cheese",
+					"Half": {
+						"Price": "$3.99",
+						"Calories": 530
+					},
+					"Whole": {
+						"Price": "$5.29",
+						"Calories": 1060
+					}
+				},
+				"Ham": {
+					"Description": "Our own baked ham",
+					"Half": {
+						"Price": "$3.99",
+						"Calories": 500
+					},
+					"Whole": {
+						"Price": "$5.29",
+						"Calories": 990
+					}
+				},
+				"American": {
+					"Description": "Cooked ham, bologna cooked salami, American cheese",
+					"Half": {
+						"Price": "$3.99",
+						"Calories": 500
+					},
+					"Whole": {
+						"Price": "$5.29",
+						"Calories": 990
+					}
+				},
+				"Turkey": {
+					"Description": "Our own baked turkey",
+					"Half": {
+						"Price": "$3.99",
+						"Calories": 340
+					},
+					"Whole": {
+						"Price": "$5.29",
+						"Calories": 680
+					}
+				},
+				"Ultimate": {
+					"Description": "Roast beef, ham and turkey breast",
+					"Half": {
+						"Price": "$3.99",
+						"Calories": 340
+					},
+					"Whole": {
+						"Price": "$5.29",
+						"Calories": 680
+					}
+				}
 			}
 		},
 		"Hot Subs": {
 			"Chicken Parmesan": {
+				"Description": "Breaded chicken, marinara sauce, and parmesan cheese",
 				"Half": {
 					"Price": "$4.49",
 					"Calories": 570
@@ -72,6 +83,7 @@
 				}
 			},
 			"Eggplant Parmesan": {
+				"Description": "Breaded eggplant, marinara sauce and parmesan cheese",
 				"Half": {
 					"Price": "$4.49",
 					"Calories": 510
@@ -82,6 +94,7 @@
 				}
 			},
 			"Meatball": {
+				"Description": "With our own tomato sauce",
 				"Half": {
 					"Price": "$4.49",
 					"Calories": 340
@@ -92,6 +105,7 @@
 				}
 			},
 			"Meatloaf": {
+				"Description": "Homestyle meatloaf with gravy or marinara sauce",
 				"Half": {
 					"Price": "$4.49",
 					"Calories": 340
@@ -103,8 +117,9 @@
 			}
 		}
 	},
-	"Freshly Made Salads": {
+	"Salads": {
 		"Garden Salad": {
+			"Description": "Fresh greens, tomato, cucumber, red onion and green pepper",
 			"Medium": {
 				"Price": "$3.79",
 				"Calories": 20
@@ -115,41 +130,78 @@
 			}
 		},
 		"Chef Salad": {
-			"Price": "$4.29",
-			"Calories": 60
+			"Description": "Fresh greens, tomato, cucumber, red onion and green pepper, ham, turkey and cheese",
+			"Medium": {
+				"Price": "$3.79",
+				"Calories": 20
+			},
+			"Large": {
+				"Price": "$5.49",
+				"Calories": 20
+			}
 		},
 		"Chef Salad with Egg": {
-			"Price": "$4.99",
-			"Calories": 60
+			"Description": "Fresh greens, tomato, cucumber, red onion and green pepper",
+			"Medium": {
+				"Price": "$3.79",
+				"Calories": 20
+			},
+			"Large": {
+				"Price": "$5.49",
+				"Calories": 20
+			}
 		},
 		"Greek Salad": {
-			"Price": "$4.29",
-			"Calories": 70
+			"Description": "Fresh greens, tomato, cucumber, red onion, green pepper, feta, olives, and oregano",
+			"Medium": {
+				"Price": "$3.79",
+				"Calories": 20
+			},
+			"Large": {
+				"Price": "$5.49",
+				"Calories": 20
+			}
 		},
 		"Caesar Salad": {
-			"Price": "$4.49",
-			"Calories": 40
+			"Description": "Romaine lettuce, shredded parmesan and croutons",
+			"Medium": {
+				"Price": "$3.79",
+				"Calories": 20
+			},
+			"Large": {
+				"Price": "$5.49",
+				"Calories": 20
+			}
 		},
 		"Grilled Chicken Caesar Salad": {
-			"Price": "$5.99",
-			"Calories": 90
+			"Medium": {
+				"Price": "$3.79",
+				"Calories": 20
+			},
+			"Large": {
+				"Price": "$5.49",
+				"Calories": 20
+			}
 		}
 	},
-	"Fresh Made Wraps": {
+	"Wraps": {
 		"Vegetarian Greek Salad": {
+			"Description": "Fresh veggies on a bed of greens, hots, feta and Greek dressing",
 			"Price": "$4.49",
 			"Calories": 520
 		},
 		"Vegetarian Italian Salad": {
+			"Description": "Fresh greens with sliced tomatoes, mozzarella, grilled peppers and Italian dressing",
 			"Price": "$4.49",
 			"Calories": 520
 		},
 		"Caesar Salad with Chicken": {
+			"Description": "Romaine lettuce, our own fancy Caesar dressing, baked croutons",
 			"Price": "$5.29",
-			"Calories": 520
+			"Calories": 530
 		}
 	},
-	"Fresh Made Finger Rolls": [
+	"Finger Rolls": [
 		{
 			"name": "Lobster Salad",
 			"description": "Real Lobster Twin Pack",
@@ -193,7 +245,7 @@
 			"price": "$2.49"
 		}
 	],
-	"Fresh Made Panini Melts": [
+	"Panini Melts": [
 		{
 			"name": "Ham and Cheese",
 			"description": "Baked ham and Swiss cheese",
@@ -246,7 +298,7 @@
 			"price": "$3.99"
 		}
 	],
-	"Fresh Made 19 Pizza": [
+	"19 Pizza": [
 		{
 			"name": "19\" Traditional Cheese Pizza",
 			"calories": 840,

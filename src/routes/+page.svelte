@@ -25,7 +25,7 @@
 	let order = $state([]);
 
 	let orderTypes = $state(['deli', 'kitchen']);
-	let curOrderType = $state(0);
+	let curOrderType = $state(1);
 
 	let stores = $state([]);
 	let curStore = $state(0);
@@ -103,7 +103,8 @@
 				items = deliItems;
 				break;
 			case 1:
-				items = Object.keys(TakeoutMenu).map((e) => {
+				items = Object.keys(TakeoutMenu).map((e, idx) => {
+					// if (idx == 0) console.log(Object.keys(TakeoutMenu[e][0]['Whole']));
 					return { name: e, objects: TakeoutMenu[e] };
 				});
 				/*
@@ -129,7 +130,7 @@
 	}
 
 	function setNewItems(newItems) {
-		console.log('setting...');
+		console.log('setting new', newItems);
 		if (newItems[0]?.name) {
 			items = newItems;
 
@@ -180,7 +181,6 @@
 	}
 
 	function setCurrentLanguage(idx) {
-		// console.log('setting.');
 		currentLanguage = idx;
 	}
 
@@ -273,9 +273,12 @@
 	}
 
 	onMount(() => {
-		GrillItems.menu.items.forEach((e) => {
-			// console.log(e.name, e.price, e.calories);
+		// console.log(TakeoutMenu);
+		/*
+		TakeoutMenu.forEach((e) => {
+			console.log(e);
 		});
+    */
 
 		showTicketEls();
 		setTimeout(() => {
