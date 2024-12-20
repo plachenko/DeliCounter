@@ -50,8 +50,8 @@
 			currentCategory = items[idx];
 			// console.log(Object.keys(items[idx].objects));
 
-			let arr = items[idx].objects;
-			let firstArr = arr[Object.keys(arr)[0]];
+			// let arr = items[idx].objects;
+			// let firstArr = arr[Object.keys(arr)[0]];
 
 			if (currentCategory.name == 'Subs') {
 				// console.log(arr);
@@ -74,13 +74,12 @@
 			}
       */
 
-			console.log(items[idx]?.objects);
-
 			if (items[idx]?.objects) {
 				setNewItems(items[idx]?.objects);
 			} else {
 				setOrderItem(items[idx]);
 			}
+
 			setItemHeight();
 		}, 500);
 
@@ -231,7 +230,7 @@
 									</div>
 
 									<div
-										class="capitalize relativeflex-1 text-sm landscape:text-left landscap:text-sm portrait:text-lg"
+										class="capitalize relativeflex-1 text-xs landscape:text-left landscap:text-sm portrait:text-lg"
 									>
 										{item?.name || 'item ' + idx}
 										{#if item.price}

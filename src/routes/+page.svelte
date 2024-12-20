@@ -24,6 +24,8 @@
 	let sliderShown = $state(false);
 	let order = $state([]);
 
+	let itemQnty = $state(1);
+
 	let orderTypes = $state(['deli', 'kitchen']);
 	let curOrderType = $state(1);
 
@@ -130,7 +132,7 @@
 	}
 
 	function setNewItems(newItems) {
-		console.log('setting new', newItems);
+		// console.log('setting new', newItems);
 		if (newItems[0]?.name) {
 			items = newItems;
 
@@ -282,7 +284,9 @@
 
 		showTicketEls();
 		setTimeout(() => {
-			curState = 2;
+			setOrderItem(TakeoutMenu['Finger Rolls'][0]);
+			curState = 3;
+
 			// document.getElementById('TicketNumber').textContent = 'new';
 		}, 100);
 
@@ -402,13 +406,72 @@
 			{/if}
 
 			{#if states[curState].name == 'orderItem'}
-				<div class="flex flex-col bg-blue-400">
-					<div class="flex flex-1 w-full">
-						<div class="w-full flex-1 bg-red-400">{curOrderItem.name}</div>
-						<div class="flex-1">{curOrderItem.price}</div>
+				<div class="absolute flex flex-col w-full h-full">
+					<div class="flex w-full items-center p-1 border-b-2">
+						<div class="w-full flex-1 text-center text-xl">{curOrderItem.name}</div>
+						<div class="px-2">{curOrderItem.price}</div>
 					</div>
-					<div>{curOrderItem.description}</div>
-					<div>{curOrderItem.calories}</div>
+					<div class="px-2 py-1 text-sm text-slate-500">{curOrderItem.description}</div>
+
+					<div class="flex w-full portrait:flex-col landscape:flex-row flex-1 h-full">
+						<div class="flex-1 w-full h-full p-2">
+							<div class="w-full h-[69%] bg-red-400"></div>
+						</div>
+
+						<div class="flex-1 h-full w-full p-2">
+							<button
+								class="border-2 border-slate-400 bg-slate-200 rounded-md p-2 w-full relative flex items-center flex-1"
+								><span class="w-full flex-1 flex items-center"
+									>View Nutrition &mdash; <span class="text-xs pl-1 text-slate-400 font-bold"
+										>{curOrderItem.calories} Cal</span
+									></span
+								></button
+							>
+							<div class="p-2 flex">
+								<span class="flex-1 text-sm w-full">Quantity: {itemQnty}</span><input
+									type="range"
+									bind:value={itemQnty}
+									min="1"
+									max="10"
+								/>
+							</div>
+						</div>
+					</div>
+					<!--
+					<div class="flex flex-col w-full">
+						<div class="flex-1 w-full">Description</div>
+						<div>
+							{curOrderItem.description}
+						</div>
+					</div>
+					<div class="flex w-full">
+						<div class="flex-1 w-full">Calories</div>
+						<div>
+						{curOrderItem.calories}	
+						</div>
+					</div>
+-->
+					<div class="w-full absolute bottom-0 flex py-2">
+						<div class="flex-1 w-full flex justify-start">
+							<button
+								onclick={() => {
+									cancelOrder();
+								}}
+								class="border-2 text-white border-red-500 bg-red-400 rounded-md p-2 px-4 ml-2"
+								>Cancel</button
+							>
+						</div>
+						<div class="flex-1 w-full flex justify-end">
+							<button
+								onclick={() => {
+									addItemToOrder();
+								}}
+								class="border-2 border-green-500 bg-green-400 flex items-center px-4 rounded-md mr-2"
+								>Add to order <span class="text-xs text-green-700 pl-1">({curOrderItem.price})</span
+								></button
+							>
+						</div>
+					</div>
 				</div>
 			{/if}
 
