@@ -11,7 +11,7 @@
 
     let itemQnty = $state(1);
 
-    let orderParams = $state(['nutrition', 'quantity', ]);
+    let orderParams = $state(['nutrition', 'quantity', 'ingredients']);
 
     onMount(() => {
         setTimeout(() => {
@@ -47,31 +47,45 @@
         </div>
 
         <div class="flex-1 h-full w-full p-2">
-            <button
-                class="border-2 border-slate-400 bg-slate-200 rounded-md p-2 w-full relative flex items-center flex-1"
-                ><span class="w-full flex-1 flex items-center"
-                    >
-                    <div class="flex w-full relative justify-center items-center">
-                        <span class="flex-1 w-full text-left z-[10]"><span class="bg-slate-200 px-2 text-sm">View Nutrition</span></span>
-                        <div class="w-full border-t-2 border-dashed h-[1px] z-[6] absolute border-slate-600/20"></div> 
-                        <span class="text-xs pl-1 text-slate-400 font-bold z-[10]">
-                            <div class="pl-2 bg-slate-200">
-                                <span class="bg-slate-200 border-2 border-slate-300 py-1 rounded-md px-2">
-                                    {curOrderItem.calories * itemQnty} Cal
-                                </span>
-                            </div>
-                        </span>
-                    </div>
+            {#each orderParams as param, idx}
+                {#if param == 'nutrition'}
+                <button class="border-2 border-slate-400 bg-slate-200 rounded-md p-2 w-full relative flex items-center flex-1">
+                    <span class="w-full flex-1 flex items-center">
+                        <div class="flex w-full relative justify-center items-center">
+                            <span class="flex-1 w-full text-left z-[10]"><span class="bg-slate-200 px-2 text-sm">View Nutrition</span></span>
+                            <div class="w-full border-t-2 border-dashed h-[1px] z-[6] absolute border-slate-600/20"></div> 
+                            <span class="text-xs pl-1 text-slate-400 font-bold z-[10]">
+                                <div class="pl-2 bg-slate-200">
+                                    <span class="bg-slate-200 border-2 border-slate-300 py-1 rounded-md px-2">
+                                        {curOrderItem.calories * itemQnty} Cal
+                                    </span>
+                                </div>
+                            </span>
+                        </div>
                     </span>
                 </button>
-            <div class="p-2 flex border-2 rounded-md mt-1 border-slate-400">
-                <span class="flex-1 text-sm w-full">Quantity: {itemQnty}</span><input
-                    type="range"
-                    bind:value={itemQnty}
-                    min="1"
-                    max="10"
-                />
-            </div>
+                {/if}
+
+                {#if param == 'quantity'}
+                <div class="p-2 flex border-2 rounded-md mt-1 border-slate-400">
+                    <span class="flex-1 text-sm w-full">Quantity: {itemQnty}</span>
+                    <input
+                        type="range"
+                        bind:value={itemQnty}
+                        min="1"
+                        max="10"
+                    />
+                </div>
+                {/if}
+
+                {#if param == 'ingredients'}
+                <button class="text-sm mt-1 border-2 border-slate-400 bg-slate-200 rounded-md p-2 w-full relative flex justify-center items-center flex-1">
+                    What's on it
+                </button>
+                {/if}
+                
+            {/each}
+            
         </div>
     </div>
 
