@@ -181,7 +181,7 @@
 			<div
 				bind:this={gridContainer}
 				onscrollend={scrollEnd}
-				class={`pt-2 w-full grid ${curItem <= 8 ? 'overflow-hidden' : 'overflow-y-auto'} grid-cols-${items.length < 3 ? items.length : '3'} gap-2 px-1`}
+				class={`pt-2 w-full grid ${curItem <= 8 ? 'overflow-hidden' : 'overflow-y-auto'} ${items.length < 3 ? 'grid-cols-2' : 'grid-cols-3'} gap-2 px-1`}
 			>
 				{#each items as item, idx}
 					<div

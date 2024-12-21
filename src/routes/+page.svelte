@@ -105,10 +105,7 @@
 				items = deliItems;
 				break;
 			case 1:
-				items = Object.keys(TakeoutMenu).map((e, idx) => {
-					// if (idx == 0) console.log(Object.keys(TakeoutMenu[e][0]['Whole']));
-					return { name: e, objects: TakeoutMenu[e] };
-				});
+				setKitchenItems();
 				/*
 				items = [
 					{ name: 'pizza', objects: PizzaItems },
@@ -119,6 +116,13 @@
 				break;
 		}
 	});
+
+	function setKitchenItems(){
+		items = Object.keys(TakeoutMenu).map((e, idx) => {
+			// if (idx == 0) console.log(Object.keys(TakeoutMenu[e][0]['Whole']));
+			return { name: e, objects: TakeoutMenu[e] };
+		});
+	}
 
 	function setOrderItem(orderItem) {
 		if (curOrderItem?.obj) {
@@ -245,6 +249,19 @@
 		return v >= v - min && v <= v + max;
 	}
 
+	function cancelOrder() {
+		setKitchenItems();
+		itemQnty = 1;
+		curState = 1;
+	}
+
+	function addItemToOrder() {
+		order = [...order, curOrderItem];
+		itemQnty = 1;
+		setKitchenItems();
+		curState = 1;
+	}
+	
 	function distance(p1, p2) {
 		let x = p2[0] - p1[0];
 		let y = p2[1] - p1[1];
@@ -424,12 +441,12 @@
 								><span class="w-full flex-1 flex items-center"
 									>
 									<div class="flex w-full relative justify-center items-center">
-										<span class="flex-1 w-full text-left z-[10]"><span class="bg-slate-200 px-2">View Nutrition</span></span>
+										<span class="flex-1 w-full text-left z-[10]"><span class="bg-slate-200 px-2 text-sm">View Nutrition</span></span>
 										<div class="w-full border-t-2 border-dashed h-[1px] z-[6] absolute border-slate-600/20"></div> 
 										<span class="text-xs pl-1 text-slate-400 font-bold z-[10]">
 											<div class="pl-2 bg-slate-200">
 												<span class="bg-slate-200 border-2 border-slate-300 py-1 rounded-md px-2">
-													{curOrderItem.calories} Cal
+													{curOrderItem.calories * itemQnty} Cal
 												</span>
 											</div>
 										</span>
@@ -437,7 +454,7 @@
 									</span
 								></button
 							>
-							<div class="p-2 flex">
+							<div class="p-2 flex border-2 rounded-md mt-1 border-slate-400">
 								<span class="flex-1 text-sm w-full">Quantity: {itemQnty}</span><input
 									type="range"
 									bind:value={itemQnty}

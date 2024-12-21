@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import LanguageList from '$lib/LanguageList.json';
 
-	let { currentLanguage, setCurrentLanguage, curState, changeState, startVoice, voiceStarted } =
+	let { currentLanguage, setCurrentLanguage, curState, changeState, startVoice, voiceStarted, order } =
 		$props();
 
 	let selectingLanguage = $state(false);
@@ -11,7 +11,6 @@
 	let inputTxt = $state('');
 	let inputTxtContainer = $state(null);
 
-	let order = $state([]);
 	let inputFocused = $state(false);
 	// let languages = $state(LanguageList);
 	//
