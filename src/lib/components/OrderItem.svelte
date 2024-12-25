@@ -64,7 +64,7 @@
 						<span class="text-xs pl-1 text-slate-400 font-bold z-[10]">
 							<div class="pl-2 bg-slate-200">
 								<span class="bg-slate-200 border-2 border-slate-300 py-1 rounded-md px-2">
-									{curOrderItem.calories * (itemQnty || 1)} Cal
+									{curOrderItem.calories} Cal
 								</span>
 							</div>
 						</span>

@@ -314,14 +314,6 @@
 	}
 
 	onMount(() => {
-		// console.log(TakeoutMenu);
-		/*
-		TakeoutMenu.forEach((e) => {
-			console.log(e);
-		});
-    */
-
-		console.log([4, 3].reduce((acc, cur) => acc + cur));
 
 		showTicketEls();
 		setTimeout(() => {
