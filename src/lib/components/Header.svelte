@@ -3,8 +3,16 @@
 	import { onMount } from 'svelte';
 	import LanguageList from '$lib/LanguageList.json';
 
-	let { currentLanguage, setCurrentLanguage, curState, changeState, startVoice, voiceStarted, order } =
-		$props();
+	let {
+		currentLanguage,
+		setCurrentLanguage,
+		curState,
+		changeState,
+		startVoice,
+		voiceStarted,
+		order,
+		showOrder
+	} = $props();
 
 	let selectingLanguage = $state(false);
 
@@ -194,13 +202,20 @@
 	<button
 		disabled={order.length == 0}
 		aria-label="ShopButton"
-		class="bg-slate-300 w-[50px] h-full rounded-md relative"
+		onclick={() => {
+			showOrder();
+		}}
+		class="bg-slate-300 text-slate-800 w-[50px] h-full rounded-md relative"
 	>
 		{#if order.length}
-			<div class="bg-red-400 size-3 absolute top-[2px] right-[2px] rounded-full"></div>
+			<div
+				class="bg-red-400 p-1 text-xs flex justify-center items-center text-white absolute top-[-2px] right-[-2px] rounded-full"
+			>
+				{order.length}
+			</div>
 		{/if}
 		<div
-			class={`opacity-20 ${order.length ? 'hover:opacity-60' : ''} w-full h-full flex justify-center items-center`}
+			class={`${order.length ? 'hover:opacity-60' : 'opacity-20'} w-full h-full flex justify-center items-center`}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

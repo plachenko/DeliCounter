@@ -24,6 +24,7 @@
 	let currentLanguage = $state(10);
 	let sliderShown = $state(false);
 	let order = $state([]);
+	let orderVisible = $state(false);
 
 	let itemQnty = $state(1);
 
@@ -61,7 +62,7 @@
 		{ name: 'grid', showHeader: true },
 		{ name: 'ticket' },
 		{ name: 'orderItem', showHeader: true },
-		{ name: 'order' },
+		{ name: 'order', showHeader: true },
 		{ name: 'voiceRecognition', showHeader: true }
 	]);
 
@@ -101,6 +102,18 @@
 	let scaleWidth = $state(0);
 
 	$effect(() => {
+		if (order.length) {
+			/*
+			let prices = order.map((e) => {
+				return parseFloat(e.price.split('$')[1]);
+			});
+
+			let total = prices.reduce((acc, cur) => acc + cur);
+
+			console.log(total);
+      */
+		}
+
 		switch (curOrderType) {
 			case 0:
 				items = deliItems;
@@ -118,7 +131,15 @@
 		}
 	});
 
-	function setKitchenItems(){
+	function showOrder() {
+		orderVisible = true;
+	}
+
+	function cancelTotalOrder() {
+		orderVisible = false;
+	}
+
+	function setKitchenItems() {
 		items = Object.keys(TakeoutMenu).map((e, idx) => {
 			// if (idx == 0) console.log(Object.keys(TakeoutMenu[e][0]['Whole']));
 			return { name: e, objects: TakeoutMenu[e] };
@@ -252,7 +273,7 @@
 
 	function cancelOrder() {
 		setKitchenItems();
-		itemQnty = 1;
+		// itemQnty = 1;
 		curState = 1;
 	}
 
@@ -262,7 +283,7 @@
 		setKitchenItems();
 		curState = 1;
 	}
-	
+
 	function distance(p1, p2) {
 		let x = p2[0] - p1[0];
 		let y = p2[1] - p1[1];
@@ -300,6 +321,8 @@
 		});
     */
 
+		console.log([4, 3].reduce((acc, cur) => acc + cur));
+
 		showTicketEls();
 		setTimeout(() => {
 			setOrderItem(TakeoutMenu['Finger Rolls'][0]);
@@ -325,6 +348,10 @@
 			showBody = true;
 		}, 800);
 	});
+
+	function removeItemFromOrder(idx) {
+		order = order.splice(idx, 0);
+	}
 
 	const USStates = [
 		'AL',
@@ -397,9 +424,70 @@
 </script>
 
 <div id="Container" class="overflow-hidden bg-slate-100">
+	{#if orderVisible}
+		<div
+			transition:fly={{ x: 20 }}
+			class="flex flex-col w-full h-full absolute bg-slate-100 z-[90]"
+		>
+			<div class="flex w-full items-center p-2">
+				<div class="flex-1 w-full flex justify-center">
+					<h2 class="text-xl">Current order</h2>
+				</div>
+				{#if order.length}
+					<div class="">
+						${order
+							.map((e) => {
+								return parseFloat(e.price.split('$')[1]) * e.qty;
+							})
+							.reduce((acc, cur) => {
+								return acc + cur;
+							})}
+					</div>
+				{/if}
+			</div>
+			<div class={`bg-slate-300 flex flex-col ${order.length ? '' : 'h-full'}`}>
+				{#if order.length}
+					{#each order as orderItem, idx}
+						<div
+							class="overflow-y-scroll flex flex-1 w-full p-1 items-center [&:not(:first-child)]:border-t-2 border-dashed gap-1"
+						>
+							<input bind:value={orderItem.qty} type="number" />
+							<span class="flex-1">{orderItem.name}</span>
+							<span>{orderItem.price}</span>
+							<button
+								class="p-2 border-2 rounded-md bg-slate-200 ml-2"
+								onclick={() => removeItemFromOrder(idx)}>x</button
+							>
+						</div>
+					{/each}
+				{:else}
+					<div class="w-full h-full flex justify-center items-center italic text-slate-400">
+						No order items
+					</div>
+				{/if}
+			</div>
+			<div class="flex absolute bottom-0 gap-2 px-2 pb-1">
+				<button
+					class="rounded-md flex-1 bg-red-400 p-3"
+					onclick={() => {
+						cancelTotalOrder();
+					}}>Back</button
+				>
+				{#if order.length}
+					<button
+						class="rounded-md w-full flex-1 p-3 bg-green-400"
+						onclick={() => {
+							cancelTotalOrder();
+						}}>Send Order</button
+					>
+				{/if}
+			</div>
+		</div>
+	{/if}
 	{#if states[curState]?.showHeader}
 		<div out:fade in:fly={{ y: -100, delay: 100, duration: 600 }}>
 			<Header
+				{showOrder}
 				{order}
 				{setCurrentLanguage}
 				{changeState}
