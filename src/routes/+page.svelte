@@ -275,6 +275,7 @@
 		setKitchenItems();
 		// itemQnty = 1;
 		curState = 1;
+		curOrderItem = null;
 	}
 
 	function addItemToOrder() {
@@ -314,7 +315,6 @@
 	}
 
 	onMount(() => {
-
 		showTicketEls();
 		setTimeout(() => {
 			setOrderItem(TakeoutMenu['Finger Rolls'][0]);
@@ -479,6 +479,7 @@
 	{#if states[curState]?.showHeader}
 		<div out:fade in:fly={{ y: -100, delay: 100, duration: 600 }}>
 			<Header
+				{curOrderItem}
 				{showOrder}
 				{order}
 				{setCurrentLanguage}
@@ -488,6 +489,7 @@
 				{startVoice}
 				{voiceStarted}
 			/>
+			<!-- <div class="w-full bg-slate-300 p-1">test</div> -->
 		</div>
 	{/if}
 
@@ -504,7 +506,7 @@
 			{/if}
 
 			{#if states[curState].name == 'orderItem'}
-				<OrderItem {curOrderItem} {addItemToOrder} {cancelOrder} />
+				<OrderItem {order} {curOrderItem} {addItemToOrder} {cancelOrder} />
 			{/if}
 
 			{#if states[curState].name == 'ticket'}

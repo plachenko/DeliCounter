@@ -1,13 +1,15 @@
 <script>
 	import { onMount } from 'svelte';
-	import { fly } from 'svelte/transition';
+	import { fly, fade } from 'svelte/transition';
+	import NutritionLabel from './NutritionLabel.svelte';
 
 	let showCancelButton = $state(false);
 	let showAddButton = $state(false);
 
+	let showNutritionLabel = $state(false);
 	let showImage = $state(false);
 
-	let { curOrderItem, addItemToOrder, cancelOrder } = $props();
+	let { curOrderItem, addItemToOrder, cancelOrder, order } = $props();
 
 	let itemQnty = $state(0);
 
@@ -16,6 +18,10 @@
 	$effect(() => {
 		curOrderItem.qty = itemQnty;
 	});
+
+	function viewNutrition() {
+		showNutritionLabel = !showNutritionLabel;
+	}
 
 	onMount(() => {
 		setTimeout(() => {
@@ -29,6 +35,7 @@
 		showCancelButton = false;
 		showAddButton = false;
 		showImage = false;
+		curOrderItem = null;
 		setTimeout(() => {
 			cancelOrder();
 		}, 300);
@@ -37,25 +44,36 @@
 
 <div class="absolute flex flex-col w-full h-full">
 	<div class="flex w-full items-center p-1 border-b-2">
+		<!--
 		<div class="w-full flex-1 text-center text-xl">{curOrderItem.name}</div>
 		<div class="p-1 text-slate-200 bg-slate-400 rounded-md">{curOrderItem.price}</div>
+-->
 	</div>
 	<div class="px-2 py-1 text-sm text-slate-500">{curOrderItem.description}</div>
 
 	<div class="flex w-full portrait:flex-col landscape:flex-row flex-1 h-full">
 		<div class="flex-1 w-full h-full p-2">
 			{#if showImage}
-				<div transition:fly={{ y: -10 }} class="w-full h-[69%] bg-red-400"></div>
+				<div transition:fly={{ y: 10 }} class="overflow-hidden w-full h-[69%] bg-slate-200">
+					{#if showNutritionLabel}
+						<div transition:fade={{ duration: 300 }} class="overflow-y-auto h-full">
+							<NutritionLabel />
+						</div>
+					{/if}
+				</div>
 			{/if}
 		</div>
 
-		<div class="flex-1 h-full w-full p-2">
+		<div class="flex-1 h-full w-full p-2 pb-[200px]">
 			<button
-				class="border-2 border-slate-400 bg-slate-200 rounded-md p-2 w-full relative flex items-center flex-1"
+				onclick={() => {
+					viewNutrition();
+				}}
+				class={`border-2 ${showNutritionLabel ? 'border-slate-400' : 'border-slate-300'}  bg-slate-200 rounded-md p-2 w-full relative flex items-center flex-1`}
 				><span class="w-full flex-1 flex items-center">
 					<div class="flex w-full relative justify-center items-center">
 						<span class="flex-1 w-full text-left z-[10] items-center"
-							><span class="bg-slate-200 text-sm whitespace-nowrap left-0">View Nutrition</span
+							><span class="bg-slate-200 text-xs whitespace-nowrap left-0 pr-2">View Nutrition</span
 							></span
 						>
 						<div
@@ -80,7 +98,7 @@
 		</div>
 	</div>
 
-	<div class="w-full gap-1 absolute bottom-0 flex py-2 px-2">
+	<div class="w-full gap-1 absolute bg-white border-t bottom-0 flex py-2 px-2">
 		<div class="flex-1 flex justify-start">
 			{#if showCancelButton}
 				<button
@@ -89,19 +107,29 @@
 						// cancelOrder();
 						startCancelOrder();
 					}}
-					class="w-full border-2 text-white border-red-500 bg-red-400 rounded-md p-2">Back</button
+					class="text-xs w-full border-2 text-white border-red-500 bg-red-400 rounded-md p-2"
+					>Back</button
 				>
 			{/if}
 		</div>
+
 		<div class="flex-1 w-full flex justify-end">
 			{#if showAddButton}
 				<button
-					transition:fly={{ x: 10 }}
+					transition:fade
 					onclick={() => {
 						//addItemToOrder();
+						console.log(curOrderItem);
+						/*
+            if(curOrderItem){
+
+            }
+            */
+						// order.push(curOrderItem);
 						itemQnty++;
+						// order
 					}}
-					class="flex-1 border-2 border-green-500 bg-green-400 flex items-center justify-center px-4 rounded-md"
+					class="text-xs flex-1 border-2 border-green-500 bg-green-400 flex items-center justify-center px-4 rounded-md"
 					>Add to order
 					{#if curOrderItem.qty}
 						<span class="text-xs text-green-700 pl-1">({curOrderItem.qty})</span>{/if}</button
@@ -109,15 +137,18 @@
 			{/if}
 		</div>
 
-		<button
-			disabled={curOrderItem.qty == 0}
-			class={`${curOrderItem.qty == 0 ? 'opacity-50 bg-slate-300' : 'bg-green-400'} flex-1 border-green-500 border-2 rounded-md`}
-			>Proceed to checkout
-			{#if curOrderItem.qty}
-				<span class="text-xs px-2">
-					(${(parseFloat(curOrderItem.price.split('$')[1]) * itemQnty).toFixed(2)})
-				</span>
-			{/if}
-		</button>
+		{#if curOrderItem.qty}
+			<button
+				transition:fly={{ x: 10 }}
+				disabled={curOrderItem.qty == 0}
+				class={`${curOrderItem.qty == 0 ? 'opacity-50 bg-slate-300' : 'bg-green-400 border-green-500'} flex-1  border-2 text-xs rounded-md`}
+				>Proceed to checkout
+				{#if curOrderItem.qty}
+					<span class="text-xs px-2">
+						(${(parseFloat(curOrderItem.price.split('$')[1]) * itemQnty).toFixed(2)})
+					</span>
+				{/if}
+			</button>
+		{/if}
 	</div>
 </div>

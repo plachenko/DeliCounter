@@ -1,0 +1,77 @@
+{
+	"Product": "Cheeseburger on a Bun",
+	"SellByDate": "12.28.24",
+	"UnitQuantity": 1,
+	"UnitPrice": 2.99,
+	"TotalPrice": 2.99,
+	"PackedOn": "12.27.24",
+	"PackedTime": "01:08 PM",
+	"Ingredients": [
+		"Beef",
+		"Unbleached, Unbromated Enriched Wheat Flour",
+		"Water",
+		"Cheddar Cheese",
+		"Whey Protein Concentrate",
+		"Salt",
+		"Soy Lecithin",
+		"Vegetable Oil",
+		"Less than 2% of each of the following: Potato Flour, Dextrose, Natural Flavor, Spice, Cultured Wheat Flour, Maltodextrin (Corn)"
+	],
+	"Contains": ["Milk", "Wheat", "Soy"],
+	"NutritionFacts": {
+		"ServingSize": "7 oz (198g)",
+		"ServingsPerContainer": 1,
+		"Calories": 530,
+		"TotalFat": {
+			"Amount": "33g",
+			"DailyValue": "43%"
+		},
+		"SaturatedFat": {
+			"Amount": "14g",
+			"DailyValue": "71%"
+		},
+		"TransFat": "0g",
+		"Cholesterol": {
+			"Amount": "110mg",
+			"DailyValue": "37%"
+		},
+		"Sodium": {
+			"Amount": "820mg",
+			"DailyValue": "36%"
+		},
+		"TotalCarbohydrate": {
+			"Amount": "29g",
+			"DailyValue": "10%"
+		},
+		"DietaryFiber": {
+			"Amount": "1g",
+			"DailyValue": "4%"
+		},
+		"AddedSugars": {
+			"Amount": "1g",
+			"DailyValue": "2%"
+		},
+		"TotalSugars": {
+			"Amount": "3g"
+		},
+		"Protein": {
+			"Amount": "27g"
+		},
+		"VitaminD": {
+			"Amount": "1mg",
+			"DailyValue": "2%"
+		},
+		"Calcium": {
+			"Amount": "226mg",
+			"DailyValue": "15%"
+		},
+		"Iron": {
+			"Amount": "12mg",
+			"DailyValue": "70%"
+		},
+		"Potassium": {
+			"Amount": "80mg",
+			"DailyValue": "2%"
+		}
+	}
+}

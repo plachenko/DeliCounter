@@ -53,14 +53,13 @@
 			// let arr = items[idx].objects;
 			// let firstArr = arr[Object.keys(arr)[0]];
 
-			if (currentCategory.name == 'Subs') {
-				// console.log(arr);
-				/*
-        items = items[idx].map((e)=>{
-          return {name: }
-        })
-        */
-			}
+			/*
+			console.log(currentCategory.objects);
+
+      if(currentCategory?.objects){
+        items = currentCategory.objects;
+      }
+      */
 
 			/*
 			if (Object.keys(firstArr)[0] == 'Half') {
