@@ -30,7 +30,7 @@
 	<div>Ingredients</div>
 </div>
 -->
-<div class="label w-[40px]">
+<div class="label w-[40px] bg-white">
 	<div class="label-heading">Nutrition Facts</div>
 	<span class="text-sm">1 Servings per container</span>
 
