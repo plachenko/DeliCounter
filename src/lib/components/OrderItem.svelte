@@ -117,35 +117,43 @@
 		<div class="flex-1 w-full flex justify-end">
 			{#if showAddButton}
 				{#if itemQnty}
-					<button class="bg-red-400 p-4 rounded-md mr-1 text-2xl text-slate-800/50">-</button>
+					<button
+						onclick={() => {
+							itemQnty--;
+						}}
+						class="text-2xl text-slate-100/70 h-full rounded-l-md font-bold justify-center items-center flex px-3 bg-red-400/50 border-red-400 border-y-2 border-l-2 rounded-l-md"
+					>
+						-
+					</button>
 				{/if}
 				<button
-					transition:fade
+					transition:fly={{ x: 20 }}
 					onclick={() => {
-						//addItemToOrder();
 						console.log(curOrderItem);
-						/*
-            if(curOrderItem){
-
-            }
-            */
-						// order.push(curOrderItem);
+						if (itemQnty) return;
 						itemQnty++;
-						// order
 					}}
-					class="text-xs relative flex-1 border-2 border-green-500 bg-green-400 flex items-center justify-center rounded-md"
-					><div
-						class="text-2xl text-slate-800/50 h-full bg-white/30 justify-center items-center flex px-2 border-r-2 border-slate-200/30"
-					>
-						+
+					class={`text-xs relative flex-1 ${itemQnty == 0 ? 'border-l-2 rounded-l-md' : ''} border-y-2 border-green-500 bg-green-400 flex items-center justify-center`}
+				>
+					<div class="flex-1 flex flex-col justaify-center items-center">
+						{#if itemQnty}
+							<span class="flex-1"> Quantity </span>
+							<span
+								class="flex-1 bg-white/30 border-t-2 border-slate-100/30 mt-1 p-1 flex justify-center items-center text-xs w-full"
+								>{itemQnty}</span
+							>
+						{:else}
+							<span class="flex-1"> Add to order </span>
+						{/if}
 					</div>
-					<div class="flex-1">Add to order</div>
-
-					<!--
-					{#if curOrderItem.qty}
-						<span class="text-xs text-green-700 pl-1">({curOrderItem.qty})</span>
-          {/if}
-          -->
+				</button>
+				<button
+					onclick={() => {
+						itemQnty++;
+					}}
+					class="text-2xl border-y-2 border-r-2 border-green-500 text-slate-800/50 h-full bg-green-500/30 justify-center rounded-r-md items-center flex px-2"
+				>
+					+
 				</button>
 			{/if}
 		</div>
