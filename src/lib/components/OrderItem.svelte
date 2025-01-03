@@ -11,13 +11,26 @@
 	let showNutritionLabel = $state(false);
 	let showImage = $state(false);
 
-	let { curOrderItem, addItemToOrder, cancelOrder, order } = $props();
+	let { curOrderItem, showOrder, addItemToOrder, cancelOrder, order } = $props();
 
 	let itemQnty = $state(0);
 
 	let orderParams = $state(['nutrition', 'quantity', 'toppings']);
 
 	$effect(() => {
+		/*
+		if (itemQnty) {
+			let curItemIdx = order.indexOf((e) => {
+				return e.name == curOrderItem.name;
+			});
+
+			console.log(curItemIdx);
+			if (curItemIdx > 0) return;
+
+			order.push(curOrderItem);
+		}
+		curOrderItem.qty = itemQnty;
+    */
 		curOrderItem.qty = itemQnty;
 	});
 
@@ -69,7 +82,14 @@
 		</div>
 
 		{#if showBtns}
-			<div transition:fly={{ x: 20 }} class="flex-1 h-full w-full p-2 pb-[200px]">
+			<div
+				transition:fly={{ x: 20 }}
+				class="flex gap-1 flex-col flex-1 h-full w-full p-2 pb-[200px]"
+			>
+				<button
+					class="bg-slate-200 border-slate-500/20 border-2 py-3 px-2 flex w-full rounded-md text-xs"
+					>Details</button
+				>
 				<button
 					onclick={() => {
 						viewNutrition();
@@ -95,6 +115,10 @@
 						</div>
 					</span>
 				</button>
+				<button
+					class="bg-slate-200 border-slate-500/20 border-2 py-3 px-2 flex w-full rounded-md text-xs"
+					>What's inside</button
+				>
 			</div>
 		{/if}
 	</div>
@@ -114,10 +138,26 @@
 			{/if}
 		</div>
 
+		{#if curOrderItem.qty}
+			<button
+				transition:fly={{ y: 30 }}
+				disabled={curOrderItem.qty == 0}
+				onclick={() => showOrder()}
+				class={`${curOrderItem.qty == 0 ? 'opacity-50 bg-slate-300' : 'bg-green-400 border-green-500'} flex-1  border-2 text-xs rounded-md`}
+				>Checkout
+				{#if curOrderItem.qty}
+					<span class="text-xs px-2">
+						(${(parseFloat(curOrderItem.price.split('$')[1]) * itemQnty).toFixed(2)})
+					</span>
+				{/if}
+			</button>
+		{/if}
+
 		<div class="flex-1 w-full flex justify-end">
 			{#if showAddButton}
 				{#if itemQnty}
 					<button
+						transition:fly={{ x: 10 }}
 						onclick={() => {
 							itemQnty--;
 						}}
@@ -127,9 +167,8 @@
 					</button>
 				{/if}
 				<button
-					transition:fly={{ x: 20 }}
+					transition:fly={{ x: 70 }}
 					onclick={() => {
-						console.log(curOrderItem);
 						if (itemQnty) return;
 						itemQnty++;
 					}}
@@ -148,8 +187,12 @@
 					</div>
 				</button>
 				<button
+					transition:fade
 					onclick={() => {
+						// order = [...order, curOrderItem];
+						// console.log(curOrderItem);
 						itemQnty++;
+						order.push(curOrderItem);
 					}}
 					class="text-2xl border-y-2 border-r-2 border-green-500 text-slate-800/50 h-full bg-green-500/30 justify-center rounded-r-md items-center flex px-2"
 				>
@@ -157,19 +200,5 @@
 				</button>
 			{/if}
 		</div>
-
-		{#if curOrderItem.qty}
-			<button
-				transition:fly={{ x: 10 }}
-				disabled={curOrderItem.qty == 0}
-				class={`${curOrderItem.qty == 0 ? 'opacity-50 bg-slate-300' : 'bg-green-400 border-green-500'} flex-1  border-2 text-xs rounded-md`}
-				>Checkout
-				{#if curOrderItem.qty}
-					<span class="text-xs px-2">
-						(${(parseFloat(curOrderItem.price.split('$')[1]) * itemQnty).toFixed(2)})
-					</span>
-				{/if}
-			</button>
-		{/if}
 	</div>
 </div>

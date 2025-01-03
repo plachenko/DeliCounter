@@ -433,32 +433,35 @@
 							})
 							.reduce((acc, cur) => {
 								return acc + cur;
-							})}
+							})
+							.toFixed(2)}
 					</div>
 				{/if}
 			</div>
 			<div class={`bg-slate-300 flex flex-col ${order.length ? '' : 'h-full'}`}>
 				{#if order.length}
-					{#each order as orderItem, idx}
-						<div
-							class="overflow-y-scroll flex flex-1 w-full p-1 items-center [&:not(:first-child)]:border-t-2 border-dashed gap-1"
-						>
-							<input bind:value={orderItem.qty} type="number" />
-							<span class="flex-1">{orderItem.name}</span>
-							<span>{orderItem.price}</span>
-							<button
-								class="p-2 border-2 rounded-md bg-slate-200 ml-2"
-								onclick={() => removeItemFromOrder(idx)}>x</button
+					<div class="overflow-y-auto h-[100vh]">
+						{#each order as orderItem, idx}
+							<div
+								class="overflow-y-scroll flex flex-1 w-full p-1 items-center [&:not(:first-child)]:border-t-2 border-dashed gap-1"
 							>
-						</div>
-					{/each}
+								<input bind:value={orderItem.qty} type="number" />
+								<span class="flex-1">{orderItem.name}</span>
+								<span>{orderItem.price}</span>
+								<button
+									class="p-2 border-2 rounded-md bg-slate-200 ml-2"
+									onclick={() => removeItemFromOrder(idx)}>x</button
+								>
+							</div>
+						{/each}
+					</div>
 				{:else}
 					<div class="w-full h-full flex justify-center items-center italic text-slate-400">
 						No order items
 					</div>
 				{/if}
 			</div>
-			<div class="flex absolute bottom-0 gap-2 px-2 pb-1">
+			<div class="flex absolute w-full bottom-0 gap-2 px-2 pb-1">
 				<button
 					class="rounded-md flex-1 bg-red-400 p-3"
 					onclick={() => {
@@ -506,7 +509,7 @@
 			{/if}
 
 			{#if states[curState].name == 'orderItem'}
-				<OrderItem {order} {curOrderItem} {addItemToOrder} {cancelOrder} />
+				<OrderItem {order} {curOrderItem} {showOrder} {addItemToOrder} {cancelOrder} />
 			{/if}
 
 			{#if states[curState].name == 'ticket'}
