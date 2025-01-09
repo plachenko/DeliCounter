@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	let dateTime = $state(formatDate());
 	let blink = $state(false);
 	let curTime = new Date();
@@ -8,17 +8,33 @@
 	let t2 = '02:34:00';
 	let pct = $state(((100 * totalSeconds(t1)) / totalSeconds(t2)).toFixed(2));
 
+	let { startTime } = $props();
+	let timeDiff = $state(0);
+
+	let tickInt = $state(null);
+
 	onMount(() => {
 		dateTime = formatDate();
-		setInterval(() => {
+		tickInt = setInterval(() => {
 			blink = !blink;
 			dateTime = formatDate();
+			if (startTime) {
+				timeDiff++;
+			}
 		}, 1000);
-
-		// gsap.from("#timeCont", { opacity: 0, duration: 0.4, y: -30, delay: 0.4 });
-
-		// Check if date is between 6am and 9pm
 	});
+
+	onDestroy(() => {
+		clearInterval(tickInt);
+		tickInt = null;
+	});
+
+	function formatTimer() {
+		return new Date().toLocaleTimeString([], {
+			minute: '2-digit',
+			seconds: '2-digit'
+		});
+	}
 
 	function formatDate() {
 		return new Date().toLocaleTimeString([], {
@@ -26,6 +42,8 @@
 			minute: '2-digit'
 		});
 	}
+
+	let TimeDiff = $state(0);
 
 	function totalSeconds(time) {
 		let parts = time.split(':');
@@ -39,6 +57,11 @@
     <div class="h-full w-[39%] bg-green-300"></div>
   </div>
   -->
+	{#if startTime}
+		<span class="absolute left-1 border-2 rounded-md p-1 py-0 border-red-300"
+			>{new Date(timeDiff * 1000).toISOString().substr(14, 5)}</span
+		>
+	{/if}
 	<div class="flex gap-2 w-full">
 		<div class="border-r-2 pr-2 flex-1 flex break-keep justify-end">
 			<span>{dateTime.split(':')[0]}</span><span class={blink ? 'text-slate-400' : 'text-slate-300'}

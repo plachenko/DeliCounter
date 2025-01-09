@@ -10,6 +10,7 @@
 
 	let showNutritionLabel = $state(false);
 	let showImage = $state(false);
+	let showCheckout = $state(false);
 
 	let { curOrderItem, showOrder, addItemToOrder, cancelOrder, order } = $props();
 
@@ -32,6 +33,7 @@
 		curOrderItem.qty = itemQnty;
     */
 		curOrderItem.qty = itemQnty;
+		showCheckout = itemQnty > 0;
 	});
 
 	function viewNutrition() {
@@ -50,6 +52,7 @@
 	function startCancelOrder() {
 		showCancelButton = false;
 		showAddButton = false;
+		showCheckout = false;
 		showImage = false;
 		curOrderItem = null;
 		showBtns = false;
@@ -138,12 +141,12 @@
 			{/if}
 		</div>
 
-		{#if curOrderItem.qty}
+		{#if showCheckout && curOrderItem.qty}
 			<button
-				transition:fly={{ y: 30 }}
+				transition:fly={{ y: 60 }}
 				disabled={curOrderItem.qty == 0}
 				onclick={() => showOrder()}
-				class={`${curOrderItem.qty == 0 ? 'opacity-50 bg-slate-300' : 'bg-green-400 border-green-500'} flex-1  border-2 text-xs rounded-md`}
+				class={`${curOrderItem.qty == 0 ? 'opacity-50 bg-slate-300' : 'bg-green-400 border-green-500'} flex-1 border-2 text-xs rounded-md`}
 				>Checkout
 				{#if curOrderItem.qty}
 					<span class="text-xs px-2">
