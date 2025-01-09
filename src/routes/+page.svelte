@@ -5,8 +5,23 @@
 	import LineItems from '$lib/components/LineItems.svelte';
 	import Logo from '$lib/components/Logo.svelte';
 
+	let orderType = $state('test');
 	let orderCat = ['Pizza', 'Panini', 'Sub', 'Panini', 'Grill', 'Fried Food', 'Soups'];
-	let toppings = ['Cheese', 'Pepperoni', 'Mushrooms', 'Green Peppers', 'Onions', 'Black Olives', 'Sausage', 'Pineapple', 'Ham', 'Brocolli', 'Garlic', 'Chicken', 'Bacon'];
+	let toppings = [
+		'Cheese',
+		'Pepperoni',
+		'Mushrooms',
+		'Green Peppers',
+		'Onions',
+		'Black Olives',
+		'Sausage',
+		'Pineapple',
+		'Ham',
+		'Brocolli',
+		'Garlic',
+		'Chicken',
+		'Bacon'
+	];
 
 	const lineItems = [
 		'Mushrooms',
@@ -19,9 +34,6 @@
 		'lettuce',
 		'tomato'
 	];
-
-
-
 
 	let subs = ['italian', 'turkey', 'roast beef', 'ham and cheese'];
 	let paninis = ['Reuben', 'turkey', 'BLT melt', 'Grilled Cheese and tomato'];
@@ -51,25 +63,25 @@
 	});
 
 	function handleClick(cat) {
-		if(curCat == "Pizza"){
+		if (curCat == 'Pizza') {
 			addPizza(cat);
 			return;
 		}
-		
+
 		//showIngredients = true;
-		
+
 		if (cat && products[cat].length) {
 			curArr = products[cat];
 			curCat = cat;
 		}
 	}
 
-	function addPizza(type){
+	function addPizza(type) {
 		let pizzaObj = {
 			name: 'Pizza',
 			toppings: []
-		}
-		if(type == 'Custom'){
+		};
+		if (type == 'Custom') {
 			itemList = toppings;
 			showIngredients = true;
 		}
@@ -131,7 +143,12 @@
 			</div>
 		{/if}
 
-		<Time {startTime} />
+		<div class="relative w-full p-1">
+			<Time {startTime} />
+			<span class="top-1 absolute right-1 rounded-md border-2 bg-slate-300/30 px-1"
+				>{orderType}</span
+			>
+		</div>
 		<div class="grid grid-cols-3 gap-1 grid-rows-3 h-full p-1">
 			{#each curArr as cat, idx}
 				<button
@@ -145,6 +162,8 @@
 				class="w-full bg-red-400 p-2 rounded-md"
 				onclick={() => {
 					startOrder = false;
+					curArr = orderCat;
+					curCat = '';
 				}}>Cancel Order</button
 			>
 		</div>
@@ -153,18 +172,30 @@
 			transition:fly={{ y: -20 }}
 			class="p-2 pt-0 w-full bg-slate-100 gap-2 h-full flex absolute justify-center items-center flex-col"
 		>
-			<div class="w-full border-b-2">
+			<div class="w-full border-b-2 relative">
 				<Time {startTime} />
 			</div>
 			<Logo />
-			<button
-				onclick={() => {
-					startOrder = true;
-				}}
-				class="bg-slate-300 rounded-md p-3"
-			>
-				start order
-			</button>
+			<div class="flex gap-1 w-full">
+				<button
+					onclick={() => {
+						startOrder = true;
+						orderType = 'Counter';
+					}}
+					class="bg-slate-300 rounded-md p-3 flex-1"
+				>
+					Counter order
+				</button>
+				<button
+					onclick={() => {
+						startOrder = true;
+						orderType = 'Phone';
+					}}
+					class="bg-slate-300 rounded-md p-3"
+				>
+					Phone order
+				</button>
+			</div>
 		</div>
 	{/if}
 </div>
