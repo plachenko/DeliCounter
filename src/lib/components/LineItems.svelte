@@ -1,22 +1,11 @@
 <script>
 	import { onMount } from 'svelte';
-	const lineItems = [
-		'Mushrooms',
-		'Olives',
-		'Green Peppers',
-		'White Onions',
-		'Red Onions',
-		'pickles',
-		'Bannana Peppers',
-		'lettuce',
-		'tomato'
-	];
 
 	const condiments = ['ketchup', 'mayonaise', 'mustard', 'BBQ sauce', 'hots', 'oil', 'vinegar'];
 
 	const amtArr = ['lite', 'extra'];
 
-	let { allSelect } = $props();
+	let { allSelect, itemList } = $props();
 
 	let itemsObj = $state([]);
 
@@ -27,7 +16,7 @@
 	}
 
 	onMount(() => {
-		itemsObj = lineItems.map((e) => {
+		itemsObj = itemList.map((e) => {
 			return { name: e, checked: ~~(Math.random() * 3 - 1), amt: 0, grilled: false };
 		});
 

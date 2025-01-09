@@ -6,7 +6,22 @@
 	import Logo from '$lib/components/Logo.svelte';
 
 	let orderCat = ['Pizza', 'Panini', 'Sub', 'Panini', 'Grill', 'Fried Food', 'Soups'];
-	let toppings = ['Mushrooms', 'Olives', 'Onions', 'Sausage', 'Green Peppers', 'Chicken', 'Bacon'];
+	let toppings = ['Cheese', 'Pepperoni', 'Mushrooms', 'Green Peppers', 'Onions', 'Black Olives', 'Sausage', 'Pineapple', 'Ham', 'Brocolli', 'Garlic', 'Chicken', 'Bacon'];
+
+	const lineItems = [
+		'Mushrooms',
+		'Olives',
+		'Green Peppers',
+		'White Onions',
+		'Red Onions',
+		'pickles',
+		'Bannana Peppers',
+		'lettuce',
+		'tomato'
+	];
+
+
+
 
 	let subs = ['italian', 'turkey', 'roast beef', 'ham and cheese'];
 	let paninis = ['Reuben', 'turkey', 'BLT melt', 'Grilled Cheese and tomato'];
@@ -17,8 +32,10 @@
 	let products = {
 		Pizza: ['Custom', 'Cheese', 'pepperoni', 'buffalo Chicken']
 	};
+	let itemList = $state(lineItems);
 
 	let curArr = $state([]);
+	let curCat = $state('');
 	let order = $state([]);
 	let showIngredients = $state(0);
 
@@ -34,11 +51,29 @@
 	});
 
 	function handleClick(cat) {
-		console.log(cat);
+		if(curCat == "Pizza"){
+			addPizza(cat);
+			return;
+		}
+		
 		//showIngredients = true;
+		
 		if (cat && products[cat].length) {
 			curArr = products[cat];
+			curCat = cat;
 		}
+	}
+
+	function addPizza(type){
+		let pizzaObj = {
+			name: 'Pizza',
+			toppings: []
+		}
+		if(type == 'Custom'){
+			itemList = toppings;
+			showIngredients = true;
+		}
+		console.log('adding pizza', type);
 	}
 
 	$effect(() => {
@@ -75,7 +110,7 @@
 				</div>
 
 				<div class="h-full overflow-y-auto relative w-full">
-					<LineItems bind:this={lineItemEl} {allSelect} />
+					<LineItems bind:this={lineItemEl} {allSelect} {itemList} />
 				</div>
 				<div class="w-full flex gap-1 p-1 pt-0">
 					<button
