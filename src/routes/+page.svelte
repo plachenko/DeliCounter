@@ -5,7 +5,8 @@
 	import LineItems from '$lib/components/LineItems.svelte';
 	import Logo from '$lib/components/Logo.svelte';
 
-	let orderType = $state('test');
+	let orderType = $state(null);
+	let orderTypes = $state(['counter', 'phone']);
 	let orderCat = ['Pizza', 'Panini', 'Sub', 'Panini', 'Grill', 'Fried Food', 'Soups'];
 	let toppings = [
 		'Cheese',
@@ -70,7 +71,7 @@
 
 		//showIngredients = true;
 
-		if (cat && products[cat].length) {
+		if (cat && products[cat]?.length) {
 			curArr = products[cat];
 			curCat = cat;
 		}
@@ -145,15 +146,14 @@
 
 		<div class="relative w-full p-1">
 			<Time {startTime} />
-			<span class="top-1 absolute right-1 rounded-md border-2 bg-slate-300/30 px-1"
-				>{orderType}</span
-			>
+			<button onclick={() => (orderType = orderType ? 0 : 1)} class="top-1 absolute right-1 rounded-md border-2 bg-slate-300/30 px-1"
+				>{orderTypes[orderType]}</button>
 		</div>
 		<div class="grid grid-cols-3 gap-1 grid-rows-3 h-full p-1">
 			{#each curArr as cat, idx}
 				<button
 					onclick={() => handleClick(cat)}
-					class="rounded-md bg-slate-400 flex justify-center items-center">{cat}</button
+					class="rounded-md bg-slate-400 flex justify-center items-center bg-gradient-to-b from-slate-200 to-slate-300/40 drop-shadow font-bold border-2 border-slate-300"><span class="drop-shadow-[0_2px_2px_#999] text-2xl text-slate-700">{cat}</span></button
 				>
 			{/each}
 		</div>
@@ -177,24 +177,31 @@
 			</div>
 			<Logo />
 			<div class="flex gap-1 w-full">
-				<button
-					onclick={() => {
-						startOrder = true;
-						orderType = 'Counter';
-					}}
-					class="bg-slate-300 rounded-md p-3 flex-1"
-				>
-					Counter order
-				</button>
-				<button
+				{#each orderTypes as type, idx}
+					<button
+						onclick={() => {
+							startOrder = true;
+							orderType = idx;
+						}}
+						class="bg-slate-300 rounded-md p-3 flex-1"
+					>
+						{orderTypes[idx]}
+					</button>
+				{/each}
+	
+
+				<!-- <button
 					onclick={() => {
 						startOrder = true;
 						orderType = 'Phone';
 					}}
-					class="bg-slate-300 rounded-md p-3"
+					class="bg-slate-300 rounded-md p-3 flex-1"
 				>
 					Phone order
-				</button>
+				</button> -->
+				<a href="/orders" class="bg-slate-700 text-white rounded-md p-3">
+					all orders
+				</a>
 			</div>
 		</div>
 	{/if}
