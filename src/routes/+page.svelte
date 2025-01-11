@@ -214,6 +214,7 @@
 						>{order.length}</span
 					><span class="absolute right-2 bg-green-300/60 rounded-md px-1">$126.69</span></button
 				>
+				<button class="w-[50px] bg-green-300 rounded-md">🖨️</button>
 			{/if}
 		</div>
 	{:else}
