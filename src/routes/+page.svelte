@@ -48,6 +48,8 @@
 	};
 	let itemList = $state(lineItems);
 
+	let startPrint = $state(false);
+
 	let curArr = $state([]);
 	let curCat = $state('');
 	let order = $state([]);
@@ -110,6 +112,13 @@
 </script>
 
 <div class="flex flex-col h-full relative w-full">
+	{#if startPrint}
+	<div class="w-full h-full absolute left-0 top-0 z-[9999] bg-white flex justify-center items-center">
+		<div class="flex justify-center items-center w-full border-t-4 border-b-4 py-2 pb-10">
+			<span>test</span>
+		</div>
+	</div>
+	{/if}
 	{#if addingFuture}
 		<div class="absolute z-[9999] top-1 flex justify-center w-full">
 			<input
@@ -214,7 +223,10 @@
 						>{order.length}</span
 					><span class="absolute right-2 bg-green-300/60 rounded-md px-1">$126.69</span></button
 				>
-				<button class="w-[50px] bg-green-300 rounded-md">🖨️</button>
+				<button onclick={()=>{
+					startPrint = true;
+					window.print();
+				}} class="w-[50px] bg-green-300 rounded-md">🖨️</button>
 			{/if}
 		</div>
 	{:else}
