@@ -1,33 +1,62 @@
 <script>
-	let items = $state(null);
+	import { onMount } from 'svelte';
+	let items = $state([]);
 	let inputTxt = $state(null);
+
+	let addingItem = $state(false);
+
+	onMount(() => {});
+
+	function editItem(idx) {}
+	function removeItem(idx) {}
+	function addItem() {}
 </script>
 
-<div class="w-full h-full flex-col bg-blue-400 flex">
-	<div class="w-full flex-1 h-[80px] bg-red-400 p-2"></div>
-	<div style="height: 80px" class="flex flex-col w-full bg-blue-400 p-2">
-		<div class="flex gap-3 w-full flex-1 bg-slate-400">
-			<div class="w-full bg-slate-300 rounded-md p-1">
-				<div contenteditable="true"></div>
-			</div>
-			<button class="rounded-md">add</button>
-		</div>
+<div class="w-full h-full flex-col flex">
+	<div class="w-full flex-1 h-[80px] bg-red-400 p-2">
+		{#if !addingItem}
+			{#each items as item, idx}
+				<div>
+					<span>
+						{item}
+					</span>
+					<button
+						onclick={() => {
+							removeItem(idx);
+						}}>remove</button
+					>
+					<button
+						onclick={() => {
+							editItem(idx);
+						}}>edit</button
+					>
+				</div>
+			{/each}
+		{/if}
+	</div>
+	<div class="flex p-1 gap-1 w-full p-2">
+		{#if addingItem}
+			<button
+				onclick={() => {
+					addingItem = false;
+				}}
+				class="bg-red-400 flex rounded-md p-1 font-bold w-full"
+			>
+				<span class="flex-1 text-slate-100">Cancel</span>
+			</button>
+			<button onclick={() => {}} class="bg-green-400 flex rounded-md p-1 font-bold w-full"
+				><span class="border-r-2 border-green-600 px-3 drop-shadow">+</span>
+				<span class="flex-1 text-slate-100">Add</span>
+			</button>
+		{:else}
+			<button
+				onclick={() => {
+					addingItem = true;
+				}}
+				class="bg-green-400 flex rounded-md p-1 font-bold w-full"
+				><span class="border-r-2 border-green-600 px-3 drop-shadow">+</span>
+				<span class="flex-1 text-slate-100">Add Item</span>
+			</button>
+		{/if}
 	</div>
 </div>
-<!-- <div class="flex-1 w-full bg-slate-400"></div> -->
-<!--
-	<div class="w-full h-[30px] bg-slate-500"></div>
-    <div class="w-full h-full flex p-2">
-    <div class="w-full h-full flex gap-2">
-        <div class="flex-1 w-full h-full bg-white rounded-md flex items-center justify-center p-1">
-    
-            <div contenteditable="true" bind:this={inputTxt} class="flex-1 w-full h-full bg-white"></div>
-        </div>
-        <button onclick={() => {items.push({name: 'test'})}} class="h-full bg-slate-200 rounded-md font-bold px-3">new item</button>
-    </div>
-    <div class="w-full h-[20px] bg-slate-900">
-
-    </div>
-</div>
-    -->
-

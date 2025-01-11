@@ -8,7 +8,7 @@
 	let t2 = '02:34:00';
 	let pct = $state(((100 * totalSeconds(t1)) / totalSeconds(t2)).toFixed(2));
 
-	let { startTime } = $props();
+	let { startTime, addFutureDate } = $props();
 	let timeDiff = $state(0);
 
 	let tickInt = $state(null);
@@ -52,27 +52,26 @@
 </script>
 
 <div id="timeCont" class="flex flex-col text-slate-400 relative">
-	<!--
-  <div class="bg-red-400 w-full h-[5px] absolute bottom-[-5px]">
-    <div class="h-full w-[39%] bg-green-300"></div>
-  </div>
-  -->
 	{#if startTime}
 		<span class="absolute left-1 border-2 rounded-md p-1 py-0 border-red-300"
 			>{new Date(timeDiff * 1000).toISOString().substr(14, 5)}</span
 		>
 	{/if}
 	<div class="flex gap-2 w-full">
-		<div class="border-r-2 pr-2 flex-1 flex break-keep justify-end">
+		{#if addFutureDate}
+			<div class="w-full absolute h-full flex justify-center">
+				<button
+					onclick={() => addFutureDate()}
+					class="bg-slate-400/20 rounded-md border-2 absolute top-0 z-[999] w-[200px] h-full"
+				>
+				</button>
+			</div>
+		{/if}
+		<div class="relative border-r-2 pr-2 flex-1 flex break-keep justify-end">
 			<span>{dateTime.split(':')[0]}</span><span class={blink ? 'text-slate-400' : 'text-slate-300'}
 				>:</span
 			><span>{dateTime.split(':')[1]}</span>
 		</div>
 		<div class="flex flex-1 w-full">{new Date().toLocaleDateString()}</div>
 	</div>
-	<!--
-  <div class="flex-1 justify-center items-center flex">
-    <span class="">Store #84 Salem, NH</span>
-  </div>
-  -->
 </div>

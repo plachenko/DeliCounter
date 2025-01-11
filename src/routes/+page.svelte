@@ -6,6 +6,7 @@
 	import Logo from '$lib/components/Logo.svelte';
 
 	let orderType = $state(null);
+	let futureDateEl = $state(null);
 	let orderTypes = $state(['counter', 'phone']);
 	let orderCat = ['Pizza', 'Panini', 'Sub', 'Panini', 'Grill', 'Fried Food', 'Soups'];
 	let toppings = [
@@ -58,9 +59,19 @@
 
 	let startOrder = $state(false);
 	let startTime = $state(null);
+	let addingFuture = $state(false);
+
+	function addFutureDate() {
+		addingFuture = true;
+		futureDateEl.focus();
+		console.log('adding future');
+	}
 
 	onMount(() => {
 		curArr = orderCat;
+		futureDateEl.addEventListener('onCancel', () => {
+			console.log('dismissed!');
+		});
 	});
 
 	function handleClick(cat) {
@@ -69,7 +80,7 @@
 			return;
 		}
 
-		//showIngredients = true;
+		order.push(cat);
 
 		if (cat && products[cat]?.length) {
 			curArr = products[cat];
@@ -99,6 +110,22 @@
 </script>
 
 <div class="flex flex-col h-full relative w-full">
+	{#if addingFuture}
+		<div class="absolute z-[9999] top-1 flex justify-center w-full">
+			<input
+				bind:this={futureDateEl}
+				oncancl={() => {
+					console.log('canceled');
+					addingFuture = false;
+				}}
+				oninput={() => {
+					console.log('setting...');
+					addingFuture = false;
+				}}
+				type="datetime-local"
+			/>
+		</div>
+	{/if}
 	{#if startOrder}
 		{#if showIngredients}
 			<div
@@ -145,32 +172,54 @@
 		{/if}
 
 		<div class="relative w-full p-1">
-			<Time {startTime} />
-			<button onclick={() => (orderType = orderType ? 0 : 1)} class="top-1 absolute right-1 rounded-md border-2 bg-slate-300/30 px-1"
-				>{orderTypes[orderType]}</button>
+			<Time {startTime} {addFutureDate} />
+			<button
+				onclick={() => (orderType = orderType ? 0 : 1)}
+				class="top-1 absolute right-1 rounded-md border-2 bg-slate-300/30 px-1"
+				>{orderTypes[orderType]}</button
+			>
 		</div>
 		<div class="grid grid-cols-3 gap-1 grid-rows-3 h-full p-1">
 			{#each curArr as cat, idx}
 				<button
 					onclick={() => handleClick(cat)}
-					class="rounded-md bg-slate-400 flex justify-center items-center bg-gradient-to-b from-slate-200 to-slate-300/40 drop-shadow font-bold border-2 border-slate-300"><span class="drop-shadow-[0_2px_2px_#999] text-2xl text-slate-700">{cat}</span></button
+					class="rounded-md bg-slate-400 flex justify-center items-center bg-gradient-to-b from-slate-200 to-slate-300/40 drop-shadow font-bold border-2 border-slate-300"
+					><span class="drop-shadow-[0_2px_2px_#999] text-2xl text-slate-700">{cat}</span></button
 				>
 			{/each}
 		</div>
-		<div class="w-full p-1">
+		<div class="w-full p-1 flex w-full gap-1">
 			<button
-				class="w-full bg-red-400 p-2 rounded-md"
+				class="w-full bg-red-400 p-2 rounded-md flex-1"
 				onclick={() => {
 					startOrder = false;
+					addingFuture = false;
 					curArr = orderCat;
+					order = [];
 					curCat = '';
 				}}>Cancel Order</button
 			>
+			{#if order?.length}
+				<button
+					onclick={() => {
+						startOrder = false;
+						addingFuture = false;
+						curArr = orderCat;
+						order = [];
+						curCat = '';
+					}}
+					class="bg-green-400 rounded-md w-full flex-1 h-full relative flex items-center justify-center"
+					>Add Order <span
+						class="border-2 border-green-700 text-sm rounded-full px-1 absolute left-2 font-bold"
+						>{order.length}</span
+					><span class="absolute right-2 bg-green-300/60 rounded-md px-1">$126.69</span></button
+				>
+			{/if}
 		</div>
 	{:else}
 		<div
 			transition:fly={{ y: -20 }}
-			class="p-2 pt-0 w-full bg-slate-100 gap-2 h-full flex absolute justify-center items-center flex-col"
+			class="z-[999] p-2 pt-0 w-full bg-slate-100 gap-2 h-full flex absolute justify-center items-center flex-col"
 		>
 			<div class="w-full border-b-2 relative">
 				<Time {startTime} />
@@ -188,7 +237,6 @@
 						{orderTypes[idx]}
 					</button>
 				{/each}
-	
 
 				<!-- <button
 					onclick={() => {
@@ -199,9 +247,7 @@
 				>
 					Phone order
 				</button> -->
-				<a href="/orders" class="bg-slate-700 text-white rounded-md p-3">
-					all orders
-				</a>
+				<a href="/orders" class="bg-slate-700 text-white rounded-md p-3"> all orders </a>
 			</div>
 		</div>
 	{/if}
