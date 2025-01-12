@@ -3,12 +3,13 @@
 	let dateTime = $state(formatDate());
 	let blink = $state(false);
 	let curTime = new Date();
+	let showFuture = $state(false);
 
 	let t1 = '01:34:00';
 	let t2 = '02:34:00';
 	let pct = $state(((100 * totalSeconds(t1)) / totalSeconds(t2)).toFixed(2));
 
-	let { startTime, addFutureDate } = $props();
+	let { startTime, addFutureDate, futureDate } = $props();
 	let timeDiff = $state(0);
 
 	let tickInt = $state(null);
@@ -25,6 +26,7 @@
 	});
 
 	onDestroy(() => {
+		showFuture = false;
 		clearInterval(tickInt);
 		tickInt = null;
 	});
@@ -33,6 +35,13 @@
 		return new Date().toLocaleTimeString([], {
 			minute: '2-digit',
 			seconds: '2-digit'
+		});
+	}
+
+	function formatFuture() {
+		return futureDate.toLocaleTimeString([], {
+			hour: '2-digit',
+			minute: '2-digit'
 		});
 	}
 
@@ -60,18 +69,41 @@
 	<div class="flex gap-2 w-full">
 		{#if addFutureDate}
 			<div class="w-full absolute h-full flex justify-center">
-				<button
-					onclick={() => addFutureDate()}
-					class="bg-slate-400/20 rounded-md border-2 absolute top-0 z-[999] w-[200px] h-full"
-				>
-				</button>
+				<div class="w-[200px] z-[999] absolute top-0 h-full">
+					<button
+						onclick={() => addFutureDate()}
+						class={`${!showFuture ? 'bg-slate-400/20' : 'bg-green-400/20 font-bold border-red-400'} rounded-md border-2 absolute top-0 w-full h-full`}
+					>
+					</button>
+					{#if futureDate}
+						<button
+							onclick={() => {
+								showFuture = !showFuture;
+							}}
+							class="bg-slate-400/30 absolute right-[-26px] rounded-l-none rounded-md px-1"
+							>🕓</button
+						>{/if}
+				</div>
 			</div>
 		{/if}
 		<div class="relative border-r-2 pr-2 flex-1 flex break-keep justify-end">
-			<span>{dateTime.split(':')[0]}</span><span class={blink ? 'text-slate-400' : 'text-slate-300'}
-				>:</span
-			><span>{dateTime.split(':')[1]}</span>
+			{#if showFuture}
+				{new Date(futureDate).toLocaleTimeString([], {
+					hour: '2-digit',
+					minute: '2-digit'
+				})}
+			{:else}
+				<span>{dateTime.split(':')[0]}</span><span
+					class={blink ? 'text-slate-400' : 'text-slate-300'}>:</span
+				><span>{dateTime.split(':')[1]}</span>
+			{/if}
 		</div>
-		<div class="flex flex-1 w-full">{new Date().toLocaleDateString()}</div>
+		<div class="flex flex-1 w-full">
+			{#if showFuture}
+				{new Date(futureDate).toLocaleDateString()}
+			{:else}
+				{new Date().toLocaleDateString()}
+			{/if}
+		</div>
 	</div>
 </div>

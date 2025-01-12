@@ -5,8 +5,10 @@
 	import LineItems from '$lib/components/LineItems.svelte';
 	import Logo from '$lib/components/Logo.svelte';
 
+	let allOrders = $state([]);
 	let orderType = $state(null);
 	let futureDateEl = $state(null);
+	let futureDate = $state(null);
 	let orderTypes = $state(['counter', 'phone']);
 	let orderCat = ['Pizza', 'Panini', 'Sub', 'Panini', 'Grill', 'Fried Food', 'Soups'];
 	let toppings = [
@@ -69,11 +71,21 @@
 		console.log('adding future');
 	}
 
+	function setOrder() {
+		return {
+			name: 'order',
+			takenBy: 'Dennys',
+			type: orderTypes[orderType],
+			dateStart: startTime,
+			endTime: new Date(),
+			futureDate: futureDate,
+			items: order
+		};
+	}
+
 	onMount(() => {
+		allOrders = JSON.parse(window.localStorage.getItem('allOrders')) || [];
 		curArr = orderCat;
-		futureDateEl.addEventListener('onCancel', () => {
-			console.log('dismissed!');
-		});
 	});
 
 	function handleClick(cat) {
@@ -113,22 +125,27 @@
 
 <div class="flex flex-col h-full relative w-full">
 	{#if startPrint}
-	<div class="w-full h-full absolute left-0 top-0 z-[9999] bg-white flex justify-center items-center">
-		<div class="flex justify-center items-center w-full border-t-4 border-b-4 py-2 pb-10">
-			<span>test</span>
+		<div
+			class="w-full h-full absolute left-0 top-0 z-[9999] bg-white flex justify-center items-center"
+		>
+			<div
+				class="flex justify-center items-center w-full border-dashed border-slate-800 border-t-4 border-b-4 py-2 pb-10"
+			>
+				<span>test</span>
+			</div>
 		</div>
-	</div>
+		<button onclick={(startPrint = false)} class="absolute bg-red-400 p-2 rounded-md">Close</button>
 	{/if}
 	{#if addingFuture}
 		<div class="absolute z-[9999] top-1 flex justify-center w-full">
 			<input
 				bind:this={futureDateEl}
-				oncancl={() => {
+				bind:value={futureDate}
+				oncancel={() => {
 					console.log('canceled');
 					addingFuture = false;
 				}}
-				oninput={() => {
-					console.log('setting...');
+				oninput={(e) => {
 					addingFuture = false;
 				}}
 				type="datetime-local"
@@ -181,7 +198,7 @@
 		{/if}
 
 		<div class="relative w-full p-1">
-			<Time {startTime} {addFutureDate} />
+			<Time {startTime} {futureDate} {addFutureDate} />
 			<button
 				onclick={() => (orderType = orderType ? 0 : 1)}
 				class="top-1 absolute right-1 rounded-md border-2 bg-slate-300/30 px-1"
@@ -206,16 +223,21 @@
 					curArr = orderCat;
 					order = [];
 					curCat = '';
+					futureDate = null;
 				}}>Cancel Order</button
 			>
 			{#if order?.length}
 				<button
 					onclick={() => {
+						allOrders.push(setOrder());
+						window.localStorage.setItem('allOrders', JSON.stringify(allOrders));
+
 						startOrder = false;
 						addingFuture = false;
 						curArr = orderCat;
 						order = [];
 						curCat = '';
+						futureDate = null;
 					}}
 					class="bg-green-400 rounded-md w-full flex-1 h-full relative flex items-center justify-center"
 					>Add Order <span
@@ -223,10 +245,13 @@
 						>{order.length}</span
 					><span class="absolute right-2 bg-green-300/60 rounded-md px-1">$126.69</span></button
 				>
-				<button onclick={()=>{
-					startPrint = true;
-					window.print();
-				}} class="w-[50px] bg-green-300 rounded-md">🖨️</button>
+				<button
+					onclick={() => {
+						startPrint = true;
+						window.print();
+					}}
+					class="w-[50px] bg-green-300 rounded-md">🖨️</button
+				>
 			{/if}
 		</div>
 	{:else}
@@ -260,7 +285,11 @@
 				>
 					Phone order
 				</button> -->
-				<a href="/orders" class="bg-slate-700 text-white rounded-md p-3"> all orders </a>
+				{#if allOrders.length}
+					<a href="/orders" class="bg-slate-700 text-white rounded-md p-3">
+						all orders ({allOrders.length})</a
+					>
+				{/if}
 			</div>
 		</div>
 	{/if}
