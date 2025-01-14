@@ -4,6 +4,7 @@
 	let blink = $state(false);
 	let curTime = new Date();
 	let showFuture = $state(false);
+	let futureDateEl = $state(null);
 
 	let t1 = '01:34:00';
 	let t2 = '02:34:00';
@@ -71,6 +72,7 @@
 			<div class="w-full absolute h-full flex justify-center">
 				<div class="w-[200px] z-[999] absolute top-0 h-full">
 					<button
+						bind:this={futureDateEl}
 						onclick={() => addFutureDate()}
 						class={`${!showFuture ? 'bg-slate-400/20' : 'bg-green-400/20 font-bold border-red-400'} rounded-md border-2 absolute top-0 w-full h-full`}
 					>

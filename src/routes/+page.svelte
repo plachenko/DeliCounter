@@ -136,6 +136,7 @@
 		</div>
 		<button onclick={(startPrint = false)} class="absolute bg-red-400 p-2 rounded-md">Close</button>
 	{/if}
+
 	{#if addingFuture}
 		<div class="absolute z-[9999] top-1 flex justify-center w-full">
 			<input
@@ -152,6 +153,7 @@
 			/>
 		</div>
 	{/if}
+
 	{#if startOrder}
 		{#if showIngredients}
 			<div
@@ -202,8 +204,15 @@
 			<button
 				onclick={() => (orderType = orderType ? 0 : 1)}
 				class="top-1 absolute right-1 rounded-md border-2 bg-slate-300/30 px-1"
-				>{orderTypes[orderType]}</button
-			>
+				>
+				
+				{#if orderType == 1}
+				📱
+				{:else}
+				🧑
+				{/if}
+				{orderTypes[orderType]}
+				</button>
 		</div>
 		<div class="grid grid-cols-3 gap-1 grid-rows-3 h-full p-1">
 			{#each curArr as cat, idx}
@@ -272,6 +281,12 @@
 						}}
 						class="bg-slate-300 rounded-md p-3 flex-1"
 					>
+						{#if idx == 1}
+						📱
+						{:else}
+						🧑
+						{/if}
+
 						{orderTypes[idx]}
 					</button>
 				{/each}
