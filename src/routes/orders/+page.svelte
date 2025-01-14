@@ -5,7 +5,15 @@
 
 	let curOrder = $state(null);
 
-	let options = $state(['back', 'cancel order', 'finish order']);
+	let options = $state(['back', 'cancel order']);
+
+	$effect(() => {
+		if (!orders[curOrder]?.finished) {
+			options[2] = 'finish order';
+		} else {
+			options[2] = 'reopen order';
+		}
+	});
 
 	onMount(() => {
 		orders = JSON.parse(window.localStorage.getItem('allOrders')) || [];
@@ -37,7 +45,14 @@
 								case 1:
 									break;
 								case 2:
-									orders[curOrder].finished = true;
+									if (orders[curOrder].finished == null) {
+										orders[curOrder].finished = new Date();
+									} else {
+										console.log('resetting.');
+										orders[curOrder].finished = null;
+										orders[curOrder].reopened.push(new Date());
+									}
+									setAllOrders();
 									break;
 							}
 							showOrder = false;
@@ -49,52 +64,80 @@
 			</div>
 		</div>
 	</div>
-{/if}
-
-<div class="flex flex-col w-full h-full">
-	<div class="flex items-center p-1 border-b-2 border-dashed">
-		<h3 class="text-2xl text-center flex-1">Orders</h3>
-		{#if orders.length}
-			<span>{orders.length}</span>
-		{/if}
-	</div>
-	<div class="overflow-y-auto flex-1">
-		{#if orders.length}
-			{#each orders as order, idx}
+{:else}
+	<div class="flex flex-col w-full h-full">
+		<div class="flex items-center p-1 border-b-2 border-dashed">
+			<h3 class="text-2xl text-center flex-1">Orders</h3>
+			{#if orders.length}
+				<span>{orders.length}</span>
+			{/if}
+		</div>
+		<div class="flex-1 flex-col flex relative">
+			<div class="h-full flex flex-col flex-1 overflow-hidden">
+				<div class="bg-red-400 h-[200px] w-full relative overflow-x-auto">
+					<div class="absolute top-0 w-[900px] h-[20px] bg-yellow-300"></div>
+				</div>
+				{#if orders.length}
+					<div class="bg-blue-400 h-full w-full relative overflow-y-auto">
+						<div class="overflow-y-auto absolute top-0 w-full h-full">
+							{#each orders as order, idx}
+								<button
+									onclick={() => {
+										curOrder = idx;
+										showOrder = true;
+									}}
+									class="w-full p-2 flex border-b-2 bg-slate-300"
+								>
+									<span>
+										<span>
+											{#if order.type == 'phone'}
+												📱
+											{:else}
+												🧑
+											{/if}
+										</span>
+										<span class={`${order.finished ? 'line-through' : ''} w-full text-left flex-1`}>
+											{order.name}
+										</span>
+										<span
+											class={`${order.finished ? 'line-through text-slate-600/40' : ''} w-full flex-1 text-right`}
+											>{new Date(order.dateStart).toLocaleTimeString([], {
+												hour: '2-digit',
+												minute: '2-digit'
+											})}</span
+										>
+										{#if order.finished}
+											<span class="pl-3">
+												{new Date(order.finished).toLocaleTimeString([], {
+													hour: '2-digit',
+													minute: '2-digit'
+												})}
+											</span>
+										{/if}
+									</span></button
+								>
+							{/each}
+						</div>
+					</div>
+				{:else}
+					<div class="w-full h-full flex justify-center items-center">
+						<span class="opacity-30">No Orders</span>
+					</div>
+				{/if}
+			</div>
+		</div>
+		<div class="p-1 w-full flex gap-1 h-[40px]">
+			<a href="/" class="bg-red-300 rounded-md w-full justify-center items-center flex">Back</a>
+			{#if orders.length}
 				<button
 					onclick={() => {
-						curOrder = idx;
-						showOrder = true;
+						orders = [];
+						setAllOrders();
 					}}
-					class="w-full p-2 flex border-b-2 bg-slate-300"
+					class="bg-red-300 p-2 rounded-md w-full flex justify-center items-center"
+					>clear orders</button
 				>
-					<span class="w-full text-left flex-1">
-						{order.name}
-					</span>
-					<span class="w-full flex-1 text-right"
-						>{new Date(order.dateStart).toLocaleTimeString([], {
-							hour: '2-digit',
-							minute: '2-digit'
-						})}</span
-					>
-				</button>
-			{/each}
-		{:else}
-			<div class="w-full h-full flex justify-center items-center">
-				<span class="opacity-30">No Orders</span>
-			</div>
-		{/if}
+			{/if}
+		</div>
 	</div>
-	<div class="p-1 w-full flex gap-1">
-		<a href="/" class="bg-red-300 p-2 rounded-md w-full text-center">Back</a>
-		{#if orders.length}
-			<button
-				onclick={() => {
-					orders = [];
-					setAllOrders();
-				}}
-				class="bg-red-300 p-2 rounded-md w-full text-center">clear orders</button
-			>
-		{/if}
-	</div>
-</div>
+{/if}

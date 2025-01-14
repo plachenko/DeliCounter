@@ -294,3 +294,12 @@
 		</div>
 	{/if}
 </div>
+
+<style>
+	@media print {
+		@page {
+			size: 58mm 105mm;
+			margin: 10mm;
+		}
+	}
+</style>
