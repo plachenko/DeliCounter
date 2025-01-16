@@ -1,21 +1,19 @@
 <script>
 	import { onMount } from 'svelte';
 	import Time from '$lib/components/Time.svelte';
+
 	let orders = $state([]);
 	let showOrder = $state(false);
 	let cursor = $state(null);
 	let timeslotEl = $state(null);
-
 	let timeslotLock = $state(true);
-
 	let curOrder = $state(null);
-
 	let options = $state(['back', 'cancel order']);
+	let curTime = $state(new Date().toLocaleTimeString([]));
 
 	$effect(() => {
-
-		if(showOrder==false){
-			focusCursor();
+		if (showOrder == false) {
+			window.requestAnimationFrame(moveCursor);
 		}
 
 		if (!orders[curOrder]?.finished) {
@@ -27,23 +25,54 @@
 
 	onMount(() => {
 		orders = JSON.parse(window.localStorage.getItem('allOrders')) || [];
-
-		window.requestAnimationFrame(moveCursor);
+		timeslotEl.addEventListener('scroll', () => {
+			console.log('scrolling');
+			timeslotLock = false;
+		});
+		window.requestAnimationFrame(tick);
 	});
 
-	function moveCursor(el) {
-		if(showOrder) return;
+	function formatTime(seconds) {
+		const hours = ~~seconds / 60;
+	}
+	function tick(el) {
+		// console.log((new Date().getMinutes() / 60) * (new Date().getSeconds() / 60));
+		orders.forEach((e) => {
+			e.timeSince = new Date().getTime() - new Date(e.dateStart).getTime() / 60;
+			// console.log(e.timeSince);
+		});
+
+		curTime = new Date().toLocaleTimeString([], {
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit'
+		});
+		if (showOrder) return;
 		let l = cursor.offsetLeft;
-		cursor.style.left = l+1 + 'px';
+		cursor.style.left = l + 1 + 'px';
 		focusCursor();
 		setTimeout(() => {
-			window.requestAnimationFrame(moveCursor);
-		},1000)
+			window.requestAnimationFrame(tick);
+		}, 1000);
 	}
 
-	function focusCursor(){
-		if(!timeslotLock) return;
-		timeslotEl.scrollLeft = cursor?.offsetLeft;
+	function focusCursor() {
+		if (!timeslotLock || !cursor) return;
+		cursor.scrollIntoView();
+		// timeslotEl.scrollLeft = cursor?.offsetLeft;
+		// timeslotEl.scrollLeft = 100;
+		// timeslotEl.scrollLeft = cursor?.offsetLeft;
+	}
+
+	function linearPos(second, divWidth) {
+		if (second < 0 || second > 59) {
+			throw new Error('Second not valid');
+		}
+
+		const increment = divWidth / (60 * 60);
+		const xPos = second * increment;
+
+		return xPos;
 	}
 
 	function setAllOrders() {
@@ -75,7 +104,6 @@
 									if (orders[curOrder].finished == null) {
 										orders[curOrder].finished = new Date();
 									} else {
-										console.log('resetting.');
 										orders[curOrder].finished = null;
 										orders[curOrder].reopened.push(new Date());
 									}
@@ -94,8 +122,10 @@
 {:else}
 	<div class="flex flex-col w-full h-full">
 		<div class="flex items-center p-1 border-b-2 border-dashed">
-			<Time />
-			<h3 class="text-2xl text-center flex-1">Orders</h3>
+			<h3 class="text-2xl">Orders</h3>
+			<div class="w-full flex-1 flex justify-center">
+				<Time />
+			</div>
 			{#if orders.length}
 				<span>{orders.length}</span>
 			{/if}
@@ -104,33 +134,48 @@
 			<div class="h-full flex flex-col flex-1 overflow-hidden relative">
 				<div bind:this={timeslotEl} class="bg-red-400 h-[200px] w-full relative overflow-x-auto">
 					<div class="absolute w-full h-full">
-
-						<button onclick={() => { timeslotLock = !timeslotLock; focusCursor();}} class="bg-slate-200 p-2 absolute right-1 bottom-1 rounded-md z-[99]">
-						{#if timeslotLock}
-							🔒
-						{:else}
-							🔓
-						{/if}
+						<button
+							onclick={() => {
+								timeslotLock = !timeslotLock;
+								focusCursor();
+							}}
+							class={`${timeslotLock ? 'bg-slate-500/70' : 'bg-slate-200/70'} p-2 absolute right-1 bottom-1 rounded-md z-[99]`}
+						>
+							{#if timeslotLock}
+								🔒
+							{:else}
+								🔓
+							{/if}
 						</button>
 					</div>
 
-					<div class="absolute h-full overflow-x-auto relative">
-						
-					<div bind:this={cursor} class="absolute h-full w-[10px] border-r-2 border-blue-400 z-[99] left-[2380px]"></div>
-					<div class="absolute flex top-0 w-[4000px] h-[20px] bg-yellow-300">
-						{#each Array(24) as time, idx}
-							<div class="flex-1 text-center">
-								<span>{idx%12 + 1}:00</span> 
-								{#if idx >= 12}
-									<span>PM</span>
-								{:else}
-									<span>AM</span>
-								{/if}
-							</div>
-						{/each}
+					<!-- <div class="bg-green-300 w-full h-[10px] absolute left-[0px] bottom-[0px]"></div> -->
 
+					<div class="absolute h-full overflow-x-auto relative">
+						<div bind:this={cursor} class="absolute h-full z-[39] left-[2380px] w-[100vw]">
+							<div class="w-[10px] h-full border-r-2 border-blue-400"></div>
+							<span class="bg-blue-500/30 rounded-md absolute left-[15px] p-1 text-xs bottom-[5px]"
+								>{curTime}</span
+							>
+						</div>
+						<div
+							class="sticky flex items-center justify-center top-0 w-[4000px] h-[20px] bg-yellow-300"
+						>
+							{#each Array(24) as time, idx}
+								<div class="flex justify-center flex-1 text-center relative">
+									<span>{(idx % 12) + 1}:00&nbsp;</span>
+									{#if idx >= 12}
+										<span>PM</span>
+									{:else}
+										<span>AM</span>
+									{/if}
+									<div
+										class="bg-black/40 absolute border-right-2 top-[25px] h-[100vh] w-[1px] z-[9999] border-slate-800"
+									></div>
+								</div>
+							{/each}
+						</div>
 					</div>
-				</div>
 				</div>
 				{#if orders.length}
 					<div class="h-full w-full relative overflow-y-auto">
@@ -154,21 +199,26 @@
 										<span class={`${order.finished ? 'line-through' : ''} w-full text-left flex-1`}>
 											{order.name}
 										</span>
-										<span
-											class={`${order.finished ? 'line-through text-slate-600/40' : ''} text-right w-full flex-1`}
-											>{new Date(order.dateStart).toLocaleTimeString([], {
-												hour: '2-digit',
-												minute: '2-digit'
-											})}</span
-										>
-										{#if order.finished}
-											<span class="pl-3">
-												{new Date(order.finished).toLocaleTimeString([], {
+										<div class="flex items-center">
+											<span
+												class={`${order.finished ? 'line-through text-slate-600/40' : ''} text-right w-full flex-1`}
+												>{new Date(order.dateStart).toLocaleTimeString([], {
 													hour: '2-digit',
 													minute: '2-digit'
-												})}
-											</span>
-										{/if}
+												})}</span
+											>
+											{#key order?.timeSince}
+												<span class="opacity-30 text-xs">&nbsp;{order?.timeSince}</span>
+											{/key}
+											{#if order.finished}
+												<span class="pl-3">
+													{new Date(order.finished).toLocaleTimeString([], {
+														hour: '2-digit',
+														minute: '2-digit'
+													})}
+												</span>
+											{/if}
+										</div>
 									</span></button
 								>
 							{/each}
