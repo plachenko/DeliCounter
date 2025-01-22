@@ -56,7 +56,7 @@
 			minute: '2-digit',
 			second: '2-digit'
 		});
-		if (showOrder) return;
+		if (showOrder || !cursor?.offsetLeft) return;
 		let l = cursor.offsetLeft;
 		cursor.style.left = l + 1 + 'px';
 		focusCursor();
