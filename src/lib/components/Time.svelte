@@ -69,7 +69,7 @@
 	{/if}
 	<div class="flex gap-2 w-full">
 		{#if addFutureDate}
-			<div class="w-full absolute h-full flex justify-center">
+			<div class="w-full absolute h-full items-center flex justify-center">
 				<div class="w-[200px] z-[999] absolute top-0 h-full">
 					<button
 						bind:this={futureDateEl}

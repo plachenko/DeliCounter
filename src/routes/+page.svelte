@@ -167,7 +167,7 @@
 							allSelect = !allSelect;
 							lineItemEl.selectAll();
 						}}
-						class="flex-1 w-full bg-slate-100 rounded-md"
+						class="flex-1 w-[30px] bg-slate-100 rounded-md"
 					>
 						{#if !allSelect}
 							All
@@ -200,19 +200,20 @@
 		{/if}
 
 		<div class="relative w-full p-1">
-			<Time {startTime} {futureDate} {addFutureDate} />
+			{#if !showIngredients}
+				<Time {startTime} {futureDate} {addFutureDate} />
+			{/if}
 			<button
 				onclick={() => (orderType = orderType ? 0 : 1)}
 				class="top-1 absolute right-1 rounded-md border-2 bg-slate-300/30 px-1"
-				>
-				
+			>
 				{#if orderType == 1}
-				📱
+					📱
 				{:else}
-				🧑
+					🧑
 				{/if}
 				{orderTypes[orderType]}
-				</button>
+			</button>
 		</div>
 		<div class="grid grid-cols-3 gap-1 grid-rows-3 h-full p-1">
 			{#each curArr as cat, idx}
@@ -222,6 +223,11 @@
 					><span class="drop-shadow-[0_2px_2px_#999] text-2xl text-slate-700">{cat}</span></button
 				>
 			{/each}
+			<a
+				href="/admin/add"
+				class="flex justify-center items-center bg-slate-400/30 border-slate-500/50 border-2 rounded-md text-2xl"
+				>+</a
+			>
 		</div>
 		<div class="w-full p-1 flex w-full gap-1">
 			<button
@@ -282,9 +288,9 @@
 						class="bg-slate-300 rounded-md p-3 flex-1"
 					>
 						{#if idx == 1}
-						📱
+							📱
 						{:else}
-						🧑
+							🧑
 						{/if}
 
 						{orderTypes[idx]}

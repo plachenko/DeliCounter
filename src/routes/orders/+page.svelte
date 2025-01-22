@@ -13,7 +13,7 @@
 
 	$effect(() => {
 		if (showOrder == false) {
-			window.requestAnimationFrame(moveCursor);
+			window.requestAnimationFrame(tick);
 		}
 
 		if (!orders[curOrder]?.finished) {
@@ -38,9 +38,18 @@
 	function tick(el) {
 		// console.log((new Date().getMinutes() / 60) * (new Date().getSeconds() / 60));
 		orders.forEach((e) => {
-			e.timeSince = new Date().getTime() - new Date(e.dateStart).getTime() / 60;
+			// e.timeSince = new Date().getTime() - new Date(e.dateStart).getTime() / 60;
 			// console.log(e.timeSince);
+			e.timeSince = msToTime(new Date().getTime() - new Date(e.dateStart).getTime());
 		});
+
+		function msToTime(ms) {
+			let seconds = ~~(ms / 1000);
+			let minutes = ~~(seconds / 60);
+			let hours = ~~(minutes / 60);
+
+			return `${hours > 0 ? `${hours} hours` : ''} ${minutes % 60} mins`;
+		}
 
 		curTime = new Date().toLocaleTimeString([], {
 			hour: '2-digit',
@@ -133,6 +142,11 @@
 		<div class="flex-1 flex-col flex relative">
 			<div class="h-full flex flex-col flex-1 overflow-hidden relative">
 				<div bind:this={timeslotEl} class="bg-red-400 h-[200px] w-full relative overflow-x-auto">
+					{#each Array(24) as col, idx}
+						<div class="bg-blue-300/30 w-[200px] h-full rounded-md border-l-2 border-slate-900">
+							{idx}
+						</div>
+					{/each}
 					<div class="absolute w-full h-full">
 						<button
 							onclick={() => {
@@ -199,6 +213,17 @@
 										<span class={`${order.finished ? 'line-through' : ''} w-full text-left flex-1`}>
 											{order.name}
 										</span>
+
+										<div class="w-[80px] flex justify-center items-center font-bold text-xs">
+											{#if order.finished}
+												<span class="pl-3">
+													{new Date(order.finished).toLocaleTimeString([], {
+														hour: '2-digit',
+														minute: '2-digit'
+													})}
+												</span>
+											{/if}
+										</div>
 										<div class="flex items-center">
 											<span
 												class={`${order.finished ? 'line-through text-slate-600/40' : ''} text-right w-full flex-1`}
@@ -208,16 +233,8 @@
 												})}</span
 											>
 											{#key order?.timeSince}
-												<span class="opacity-30 text-xs">&nbsp;{order?.timeSince}</span>
+												<span class="opacity-30 text-xs">&nbsp;{order?.timeSince} ago</span>
 											{/key}
-											{#if order.finished}
-												<span class="pl-3">
-													{new Date(order.finished).toLocaleTimeString([], {
-														hour: '2-digit',
-														minute: '2-digit'
-													})}
-												</span>
-											{/if}
 										</div>
 									</span></button
 								>
