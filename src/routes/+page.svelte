@@ -274,6 +274,9 @@
 			transition:fly={{ y: -20 }}
 			class="z-[999] p-2 pt-0 w-full bg-slate-100 gap-2 h-full flex absolute justify-center items-center flex-col"
 		>
+			<a class="p-1 z-[999] bg-slate-400 absolute rounded-md top-7 right-2 border-2" href="/admin"
+				>admin</a
+			>
 			<div class="w-full border-b-2 relative">
 				<Time {startTime} />
 			</div>

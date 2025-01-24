@@ -1,27 +1,15 @@
 <script>
+	import Product from '$lib/components/Product.svelte';
 	import { onMount } from 'svelte';
+	import { preventDefault } from 'svelte/legacy';
+
 	let items = $state(['test', 'uh']);
 	let inputTxt = $state(null);
 
+	let fieldIdx = $state(0);
+	let fields = $state([]);
+
 	let addingItem = $state(false);
-
-	onMount(() => {});
-
-
-	function editItem(idx) {}
-	function removeItem(idx) {
-		items.splice(idx, 1);
-	}
-	function addItem() {}
-
-	function randomHash() {
-		return Math.random().toString(36).slice(2);
-	}
-
-	function addObject(obj) {
-		items.push(obj);
-		addingItem = false;
-	}
 
 	let addObj = $state({
 		id: {
@@ -31,30 +19,62 @@
 		},
 		name: {
 			type: 'text',
-			value: ''
+			value: '',
+			placeholder: 'Enter field name'
 		},
 		category: {
 			type: 'select',
 			value: 0,
-			opts:[
-				'Root'
-			]
+			opts: ['Root']
 		},
 		type: {
 			type: 'select',
 			value: 0,
-			opts:[
-				'Category', 
-				'Item', 
-				'Line Item'
-			]
+			opts: ['Category', 'Item', 'Line Item']
 		},
 		price: {
+			step: 0.01,
+			min: 0,
 			type: 'number',
-			value: 0,
-			typeUnder: 1
+			value: null,
+			typeUnder: [1, 2],
+			placeholder: 'Enter dollar amount'
 		}
 	});
+
+	let curObj = $state();
+
+	onMount(() => {
+		// console.log(curObj);
+	});
+
+	function editItem(idx) {}
+	function removeItem(idx) {
+		items.splice(idx, 1);
+	}
+	function addItem() {}
+
+	$effect(() => {
+		if (fieldIdx) {
+			fields[fieldIdx].focus();
+		}
+
+		if (addingItem) {
+			// curObj = JSON.parse(JSON.stringify(addObj));
+			// console.log(curObj);
+			// console.log('test', document.getElementById('fieldCont').childNodes.length);
+		}
+	});
+
+	function randomHash() {
+		return Math.random().toString(36).slice(2);
+	}
+
+	function addObject(obj) {
+		// curObj = Object.clone(addObj);
+		items.push(obj);
+		addingItem = false;
+	}
 </script>
 
 <div class="w-full h-full flex-col flex">
@@ -88,7 +108,7 @@
 			</div>
 		{:else}
 			<div class="">
-				{#each Object.keys(addObj) as prop}
+				{#each Object.keys(addObj) as prop, idx}
 					{#if !addObj[prop]?.hidden}
 						<div class="flex w-full border-b-2 border-slate-300/20 py-2 gap-1">
 							<div class="flex pr-2 w-[20%]">
@@ -96,16 +116,40 @@
 									{prop}
 								</span>
 							</div>
-							<div class="w-[80%] flex-1 text-sm flex items-center">
+							<div id="fieldCont" class="w-[80%] flex-1 text-sm flex items-center">
 								{#if addObj[prop]?.type == 'text'}
-									<div
-										contenteditable
-										bind:textContent={addObj[prop].value}
-										class="w-full p-1 bg-white"
-									></div>
+									<div class="flex gap-1 w-full">
+										<div
+											bind:this={fields[idx]}
+											onkeydown={(e) => {
+												e.preventDefault();
+												if (e.which == 13) {
+													fieldIdx++;
+													return false;
+												}
+											}}
+											autofocus
+											contenteditable
+											bind:textContent={addObj[prop].value}
+											class="w-full flex-1 p-1 bg-white no-"
+										></div>
+										{#if addObj[prop].value}
+											<button
+												class="p-1 px-2 rounded-md bg-slate-200"
+												onclick={() => {
+													addObj[prop].value = '';
+													fields[fiseldIdx].focus();
+												}}>x</button
+											>
+										{/if}
+									</div>
 									<!-- <input required class="w-full p-1" type="text" bind:value={addObj[prop].value} /> -->
 								{:else if addObj[prop]?.type == 'select'}
-									<select class="w-full p-1 bg-white" bind:value={addObj[prop].value}>
+									<select
+										bind:this={fields[idx]}
+										class="w-full p-1 bg-white"
+										bind:value={addObj[prop].value}
+									>
 										{#each addObj[prop].opts as type, idx}
 											<option value={idx}>{type}</option>
 										{/each}
@@ -113,8 +157,14 @@
 								{:else if addObj[prop]?.type == 'number'}
 									<input
 										class="p-1 w-full"
-										step="0.01"
+										onchange={(e) => {
+											addObj[prop].value = addObj[prop].value.toFixed(2);
+										}}
+										step={addObj[prop].step || 1}
+										min={addObj[prop].min || 0}
+										max={addObj[prop].max || null}
 										bind:value={addObj[prop].value}
+										placeholder={addObj[prop].placeholder}
 										type="number"
 									/>
 								{:else}
