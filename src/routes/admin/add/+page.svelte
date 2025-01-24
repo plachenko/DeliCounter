@@ -7,7 +7,6 @@
 
 	onMount(() => {});
 
-	let objTypes = ['Category', 'Item', 'Line Item'];
 
 	function editItem(idx) {}
 	function removeItem(idx) {
@@ -36,11 +35,19 @@
 		},
 		category: {
 			type: 'select',
-			value: 0
+			value: 0,
+			opts:[
+				'Root'
+			]
 		},
 		type: {
 			type: 'select',
-			value: 0
+			value: 0,
+			opts:[
+				'Category', 
+				'Item', 
+				'Line Item'
+			]
 		},
 		price: {
 			type: 'number',
@@ -63,23 +70,17 @@
 			<div class="absolute top-0 w-full left-0 p-2 overflow-y-auto">
 				{#each items as item, idx}
 					<div
-						class="bg-slate-300 p-1 [&:is(:first-child)]:rounded-t-md [&:is(:last-child)]:rounded-b-md [&:not(:first-child)]:border-t-2 border-slate-400/30 px-2 flex w-full"
+						class="bg-slate-300 p-3 [&:is(:first-child)]:rounded-t-md [&:is(:last-child)]:rounded-b-md [&:not(:first-child)]:border-t-2 border-slate-400/30 flex w-full"
 					>
 						<span class="flex w-full">
 							{item?.name?.value || item}
 						</span>
-						<div class="flex w-[200px]">
+						<div class="flex justify-end w-[200px]">
 							<button
-								class="flex-1 w-full border-r-2"
+								class="bg-slate-400 rounded-md text-slate-100 p-1"
 								onclick={() => {
 									removeItem(idx);
 								}}>remove</button
-							>
-							<button
-								class="flex-1 w-full"
-								onclick={() => {
-									editItem(idx);
-								}}>edit</button
 							>
 						</div>
 					</div>
@@ -105,11 +106,9 @@
 									<!-- <input required class="w-full p-1" type="text" bind:value={addObj[prop].value} /> -->
 								{:else if addObj[prop]?.type == 'select'}
 									<select class="w-full p-1 bg-white" bind:value={addObj[prop].value}>
-										{#if prop == 'type'}
-											{#each objTypes as type, idx}
-												<option value={idx}>{type}</option>
-											{/each}
-										{/if}
+										{#each addObj[prop].opts as type, idx}
+											<option value={idx}>{type}</option>
+										{/each}
 									</select>
 								{:else if addObj[prop]?.type == 'number'}
 									<input
@@ -134,7 +133,7 @@
 				onclick={() => {
 					addingItem = false;
 				}}
-				class="bg-red-400 flex rounded-md p-1 font-bold w-full"
+				class="bg-red-400 flex rounded-md p-3 font-bold w-full"
 			>
 				<span class="flex-1 text-slate-100">Cancel</span>
 			</button>
@@ -143,7 +142,7 @@
 					onclick={() => {
 						addObject(addObj);
 					}}
-					class="bg-green-400 flex rounded-md p-1 font-bold w-full"
+					class="bg-green-400 flex rounded-md p-3 font-bold w-full"
 					><span class="border-r-2 border-green-600 px-3 drop-shadow">+</span>
 					<span class="flex-1 text-slate-100">Add</span>
 				</button>
@@ -153,7 +152,7 @@
 				onclick={() => {
 					addingItem = true;
 				}}
-				class="bg-green-400 flex rounded-md p-1 font-bold w-full"
+				class="bg-green-400 flex rounded-md p-3 font-bold w-full"
 				><span class="border-r-2 border-green-600 px-3 drop-shadow">+</span>
 				<span class="flex-1 text-slate-100">Add Item</span>
 			</button>
