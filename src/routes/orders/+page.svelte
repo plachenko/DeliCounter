@@ -136,7 +136,8 @@
 				<Time />
 			</div>
 			{#if orders.length}
-				<span>{orders.length}</span>
+				<span class="bg-slate-300 rounded-full px-1 border-slate-500 border-2">{orders.length}</span
+				>
 			{/if}
 		</div>
 		<div class="flex-1 flex-col flex relative">

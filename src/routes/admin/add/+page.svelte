@@ -11,6 +11,7 @@
 
 	let addingItem = $state(false);
 
+	let curObj = $state({});
 	let addObj = $state({
 		id: {
 			type: 'crypto',
@@ -42,8 +43,6 @@
 		}
 	});
 
-	let curObj = $state();
-
 	onMount(() => {
 		// console.log(curObj);
 	});
@@ -60,9 +59,9 @@
 		}
 
 		if (addingItem) {
-			// curObj = JSON.parse(JSON.stringify(addObj));
-			// console.log(curObj);
-			// console.log('test', document.getElementById('fieldCont').childNodes.length);
+			Object.keys(addObj).forEach((e) => {
+				curObj[e] = null;
+			});
 		}
 	});
 
@@ -71,7 +70,6 @@
 	}
 
 	function addObject(obj) {
-		// curObj = Object.clone(addObj);
 		items.push(obj);
 		addingItem = false;
 	}
@@ -80,7 +78,7 @@
 <div class="w-full h-full flex-col flex">
 	<div class="w-full flex-1 h-[80px] overflow-y-auto relative flex flex-col p-2">
 		{#if !addingItem}
-			{#if items.length}{:else}
+			{#if !items.length}
 				<div
 					class="w-full h-full text-2xl text-slate-600 font-bold flex justify-center items-center"
 				>
@@ -109,69 +107,72 @@
 		{:else}
 			<div class="">
 				{#each Object.keys(addObj) as prop, idx}
-					{#if !addObj[prop]?.hidden}
-						<div class="flex w-full border-b-2 border-slate-300/20 py-2 gap-1">
-							<div class="flex pr-2 w-[20%]">
-								<span class="flex justify-end w-full font-bold border-r-2 pr-1">
-									{prop}
-								</span>
-							</div>
-							<div id="fieldCont" class="w-[80%] flex-1 text-sm flex items-center">
-								{#if addObj[prop]?.type == 'text'}
-									<div class="flex gap-1 w-full">
-										<div
+					{#if !addObj[prop].typeUnder || addObj[prop].typeUnder.includes(addObj['type'].value)}
+						{#if !addObj[prop]?.hidden}
+							<div class="flex w-full border-b-2 border-slate-300/20 py-2 gap-1">
+								<div class="flex pr-2 w-[20%]">
+									<span class="flex justify-end w-full font-bold border-r-2 pr-1">
+										{prop}
+									</span>
+								</div>
+								<div id="fieldCont" class="w-[80%] flex-1 text-sm flex items-center">
+									{#if addObj[prop]?.type == 'text'}
+										<div class="flex gap-1 w-full">
+											<div
+												bind:this={fields[idx]}
+												role="textbox"
+												tabindex={idx}
+												onkeydown={(e) => {
+													e.preventDefault();
+													if (e.which == 13) {
+														fieldIdx++;
+														return false;
+													}
+												}}
+												contenteditable
+												bind:textContent={curObj[prop]}
+												class="w-full flex-1 p-1 bg-white no-"
+											></div>
+											{#if curObj[prop]}
+												<button
+													class="p-1 px-2 rounded-md bg-slate-200"
+													onclick={() => {
+														curObj[prop] = '';
+														fields[fiseldIdx].focus();
+													}}>x</button
+												>
+											{/if}
+										</div>
+										<!-- <input required class="w-full p-1" type="text" bind:value={addObj[prop].value} /> -->
+									{:else if addObj[prop]?.type == 'select'}
+										<select
 											bind:this={fields[idx]}
-											onkeydown={(e) => {
-												e.preventDefault();
-												if (e.which == 13) {
-													fieldIdx++;
-													return false;
-												}
+											class="w-full p-1 bg-white"
+											bind:value={curObj[prop]}
+										>
+											{#each addObj[prop].opts as type, idx}
+												<option value={idx}>{type}</option>
+											{/each}
+										</select>
+									{:else if addObj[prop]?.type == 'number'}
+										<input
+											class="p-1 w-full"
+											onchange={(e) => {
+												addObj[prop].value = addObj[prop].value.toFixed(2);
 											}}
-											autofocus
-											contenteditable
-											bind:textContent={addObj[prop].value}
-											class="w-full flex-1 p-1 bg-white no-"
-										></div>
-										{#if addObj[prop].value}
-											<button
-												class="p-1 px-2 rounded-md bg-slate-200"
-												onclick={() => {
-													addObj[prop].value = '';
-													fields[fiseldIdx].focus();
-												}}>x</button
-											>
-										{/if}
-									</div>
-									<!-- <input required class="w-full p-1" type="text" bind:value={addObj[prop].value} /> -->
-								{:else if addObj[prop]?.type == 'select'}
-									<select
-										bind:this={fields[idx]}
-										class="w-full p-1 bg-white"
-										bind:value={addObj[prop].value}
-									>
-										{#each addObj[prop].opts as type, idx}
-											<option value={idx}>{type}</option>
-										{/each}
-									</select>
-								{:else if addObj[prop]?.type == 'number'}
-									<input
-										class="p-1 w-full"
-										onchange={(e) => {
-											addObj[prop].value = addObj[prop].value.toFixed(2);
-										}}
-										step={addObj[prop].step || 1}
-										min={addObj[prop].min || 0}
-										max={addObj[prop].max || null}
-										bind:value={addObj[prop].value}
-										placeholder={addObj[prop].placeholder}
-										type="number"
-									/>
-								{:else}
-									<span>{addObj[prop]}</span>
-								{/if}
+											step={addObj[prop].step || 1}
+											min={addObj[prop].min || 0}
+											max={addObj[prop].max || null}
+											bind:value={addObj[prop].value}
+											placeholder={addObj[prop].placeholder}
+											type="number"
+										/>
+									{:else}
+										<span>{addObj[prop]}</span>
+									{/if}
+								</div>
 							</div>
-						</div>
+						{/if}
 					{/if}
 				{/each}
 			</div>
@@ -187,7 +188,7 @@
 			>
 				<span class="flex-1 text-slate-100">Cancel</span>
 			</button>
-			{#if addObj.name.value !== ''}
+			{#if curObj.name.value !== ''}
 				<button
 					onclick={() => {
 						addObject(addObj);
