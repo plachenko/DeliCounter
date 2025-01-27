@@ -1,10 +1,15 @@
 <script>
 	import Product from '$lib/components/Product.svelte';
+	import VoiceRecognition from '$lib/components/VoiceRecognition.svelte';
 	import { onMount } from 'svelte';
 	import { preventDefault } from 'svelte/legacy';
 
-	let items = $state(['test', 'uh']);
+	let items = $state([]);
 	let inputTxt = $state(null);
+	let categoryOpts = $state(['Root']);
+	let selectedCat = $state(0);
+
+	const colorArr = ['bg-red-400', 'bg-green-400', 'bg-blue-400'];
 
 	let fieldIdx = $state(0);
 	let fields = $state([]);
@@ -44,24 +49,52 @@
 	});
 
 	onMount(() => {
-		// console.log(curObj);
+		let curCat = window.location.search.split('=')[1];
+
+		getItemList();
+		getCategoryOpts();
+
+		if (curCat) {
+			addingItem = true;
+			let curIdx = categoryOpts.findIndex((e) => e.id == curCat);
+			selelctedCat = curIdx;
+		}
+
+		// console.log(curCat, categoryOpts);
 	});
+
+	function getItemList() {
+		items = JSON.parse(window.localStorage.getItem('allItemList'));
+	}
+
+	function getCategoryOpts() {
+		let optItems = items
+			.filter((e) => {
+				if (e.type == 0) return e;
+			})
+			.map((e) => {
+				return { id: e.id, name: e.name };
+			});
+
+		categoryOpts = ['Root', ...optItems];
+		addObj.category.opts = categoryOpts;
+	}
+
+	function setItemList() {
+		let _items = JSON.stringify(items);
+		window.localStorage.setItem('allItemList', _items);
+	}
 
 	function editItem(idx) {}
 	function removeItem(idx) {
 		items.splice(idx, 1);
+		setItemList();
 	}
 	function addItem() {}
 
 	$effect(() => {
 		if (fieldIdx) {
 			fields[fieldIdx].focus();
-		}
-
-		if (addingItem) {
-			Object.keys(addObj).forEach((e) => {
-				curObj[e] = null;
-			});
 		}
 	});
 
@@ -70,7 +103,9 @@
 	}
 
 	function addObject(obj) {
-		items.push(obj);
+		items = [...items, curObj];
+		setItemList();
+		curObj = {};
 		addingItem = false;
 	}
 </script>
@@ -85,13 +120,21 @@
 					No items
 				</div>
 			{/if}
-			<div class="absolute top-0 w-full left-0 p-2 overflow-y-auto">
+			<div class="absolute top-0 w-full left-0 overflow-y-auto">
 				{#each items as item, idx}
 					<div
-						class="bg-slate-300 p-3 [&:is(:first-child)]:rounded-t-md [&:is(:last-child)]:rounded-b-md [&:not(:first-child)]:border-t-2 border-slate-400/30 flex w-full"
+						class={`bg-slate-300 p-2 relative [&:not(:first-child)]:border-t-2 border-slate-400/30 flex w-full`}
 					>
-						<span class="flex w-full">
-							{item?.name?.value || item}
+						<button
+							onclick={() => {
+								curObj = item;
+								addingItem = true;
+							}}
+							class="absolute w-[80%] h-full left-0 top-0"
+						></button>
+						<div class={`w-[4px] h-full absolute left-0 top-0`}></div>
+						<span class="flex w-full items-center">
+							{item?.name || item}
 						</span>
 						<div class="flex justify-end w-[200px]">
 							<button
@@ -107,7 +150,7 @@
 		{:else}
 			<div class="">
 				{#each Object.keys(addObj) as prop, idx}
-					{#if !addObj[prop].typeUnder || addObj[prop].typeUnder.includes(addObj['type'].value)}
+					{#if !addObj[prop].typeUnder || addObj[prop].typeUnder.includes(curObj.type)}
 						{#if !addObj[prop]?.hidden}
 							<div class="flex w-full border-b-2 border-slate-300/20 py-2 gap-1">
 								<div class="flex pr-2 w-[20%]">
@@ -148,10 +191,10 @@
 										<select
 											bind:this={fields[idx]}
 											class="w-full p-1 bg-white"
-											bind:value={curObj[prop]}
+											bind:value={selectedCat}
 										>
 											{#each addObj[prop].opts as type, idx}
-												<option value={idx}>{type}</option>
+												<option value={type.id || idx}>{type.name || type}</option>
 											{/each}
 										</select>
 									{:else if addObj[prop]?.type == 'number'}
@@ -163,7 +206,7 @@
 											step={addObj[prop].step || 1}
 											min={addObj[prop].min || 0}
 											max={addObj[prop].max || null}
-											bind:value={addObj[prop].value}
+											bind:value={curObj[prop]}
 											placeholder={addObj[prop].placeholder}
 											type="number"
 										/>
@@ -182,13 +225,14 @@
 		{#if addingItem}
 			<button
 				onclick={() => {
+					curObj = {};
 					addingItem = false;
 				}}
 				class="bg-red-400 flex rounded-md p-3 font-bold w-full"
 			>
 				<span class="flex-1 text-slate-100">Cancel</span>
 			</button>
-			{#if curObj.name.value !== ''}
+			{#if curObj.name !== ''}
 				<button
 					onclick={() => {
 						addObject(addObj);
@@ -201,7 +245,14 @@
 		{:else}
 			<button
 				onclick={() => {
+					getCategoryOpts();
+
 					addingItem = true;
+					console.log(addObj);
+					Object.keys(addObj).forEach((e) => {
+						curObj[e] = addObj[e].value;
+					});
+					console.log('test', curObj);
 				}}
 				class="bg-green-400 flex rounded-md p-3 font-bold w-full"
 				><span class="border-r-2 border-green-600 px-3 drop-shadow">+</span>

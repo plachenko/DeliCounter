@@ -39,6 +39,8 @@
 		'tomato'
 	];
 
+	let curCatId = $state(0);
+
 	let subs = ['italian', 'turkey', 'roast beef', 'ham and cheese'];
 	let paninis = ['Reuben', 'turkey', 'BLT melt', 'Grilled Cheese and tomato'];
 	let sauces = ['Ketchup', 'mayo', 'mustard', 'oil', 'vinegar'];
@@ -85,10 +87,12 @@
 
 	onMount(() => {
 		allOrders = JSON.parse(window.localStorage.getItem('allOrders')) || [];
-		curArr = orderCat;
+		curArr = JSON.parse(window.localStorage.getItem('allItemList'));
+		// curArr = orderCat;
 	});
 
-	function handleClick(cat) {
+	function handleClick(item) {
+		/*
 		if (curCat == 'Pizza') {
 			addPizza(cat);
 			return;
@@ -99,6 +103,12 @@
 		if (cat && products[cat]?.length) {
 			curArr = products[cat];
 			curCat = cat;
+		}
+    */
+		if (item.price) {
+			order.push(item);
+		} else {
+			curCatId = item.id;
 		}
 	}
 
@@ -216,15 +226,18 @@
 			</button>
 		</div>
 		<div class="grid grid-cols-3 gap-1 grid-rows-3 h-full p-1">
-			{#each curArr as cat, idx}
-				<button
-					onclick={() => handleClick(cat)}
-					class="rounded-md bg-slate-400 flex justify-center items-center bg-gradient-to-b from-slate-200 to-slate-300/40 drop-shadow font-bold border-2 border-slate-300"
-					><span class="drop-shadow-[0_2px_2px_#999] text-2xl text-slate-700">{cat}</span></button
-				>
+			{#each curArr as item, idx}
+				{#if item.category == curCatId}
+					<button
+						onclick={() => handleClick(item)}
+						class="rounded-md bg-slate-400 flex justify-center items-center bg-gradient-to-b from-slate-200 to-slate-300/40 drop-shadow font-bold border-2 border-slate-300"
+						><span class="capitalize drop-shadow-[0_2px_2px_#999] text-2xl text-slate-700"
+							>{item.name}</span
+						></button
+					>{/if}
 			{/each}
 			<a
-				href="/admin/add"
+				href={`/admin/add${curCatId ? '?cat=' + curCatId : ''}`}
 				class="flex justify-center items-center bg-slate-400/30 border-slate-500/50 border-2 rounded-md text-2xl"
 				>+</a
 			>
@@ -235,7 +248,6 @@
 				onclick={() => {
 					startOrder = false;
 					addingFuture = false;
-					curArr = orderCat;
 					order = [];
 					curCat = '';
 					futureDate = null;
@@ -249,7 +261,6 @@
 
 						startOrder = false;
 						addingFuture = false;
-						curArr = orderCat;
 						order = [];
 						curCat = '';
 						futureDate = null;

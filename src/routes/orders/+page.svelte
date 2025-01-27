@@ -97,7 +97,14 @@
 			</span>
 			<div class="h-full w-full flex-1">
 				{#each orders[curOrder].items as item}
-					<div class="bg-slate-300">{item}</div>
+					<div class="bg-slate-300 flex p-1 border-b-2 border-dashed">
+						<span class="w-full flex-1">
+							{item.name}
+						</span>
+						<span>
+							${item.price.toFixed(2)}
+						</span>
+					</div>
 				{/each}
 			</div>
 			<div class="flex gap-1 p-1 w-full">
