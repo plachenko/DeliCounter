@@ -57,10 +57,8 @@
 		if (curCat) {
 			addingItem = true;
 			let curIdx = categoryOpts.findIndex((e) => e.id == curCat);
-			selelctedCat = curIdx;
+			// selelctedCat = curIdx;
 		}
-
-		// console.log(curCat, categoryOpts);
 	});
 
 	function getItemList() {
@@ -103,6 +101,10 @@
 	}
 
 	function addObject(obj) {
+		if (curObj['type'] < 1) {
+			curObj['price'] = -1;
+		}
+
 		items = [...items, curObj];
 		setItemList();
 		curObj = {};
@@ -191,7 +193,7 @@
 										<select
 											bind:this={fields[idx]}
 											class="w-full p-1 bg-white"
-											bind:value={selectedCat}
+											bind:value={curObj[prop]}
 										>
 											{#each addObj[prop].opts as type, idx}
 												<option value={type.id || idx}>{type.name || type}</option>
@@ -248,11 +250,9 @@
 					getCategoryOpts();
 
 					addingItem = true;
-					console.log(addObj);
 					Object.keys(addObj).forEach((e) => {
 						curObj[e] = addObj[e].value;
 					});
-					console.log('test', curObj);
 				}}
 				class="bg-green-400 flex rounded-md p-3 font-bold w-full"
 				><span class="border-r-2 border-green-600 px-3 drop-shadow">+</span>

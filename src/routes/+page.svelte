@@ -105,7 +105,7 @@
 			curCat = cat;
 		}
     */
-		if (item.price) {
+		if (item.price >= 0) {
 			order.push(item);
 		} else {
 			curCatId = item.id;
@@ -225,6 +225,11 @@
 				{orderTypes[orderType]}
 			</button>
 		</div>
+		{#if curCatId}
+			<div class="h-[40px] p-1 w-full border-b-2 border-slate-400/30">
+				{curCatId}
+			</div>
+		{/if}
 		<div class="grid grid-cols-3 gap-1 grid-rows-3 h-full p-1">
 			{#each curArr as item, idx}
 				{#if item.category == curCatId}
@@ -237,7 +242,7 @@
 					>{/if}
 			{/each}
 			<a
-				href={`/admin/add${curCatId ? '?cat=' + curCatId : ''}`}
+				href={`/admin/add?cat=${curCatId}`}
 				class="flex justify-center items-center bg-slate-400/30 border-slate-500/50 border-2 rounded-md text-2xl"
 				>+</a
 			>
@@ -250,6 +255,7 @@
 					addingFuture = false;
 					order = [];
 					curCat = '';
+					curCatId = 0;
 					futureDate = null;
 				}}>Cancel Order</button
 			>

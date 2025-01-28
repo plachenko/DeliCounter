@@ -142,10 +142,6 @@
 			<div class="w-full flex-1 flex justify-center">
 				<Time />
 			</div>
-			{#if orders.length}
-				<span class="bg-slate-300 rounded-full px-1 border-slate-500 border-2">{orders.length}</span
-				>
-			{/if}
 		</div>
 		<div class="flex-1 flex-col flex relative">
 			<div class="h-full flex flex-col flex-1 overflow-hidden relative">
@@ -264,9 +260,15 @@
 						orders = [];
 						setAllOrders();
 					}}
-					class="bg-red-300 p-2 rounded-md w-full flex justify-center items-center"
-					>clear orders</button
-				>
+					class="bg-red-300 p-2 relative rounded-md w-full flex justify-center items-center"
+					>clear orders
+					{#if orders.length}
+						<span
+							class="bg-slate-300 absolute right-2 opacity-80 rounded-full px-1 border-slate-500 border-2"
+							>{orders.length}</span
+						>
+					{/if}
+				</button>
 			{/if}
 		</div>
 	</div>
